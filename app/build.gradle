@@ -30,4 +30,10 @@ dependencies {
 
     //Firebase SDK for Google Analytics
     implementation 'com.google.firebase:firebase-analytics:17.2.2'
+
+    // Firebase UI Auth
+    implementation 'com.firebaseui:firebase-ui-auth:6.2.0'
+
+    // SDK Facebook Login
+    implementation 'com.facebook.android:facebook-login:[5,6)'
 }
