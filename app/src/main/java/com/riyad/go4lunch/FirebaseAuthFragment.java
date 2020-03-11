@@ -52,7 +52,7 @@ public class FirebaseAuthFragment extends Fragment {
                 .setTheme(R.style.LoginTheme)
                 .setAvailableProviders(proviaders)
                 .setIsSmartLockEnabled(false,true)
-                .setLogo(R.drawable.icon1)
+                .setLogo(R.drawable.ic_logo_main)
                 .build(),RC_SIGN_IN
         );
 

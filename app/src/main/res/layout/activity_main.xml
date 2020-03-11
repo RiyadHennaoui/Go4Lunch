@@ -21,7 +21,7 @@
             android:layout_width="310dp"
             android:layout_height="327dp"
 
-            android:background="@drawable/icon1" />
+            android:background="@drawable/ic_logo_main" />
 
 
 

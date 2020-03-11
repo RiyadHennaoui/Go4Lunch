@@ -2,8 +2,6 @@ package com.riyad.go4lunch;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.View;
@@ -43,7 +41,8 @@ public class MainActivity extends AppCompatActivity {
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.GoogleBuilder().build(),
-                new AuthUI.IdpConfig.FacebookBuilder().build());
+                new AuthUI.IdpConfig.FacebookBuilder().build(),
+                new AuthUI.IdpConfig.TwitterBuilder().build());
 
 
 
@@ -54,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                         .setAvailableProviders(
                                 providers)
                         .setIsSmartLockEnabled(false, true)
-                        .setLogo(R.drawable.icon1)
+                        .setLogo(R.drawable.ic_logo_main)
                         .build(), RC_SIGN_IN
         );
 
