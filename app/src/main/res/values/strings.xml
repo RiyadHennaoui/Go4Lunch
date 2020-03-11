@@ -51,4 +51,10 @@
     <string name="twitter_consumer_key" translatable="false">uBV9ChjIQYJoBNQeZfbNad8X7</string>
     <string name="twitter_consumer_secret" translatable="false">tS5h9p9RHsXxocdcfoq5AH1J7mIOO0UHiMHfHgGqGGmy9CUzph</string>
 
+    <!-- Bottom Navigation View -->
+
+    <string name="bottom_navigation_view_map_view">Map View</string>
+    <string name="bottom_navigation_view_list_view">List View</string>
+    <string name="bottom_navigation_view_workmates">Workmates</string>
+
 </resources>

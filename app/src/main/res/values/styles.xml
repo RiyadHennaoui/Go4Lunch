@@ -40,5 +40,9 @@
         <item name="android:windowBackground">@drawable/splach_background</item>
     </style>
 
+    <!-- BOTTOM NAVIGATION VIEW -->
+    <style name="bottom_navigation_menu_map_view">Map View</style>
+    <style name="bottom_navigation_menu_list_view">List View</style>
+    <style name="bottom_navigation_menu_workmates">Workmates</style>
 
 </resources>
