@@ -1,62 +1,81 @@
 package com.riyad.go4lunch;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.widget.Toast;
 
-import com.firebase.ui.auth.AuthUI;
 
-import java.util.Arrays;
-import java.util.List;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int RC_SIGN_IN = 123;
-    private CoordinatorLayout coordinatorLayout;
-    private Button buttonLogin;
+
+    private BottomNavigationView bottomNavigationView;
+    private DrawerLayout myDrawerLayout;
+    private NavigationView myNavView;
+    private Toolbar myMainToolbar;
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_bar_menu, menu);
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        coordinatorLayout = findViewById(R.id.coordinator);
-        buttonLogin = findViewById(R.id.main_activity_button_login);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+//        myNavView = findViewById(R.id.main_drawer_layout);
+        myMainToolbar = findViewById(R.id.main_toolbar);
+        myDrawerLayout =findViewById(R.id.main_drawer_layout);
 
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createSignInIntent();
-            }
-        });
+        this.setSupportActionBar(myMainToolbar);
+        this.configureBottomView();
 
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
+                myDrawerLayout,
+                myMainToolbar,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
 
+        myDrawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
     }
 
-    public void createSignInIntent() {
-        // [START auth_fui_create_intent]
-        // Choose authentication providers
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.GoogleBuilder().build(),
-                new AuthUI.IdpConfig.FacebookBuilder().build(),
-                new AuthUI.IdpConfig.TwitterBuilder().build());
+    private void configureBottomView() {
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> updateBottomFragments(item.getItemId()));
+    }
 
+    private Boolean updateBottomFragments(Integer integer) {
 
+        switch (integer) {
 
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setTheme(R.style.LoginTheme)
-                        .setAvailableProviders(
-                                providers)
-                        .setIsSmartLockEnabled(false, true)
-                        .setLogo(R.drawable.ic_logo_main)
-                        .build(), RC_SIGN_IN
-        );
+            case R.id.action_map_view:
+                //TODO afficher le fragement map view
+                Toast.makeText(this, "Map View", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.action_list_view:
+                //TODO afficher le fragement list map
+                Toast.makeText(this, "Map List View", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.action_workmates:
+                //TODO afficher le fragement workmates
+                Toast.makeText(this, "Workmates", Toast.LENGTH_LONG).show();
+                break;
+        }
 
+        return true;
     }
 
 

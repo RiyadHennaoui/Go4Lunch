@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_topStories"
+            android:icon="@drawable/ic_map_view_white"
+            android:title="Top Stories" />
+
+        <item
+            android:id="@+id/nav_mostPopular"
+            android:icon="@drawable/ic_map_view_white"
+            android:title="Most Popular" />
+
+        <item
+            android:id="@+id/nav_business"
+            android:icon="@drawable/ic_map_view_white"
+            android:title="Business" />
+
+        <item
+            android:id="@+id/nav_sport"
+            android:icon="@drawable/ic_map_view_white"
+            android:title="Sport" />
+    </group>
+
+    <item android:title="Comunicate">
+
+        <menu>
+
+            <item
+                android:id="@+id/nav_search"
+                android:icon="@drawable/ic_map_view_white"
+                android:title="Search" />
+            <item
+                android:id="@+id/nav_notification"
+                android:icon="@drawable/ic_map_view_white"
+                android:title="Notification" />
+
+
+        </menu>
+
+
+    </item>
+
+
+</menu>
