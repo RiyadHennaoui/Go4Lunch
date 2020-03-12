@@ -1,24 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="180dp"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
     android:background="@color/colorSecondary"
     android:gravity="bottom"
     android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        />
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Go4Lunch"
+        android:textSize="46sp"
         android:textColor="#ffff"
-        android:gravity="center"
-        android:textSize="16sp"
-        android:textStyle="bold"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="25dp"
+        android:id="@+id/nav_header_title"/>
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/nav_header_profile_picture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/nav_header_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/nav_header_profile_name"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/nav_header_profile_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Go4Lunch Application"
+        android:textColor="#ffff"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/nav_header_profile_picture"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/nav_header_profile_email"
+        app:layout_constraintTop_toBottomOf="@id/nav_header_title"/>
+
+    <TextView
+        android:id="@+id/nav_header_profile_email"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="riyad@riyad.fr"
+        app:layout_constraintTop_toBottomOf="@id/nav_header_profile_name"
+        app:layout_constraintStart_toEndOf="@id/nav_header_profile_picture"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,9 +6,9 @@
     <group android:checkableBehavior="single">
 
         <item
-            android:id="@+id/nav_topStories"
+            android:id="@+id/nav_your_lunch"
             android:icon="@drawable/ic_map_view_white"
-            android:title="Top Stories" />
+            android:title="Your Lunch  " />
 
         <item
             android:id="@+id/nav_mostPopular"
@@ -26,24 +26,7 @@
             android:title="Sport" />
     </group>
 
-    <item android:title="Comunicate">
 
-        <menu>
-
-            <item
-                android:id="@+id/nav_search"
-                android:icon="@drawable/ic_map_view_white"
-                android:title="Search" />
-            <item
-                android:id="@+id/nav_notification"
-                android:icon="@drawable/ic_map_view_white"
-                android:title="Notification" />
-
-
-        </menu>
-
-
-    </item>
 
 
 </menu>
