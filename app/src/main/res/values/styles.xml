@@ -38,7 +38,7 @@
 
     <!-- STYLE SPLASH ACTIVITY -->
     <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/splach_background</item>
+        <item name="android:windowBackground">@drawable/splash_screen_background</item>
     </style>
 
     <!-- BOTTOM NAVIGATION VIEW -->

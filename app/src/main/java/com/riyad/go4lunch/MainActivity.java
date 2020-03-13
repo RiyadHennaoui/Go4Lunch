@@ -1,11 +1,14 @@
 package com.riyad.go4lunch;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -54,16 +57,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void configureBottomView() {
-        bottomNavigationView.setOnNavigationItemSelectedListener(item -> updateBottomFragments(item.getItemId()));
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> updateBottons(item.getItemId()));
     }
 
-    private Boolean updateBottomFragments(Integer integer) {
+    private Boolean updateBottons(Integer integer) {
 
         switch (integer) {
 
             case R.id.action_map_view:
                 //TODO afficher le fragement map view
-                Toast.makeText(this, "Map View", Toast.LENGTH_LONG).show();
+//                Toast.makeText(this, "Map View", Toast.LENGTH_LONG).show();
+                intentToProfileActivity();
                 break;
             case R.id.action_list_view:
                 //TODO afficher le fragement list map
@@ -73,11 +77,25 @@ public class MainActivity extends AppCompatActivity {
                 //TODO afficher le fragement workmates
                 Toast.makeText(this, "Workmates", Toast.LENGTH_LONG).show();
                 break;
+            case R.id.nav_your_lunch:
+                //TODO intent vers le fragment/Activité souhaité.
+                break;
+            case R.id.nav_settings:
+                Toast.makeText(this,"serieux",Toast.LENGTH_LONG).show();
+                intentToProfileActivity();
+
+            case R.id.nav_logout:
+                //TODO ce deconnecter.
         }
 
         return true;
     }
 
+    private void intentToProfileActivity() {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
 
 

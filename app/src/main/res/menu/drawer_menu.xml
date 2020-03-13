@@ -13,7 +13,7 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_mostPopular"
+            android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings_24dp"
             android:title="SETTINGS" />
     </group>
@@ -21,7 +21,7 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_business"
+            android:id="@+id/nav_logout"
             android:icon="@drawable/ic_logout_24dp"
             android:title="LOGOUT" />
 

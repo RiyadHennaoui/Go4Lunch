@@ -45,7 +45,7 @@
 
 
         <!-- PROFILE USERNAME -->
-        <android.support.design.widget.TextInputEditText
+        <TextView
             android:id="@+id/profile_activity_edit_text_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
