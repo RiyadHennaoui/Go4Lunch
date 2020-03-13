@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context="com.riyad.go4lunch.ProfileActivity">
+
+    <!-- USER DATA CONTAINER -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/default_large_margin"
+            android:gravity="center">
+
+            <!-- FIREBASE IMAGE -->
+            <ImageView
+                android:layout_width="156dp"
+                android:layout_height="117dp"
+                android:background="@drawable/ic_logo_main" />
+
+            <!-- PROGRESS BAR -->
+            <ProgressBar
+                android:id="@+id/profile_activity_progress_bar"
+                android:layout_width="30dip"
+                android:layout_height="30dip"
+                android:layout_margin="@dimen/default_large_margin"
+                android:visibility="invisible" />
+
+            <!-- PROFILE IMAGE -->
+            <ImageView
+                android:id="@+id/profile_activity_imageview_profile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+
+        <!-- PROFILE USERNAME -->
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/profile_activity_edit_text_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/default_margin"
+            android:text="@string/text_input_username"
+            android:textSize="@dimen/default_text_size" />
+
+        <!-- PROFILE EMAIL CONTAINER -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/default_margin"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_view_email"
+                android:textSize="@dimen/default_text_size"
+                android:textStyle="bold" />
+
+            <!-- PROFILE EMAIL -->
+            <TextView
+                android:id="@+id/profile_activity_text_view_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/default_margin"
+                android:textSize="@dimen/default_text_size" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <!-- BUTTONS CONTAINER -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <!-- BUTTON UPDATE USERNAME -->
+        <Button
+            android:id="@+id/profile_activity_button_update"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/default_margin"
+            android:background="@drawable/button_radius_primary_color"
+            android:padding="@dimen/default_margin"
+            android:text="@string/button_update_account"
+            android:textColor="#fff"
+            android:textSize="@dimen/default_text_size" />
+
+        <!-- BUTTON SIGN OUT -->
+        <Button
+            android:id="@+id/profile_activity_button_sign_out"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/default_margin"
+            android:background="@drawable/button_radius_accent_color"
+            android:padding="@dimen/default_margin"
+            android:text="@string/button_sign_out_account"
+            android:textColor="#fff"
+            android:textSize="@dimen/default_text_size" />
+
+        <!-- BUTTON DELETE ACCOUNT -->
+        <Button
+            android:id="@+id/profile_activity_button_delete"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/default_margin"
+            android:background="@drawable/button_radius_error_color"
+            android:padding="@dimen/default_margin"
+            android:text="@string/button_delete_account"
+            android:textColor="#fff"
+            android:textSize="@dimen/default_text_size" />
+
+    </LinearLayout>
+
+</LinearLayout>
