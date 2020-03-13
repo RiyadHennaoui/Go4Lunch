@@ -36,8 +36,7 @@
         </activity>
 
         <!--SplashActivity-->
-        <activity android:name=".SplashScreen"
-            android:theme="@style/SplashTheme">
+        <activity android:name=".SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

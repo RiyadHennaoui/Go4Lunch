@@ -9,20 +9,23 @@
             android:id="@+id/nav_your_lunch"
             android:icon="@drawable/ic_your_lunch_24dp"
             android:title="Your Lunch" />
+    </group>
 
+    <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_mostPopular"
             android:icon="@drawable/ic_settings_24dp"
             android:title="SETTINGS" />
+    </group>
 
+
+    <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_business"
             android:icon="@drawable/ic_logout_24dp"
             android:title="LOGOUT" />
 
     </group>
-
-
 
 
 </menu>

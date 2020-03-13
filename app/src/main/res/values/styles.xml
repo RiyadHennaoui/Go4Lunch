@@ -28,9 +28,9 @@
         <item name="colorControlActivated">@android:color/darker_gray</item>
         <item name="colorControlHighlight">@android:color/darker_gray</item>
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:textColorPrimary">@android:color/darker_gray</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">@android:color/darker_gray</item>
-        <item name="android:windowBackground">@color/colorPrimary</item>
+        <item name="android:windowBackground">@drawable/splash_screen_background</item>
         <item name="windowActionBar">true</item>
         <item name="windowNoTitle">true</item>
         <item name="android:textColorHint">@android:color/white</item>
