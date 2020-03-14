@@ -20,11 +20,15 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_profile_v2);
 
-        textInputEditTextUsername = findViewById(R.id.profile_activity_edit_text_username);
-        textViewEmail= findViewById(R.id.profile_activity_text_view_email);
-        imageViewProfile = findViewById(R.id.profile_activity_imageview_profile);
+//        textInputEditTextUsername = findViewById(R.id.profile_activity_edit_text_username);
+//        textViewEmail= findViewById(R.id.profile_activity_text_view_email);
+//        imageViewProfile = findViewById(R.id.profile_activity_imageview_profile);
+
+        textViewEmail = findViewById(R.id.profile_tv_mail);
+        textInputEditTextUsername = findViewById(R.id.profile_tv_name);
+        imageViewProfile = findViewById(R.id.profile_iv)
 
         this.isCurrentUserLogged();
         this.updateUIWhenCreating();
