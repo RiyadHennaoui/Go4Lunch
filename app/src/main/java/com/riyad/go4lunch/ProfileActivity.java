@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView textInputEditTextUsername;
     private TextView textViewEmail;
     private ImageView imageViewProfile;
+    private EditText textInputPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +30,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         textViewEmail = findViewById(R.id.profile_tv_mail);
         textInputEditTextUsername = findViewById(R.id.profile_tv_name);
-        imageViewProfile = findViewById(R.id.profile_iv)
+        imageViewProfile = findViewById(R.id.profile_iv_profile);
+        textInputPassword = findViewById(R.id.profile_ev_password);
 
         this.isCurrentUserLogged();
         this.updateUIWhenCreating();

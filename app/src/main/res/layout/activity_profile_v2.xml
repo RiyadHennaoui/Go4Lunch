@@ -105,7 +105,7 @@
         app:layout_constraintTop_toBottomOf="@id/profile_iv_password" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/profile_ev_password"
         android:layout_width="258dp"
         android:layout_height="41dp"
         android:ems="10"
