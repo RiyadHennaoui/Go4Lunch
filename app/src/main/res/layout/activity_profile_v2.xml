@@ -1,36 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    android:orientation="vertical">
+    >
 
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="30dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="30dp" />
 
     <View
         android:id="@+id/view2"
-        android:layout_width="350dp"
+        android:layout_width="match_parent"
         android:layout_height="150dp"
         android:background="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/guideline2"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@id/guideline"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_bias="0.250" />
 
     <ImageView
@@ -40,10 +27,10 @@
         android:background="@drawable/profile_bg"
         android:src="@drawable/ic_mood_black_24dp"
         app:layout_constraintBottom_toTopOf="@id/view2"
-        app:layout_constraintEnd_toStartOf="@id/guideline2"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="@id/view2" />
+        app:layout_constraintTop_toTopOf="@id/view2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteX="30dp" />
 
     <TextView
         android:id="@+id/profile_tv_name"
@@ -66,11 +53,13 @@
         android:layout_marginTop="70dp"
         android:text="Settings"
         android:textColor="@color/white"
-        android:textStyle="bold"
         android:textSize="25dp"
-        app:layout_constraintEnd_toStartOf="@id/guideline2"
-        app:layout_constraintStart_toStartOf="@id/guideline"
-        app:layout_constraintTop_toBottomOf="@id/view2" />
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/view2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="20dp"
+        tools:layout_editor_absoluteX="30dp" />
 
     <View
         android:id="@+id/view3"
@@ -78,9 +67,11 @@
         android:layout_height="2dp"
         android:layout_marginTop="10dp"
         android:background="@color/colorPrimaryDark"
-        app:layout_constraintEnd_toStartOf="@id/guideline2"
-        app:layout_constraintStart_toStartOf="@id/guideline"
-        app:layout_constraintTop_toBottomOf="@id/profile_tv_settings" />
+        app:layout_constraintTop_toBottomOf="@id/profile_tv_settings"
+        app:layout_constraintStart_toStartOf="@+id/profile_tv_settings"
+        app:layout_constraintEnd_toEndOf="@id/profile_tv_mail"
+
+        tools:layout_editor_absoluteX="30dp" />
 
     <Switch
         android:id="@+id/profile_notification_switch"
@@ -89,8 +80,6 @@
         android:text="Notifications ( once a day )  "
         android:textColor="@color/white"
         android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@id/guideline2"
-        app:layout_constraintHorizontal_bias="0.98"
         app:layout_constraintStart_toEndOf="@id/profile_iv_notification"
         app:layout_constraintTop_toTopOf="@id/profile_iv_notification" />
 
@@ -98,11 +87,10 @@
         android:id="@+id/profile_iv_notification"
         android:layout_width="31dp"
         android:layout_height="30dp"
-        android:layout_marginStart="15dp"
         android:layout_marginTop="40dp"
         android:src="@drawable/ic_notifications_black_24dp"
-        app:layout_constraintStart_toStartOf="@id/guideline"
-        app:layout_constraintTop_toBottomOf="@id/profile_iv_password" />
+        app:layout_constraintTop_toBottomOf="@id/profile_iv_password"
+        tools:layout_editor_absoluteX="45dp" />
 
     <EditText
         android:id="@+id/profile_ev_password"
@@ -112,7 +100,6 @@
         android:hint="New password"
         android:inputType="textPassword"
         android:textColorHint="@color/white"
-        app:layout_constraintEnd_toStartOf="@id/guideline2"
         app:layout_constraintStart_toEndOf="@id/profile_iv_password"
         app:layout_constraintTop_toTopOf="@id/profile_iv_password" />
 
@@ -120,11 +107,10 @@
         android:id="@+id/profile_iv_password"
         android:layout_width="33dp"
         android:layout_height="32dp"
-        android:layout_marginStart="15dp"
         android:layout_marginTop="40dp"
         android:src="@drawable/ic_lock_black_24dp"
-        app:layout_constraintStart_toStartOf="@id/guideline"
-        app:layout_constraintTop_toBottomOf="@id/profile_iv_mail" />
+        app:layout_constraintTop_toBottomOf="@id/profile_iv_mail"
+        tools:layout_editor_absoluteX="45dp" />
 
 
     <TextView
@@ -134,7 +120,6 @@
         android:hint="test.go4lunch@restaurant.fr"
         android:textColorHint="@color/white"
         android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@id/guideline2"
         app:layout_constraintStart_toEndOf="@id/profile_iv_mail"
         app:layout_constraintTop_toTopOf="@id/profile_iv_mail" />
 
@@ -142,11 +127,10 @@
         android:id="@+id/profile_iv_mail"
         android:layout_width="33dp"
         android:layout_height="32dp"
-        android:layout_marginStart="15dp"
         android:layout_marginTop="40dp"
         android:src="@drawable/ic_mail_black_24dp"
-        app:layout_constraintStart_toStartOf="@id/guideline"
-        app:layout_constraintTop_toBottomOf="@id/view3" />
+        app:layout_constraintTop_toBottomOf="@id/view3"
+        tools:layout_editor_absoluteX="45dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
