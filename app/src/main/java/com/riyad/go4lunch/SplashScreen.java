@@ -2,7 +2,6 @@ package com.riyad.go4lunch;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,12 +27,11 @@ public class SplashScreen extends AppCompatActivity {
 
             createSignInIntent();
 
-        }else{
+        } else {
 
             intentToMainActivity();
 
         }
-
 
 
     }
@@ -44,9 +42,13 @@ public class SplashScreen extends AppCompatActivity {
         finish();
     }
 
-    private Boolean userCurrentLogged(){return (this.getCurrentUser() != null); }
+    private Boolean userCurrentLogged() {
+        return (this.getCurrentUser() != null);
+    }
 
-    private FirebaseUser getCurrentUser() { return FirebaseAuth.getInstance().getCurrentUser(); }
+    private FirebaseUser getCurrentUser() {
+        return FirebaseAuth.getInstance().getCurrentUser();
+    }
 
     public void createSignInIntent() {
         // [START auth_fui_create_intent]
@@ -57,8 +59,7 @@ public class SplashScreen extends AppCompatActivity {
 //                new AuthUI.IdpConfig.FacebookBuilder().build(),
                 new AuthUI.IdpConfig.TwitterBuilder().build());
 
-
-
+// TODO finir l'activité SplashScreen après le lancement de l'autentification Firebase.
         startActivityForResult(
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
@@ -79,11 +80,11 @@ public class SplashScreen extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
 
-            if (resultCode == RESULT_OK){
+            if (resultCode == RESULT_OK) {
 
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 intentToMainActivity();
-            }else {
+            } else {
 
                 //TODO something
 

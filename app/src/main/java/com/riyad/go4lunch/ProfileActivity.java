@@ -2,9 +2,11 @@ package com.riyad.go4lunch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.widget.EditText;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,26 +14,27 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class ProfileActivity extends AppCompatActivity {
     private TextView textInputEditTextUsername;
     private TextView textViewEmail;
     private ImageView imageViewProfile;
-    private EditText textInputPassword;
+    private ImageView addProfilePicture;
+    private Button logoutProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_v2);
 
-//        textInputEditTextUsername = findViewById(R.id.profile_activity_edit_text_username);
-//        textViewEmail= findViewById(R.id.profile_activity_text_view_email);
-//        imageViewProfile = findViewById(R.id.profile_activity_imageview_profile);
-
         textViewEmail = findViewById(R.id.profile_tv_mail);
         textInputEditTextUsername = findViewById(R.id.profile_tv_name);
         imageViewProfile = findViewById(R.id.profile_iv_profile);
-        textInputPassword = findViewById(R.id.profile_ev_password);
+        addProfilePicture = findViewById(R.id.profile_iv_add_picture);
+        logoutProfile = findViewById(R.id.profile_btn_logout);
+
+
 
         this.isCurrentUserLogged();
         this.updateUIWhenCreating();
@@ -43,11 +46,23 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void updateUIWhenCreating(){
 
+
+
         if (this.getCurrentUser().getPhotoUrl() !=null){
+            addProfilePicture.setVisibility(View.GONE);
             Glide.with(this)
                     .load(this.getCurrentUser().getPhotoUrl())
                     .apply(RequestOptions.circleCropTransform())
                     .into(imageViewProfile);
+        }else{
+
+            addProfilePicture.setOnClickListener((View v)-> {
+               //TODO charger une photo.
+
+            });
+//            UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
+//                    .setPhotoUri(Uri.parse())
+
         }
 
         String email = TextUtils.isEmpty(this.getCurrentUser().getEmail()) ?

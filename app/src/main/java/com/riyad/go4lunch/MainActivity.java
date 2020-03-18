@@ -4,11 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.Toast;
 
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -39,12 +37,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
-//        myNavView = findViewById(R.id.main_drawer_layout);
+        myNavView = findViewById(R.id.main_navigation_view);
         myMainToolbar = findViewById(R.id.main_toolbar);
         myDrawerLayout =findViewById(R.id.main_drawer_layout);
 
         this.setSupportActionBar(myMainToolbar);
         this.configureBottomView();
+        this.configureNavView();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
                 myDrawerLayout,
@@ -56,18 +55,20 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
     }
 
-    private void configureBottomView() {
-        bottomNavigationView.setOnNavigationItemSelectedListener(item -> updateBottons(item.getItemId()));
+    private void configureNavView(){
+        myNavView.setNavigationItemSelectedListener(item -> updateButtons(item.getItemId()));
     }
 
-    private Boolean updateBottons(Integer integer) {
+    private void configureBottomView() {
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> updateButtons(item.getItemId()));
+    }
+
+    private Boolean updateButtons(Integer integer) {
 
         switch (integer) {
 
             case R.id.action_map_view:
                 //TODO afficher le fragement map view
-//                Toast.makeText(this, "Map View", Toast.LENGTH_LONG).show();
-                intentToProfileActivity();
                 break;
             case R.id.action_list_view:
                 //TODO afficher le fragement list map
@@ -94,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
     private void intentToProfileActivity() {
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
-        finish();
     }
 
 
