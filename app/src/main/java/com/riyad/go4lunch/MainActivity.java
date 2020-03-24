@@ -1,5 +1,6 @@
 package com.riyad.go4lunch;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,7 +13,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,16 +25,13 @@ import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private final Fragment mapFragment = new com.riyad.go4lunch.MapFragment();
-    private final FragmentManager fm = getSupportFragmentManager();
-    private Fragment active = mapFragment;
 
+    private MapFragment mMapFragment;
     private GoogleMap mMap;
     private BottomNavigationView bottomNavigationView;
     private DrawerLayout myDrawerLayout;
     private NavigationView myNavView;
     private Toolbar myMainToolbar;
-    private MapFragment mMapFragment;
 
 
     @Override
@@ -55,6 +52,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         myMainToolbar = findViewById(R.id.main_toolbar);
         myDrawerLayout = findViewById(R.id.main_drawer_layout);
 
+
 //        this.setSupportActionBar(myMainToolbar);
         this.configureBottomView();
         this.configureNavView();
@@ -68,7 +66,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         myDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        fm.beginTransaction().add(R.id.activity_main_frame_layout, mapFragment).commit();
+
 
     }
 
@@ -87,8 +85,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             case R.id.action_map_view:
                 //TODO afficher le fragement map view
 
-                fm.beginTransaction().hide(active).show(mapFragment).commit();
-                active = mapFragment;
+                mMapFragment = MapFragment.newInstance();
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.add(R.id.activity_main_frame_layout, mMapFragment);
+                ft.commit();
+
+//                fm.beginTransaction().hide(active).show(mapFragment).commit();
+//                active = mapFragment;
                 break;
             case R.id.action_list_view:
                 //TODO afficher le fragement list map
