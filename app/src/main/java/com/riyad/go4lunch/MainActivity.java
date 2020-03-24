@@ -6,22 +6,35 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.Toast;
 
-
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    private final Fragment mapFragment = new com.riyad.go4lunch.MapFragment();
+    private final FragmentManager fm = getSupportFragmentManager();
+    private Fragment active = mapFragment;
 
+    private GoogleMap mMap;
     private BottomNavigationView bottomNavigationView;
     private DrawerLayout myDrawerLayout;
     private NavigationView myNavView;
     private Toolbar myMainToolbar;
+    private MapFragment mMapFragment;
 
 
     @Override
@@ -36,12 +49,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         myNavView = findViewById(R.id.main_navigation_view);
         myMainToolbar = findViewById(R.id.main_toolbar);
-        myDrawerLayout =findViewById(R.id.main_drawer_layout);
+        myDrawerLayout = findViewById(R.id.main_drawer_layout);
 
-        this.setSupportActionBar(myMainToolbar);
+//        this.setSupportActionBar(myMainToolbar);
         this.configureBottomView();
         this.configureNavView();
 
@@ -53,9 +67,12 @@ public class MainActivity extends AppCompatActivity {
 
         myDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
+        fm.beginTransaction().add(R.id.activity_main_frame_layout, mapFragment).commit();
+
     }
 
-    private void configureNavView(){
+    private void configureNavView() {
         myNavView.setNavigationItemSelectedListener(item -> updateButtons(item.getItemId()));
     }
 
@@ -69,10 +86,14 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.action_map_view:
                 //TODO afficher le fragement map view
+
+                fm.beginTransaction().hide(active).show(mapFragment).commit();
+                active = mapFragment;
                 break;
             case R.id.action_list_view:
                 //TODO afficher le fragement list map
-                Toast.makeText(this, "Map List View", Toast.LENGTH_LONG).show();
+
+//                Toast.makeText(this, "Map List View", Toast.LENGTH_LONG).show();
                 break;
             case R.id.action_workmates:
                 //TODO afficher le fragement workmates
@@ -82,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 //TODO intent vers le fragment/Activité souhaité.
                 break;
             case R.id.nav_settings:
-                Toast.makeText(this,"serieux",Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "serieux", Toast.LENGTH_LONG).show();
                 intentToProfileActivity();
 
             case R.id.nav_logout:
@@ -98,5 +119,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
 
+        // Add a marker in Sydney and move the camera
+        LatLng sydney = new LatLng(-34, 151);
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
 }
