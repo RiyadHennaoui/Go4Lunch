@@ -1,27 +1,34 @@
 package com.riyad.go4lunch;
 
+import android.Manifest;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.riyad.go4lunch.utils.Constants;
+
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+
+import static com.riyad.go4lunch.utils.Constants.PERMISSION_REQUEST_ACCESS_FINE_LOCATION;
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -32,6 +39,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private DrawerLayout myDrawerLayout;
     private NavigationView myNavView;
     private Toolbar myMainToolbar;
+//    private FusedLocationProviderClient mFusedLocationClient;
 
 
     @Override
@@ -47,15 +55,21 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_main);
 
 
+
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         myNavView = findViewById(R.id.main_navigation_view);
         myMainToolbar = findViewById(R.id.main_toolbar);
         myDrawerLayout = findViewById(R.id.main_drawer_layout);
 
+        requiresLocationPermission();
+
+//        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
 
 //        this.setSupportActionBar(myMainToolbar);
         this.configureBottomView();
         this.configureNavView();
+        myNavView.setCheckedItem(R.id.action_map_view);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
                 myDrawerLayout,
@@ -65,7 +79,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         myDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
 
 
     }
@@ -78,20 +91,37 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> updateButtons(item.getItemId()));
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+    @AfterPermissionGranted(PERMISSION_REQUEST_ACCESS_FINE_LOCATION)
+    private void requiresLocationPermission() {
+        String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            // Already have permission, do the thing
+            // ...
+        } else {
+            // Do not have permissions, request them now
+            EasyPermissions.requestPermissions(this, getString(R.string.location_rationale),
+                    PERMISSION_REQUEST_ACCESS_FINE_LOCATION, perms);
+        }
+    }
+
     private Boolean updateButtons(Integer integer) {
 
         switch (integer) {
 
             case R.id.action_map_view:
                 //TODO afficher le fragement map view
-
                 mMapFragment = MapFragment.newInstance();
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.add(R.id.activity_main_frame_layout, mMapFragment);
                 ft.commit();
+                mMapFragment.getMapAsync(this);
 
-//                fm.beginTransaction().hide(active).show(mapFragment).commit();
-//                active = mapFragment;
                 break;
             case R.id.action_list_view:
                 //TODO afficher le fragement list map
@@ -126,9 +156,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+            mMap.getUiSettings().setMyLocationButtonEnabled(true);
+            mMap.setMyLocationEnabled(true);
+
+            // Add a marker in Sydney and move the camera
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(43.1, -87.9)));
+
+
     }
+
 }
