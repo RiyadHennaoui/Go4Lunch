@@ -3,7 +3,6 @@ package com.riyad.go4lunch;
 import android.Manifest;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,18 +11,18 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentActivity;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
-import com.riyad.go4lunch.utils.Constants;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -39,7 +38,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private DrawerLayout myDrawerLayout;
     private NavigationView myNavView;
     private Toolbar myMainToolbar;
-//    private FusedLocationProviderClient mFusedLocationClient;
+    private FusedLocationProviderClient mFusedLocationProviderClient;
 
 
     @Override
@@ -55,7 +54,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_main);
 
 
-
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         myNavView = findViewById(R.id.main_navigation_view);
         myMainToolbar = findViewById(R.id.main_toolbar);
@@ -63,13 +61,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         requiresLocationPermission();
 
-//        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
-
-//        this.setSupportActionBar(myMainToolbar);
         this.configureBottomView();
         this.configureNavView();
         myNavView.setCheckedItem(R.id.action_map_view);
+        openMap();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
                 myDrawerLayout,
@@ -97,6 +92,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
+
     @AfterPermissionGranted(PERMISSION_REQUEST_ACCESS_FINE_LOCATION)
     private void requiresLocationPermission() {
         String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
@@ -116,11 +112,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
             case R.id.action_map_view:
                 //TODO afficher le fragement map view
-                mMapFragment = MapFragment.newInstance();
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.add(R.id.activity_main_frame_layout, mMapFragment);
-                ft.commit();
-                mMapFragment.getMapAsync(this);
+                openMap();
 
                 break;
             case R.id.action_list_view:
@@ -154,15 +146,31 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
+       Task locationResult =  mFusedLocationProviderClient.getLastLocation();
+       locationResult.addOnCompleteListener(this, new OnCompleteListener() {
+           @Override
+           public void onComplete(@NonNull Task task) {
+               if(task.isSuccessful()){
+
+                   
+
+               }
+           }
+       })
         mMap = googleMap;
 
-            mMap.getUiSettings().setMyLocationButtonEnabled(true);
-            mMap.setMyLocationEnabled(true);
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+        mMap.setMyLocationEnabled(true);
+        mMap.moveCamera(CameraUpdateFactory.newLatLng());
+    }
 
-            // Add a marker in Sydney and move the camera
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(43.1, -87.9)));
-
-
+    private void openMap() {
+        mMapFragment = MapFragment.newInstance();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.activity_main_frame_layout, mMapFragment);
+        ft.commit();
+        mMapFragment.getMapAsync(this);
     }
 
 }

@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
+
 
 android {
     compileSdkVersion 29
@@ -11,6 +11,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -61,4 +62,8 @@ dependencies {
     //EasyPermissions
     implementation 'pub.devrel:easypermissions:3.0.0'
 
+    //Multidex
+    implementation 'com.android.support:multidex:1.0.3'
+
 }
+apply plugin: 'com.google.gms.google-services'
