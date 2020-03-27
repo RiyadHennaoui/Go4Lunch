@@ -15,12 +15,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
@@ -58,6 +60,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         myNavView = findViewById(R.id.main_navigation_view);
         myMainToolbar = findViewById(R.id.main_toolbar);
         myDrawerLayout = findViewById(R.id.main_drawer_layout);
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+//        mGeoDataClient = Places.
 
         requiresLocationPermission();
 
@@ -147,22 +151,21 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-       Task locationResult =  mFusedLocationProviderClient.getLastLocation();
-       locationResult.addOnCompleteListener(this, new OnCompleteListener() {
-           @Override
-           public void onComplete(@NonNull Task task) {
-               if(task.isSuccessful()){
+        Task locationResult = mFusedLocationProviderClient.getLastLocation();
+        locationResult.addOnCompleteListener(this, new OnCompleteListener() {
+            @Override
+            public void onComplete(@NonNull Task task) {
+                if (task.isSuccessful()) {
 
-                   
 
-               }
-           }
-       })
+                }
+            }
+        });
         mMap = googleMap;
 
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.setMyLocationEnabled(true);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng());
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng());
     }
 
     private void openMap() {
