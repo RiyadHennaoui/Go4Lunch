@@ -226,6 +226,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 break;
             case R.id.action_workmates:
                 //TODO afficher le fragement workmates
+                openPlacesDialog();
                 Toast.makeText(this, "Workmates", Toast.LENGTH_LONG).show();
                 break;
             case R.id.nav_your_lunch:
@@ -311,7 +312,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 getLocationPermission();
             }
         } catch (SecurityException e) {
-            Log.e("Exception: %s", e.getMessage());
+            Log.e("Ex UpdateLocation: %s", e.getMessage());
         }
     }
 
@@ -389,7 +390,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                         mLikelyPlaceLatLngs = new LatLng[count];
 
                         for (PlaceLikelihood placeLikelihood : likelyPlaces.getPlaceLikelihoods()) {
-                            if (placeLikelihood.getPlace().getTypes().equals(Place.Type.RESTAURANT)) {
+//                            if (placeLikelihood.getPlace().getTypes().equals(Place.Type.RESTAURANT)) {
 
                                 mLikelyPlaceNames[i] = placeLikelihood.getPlace().getName();
                                 mLikelyPlaceAddresses[i] = placeLikelihood.getPlace().getAddress();
@@ -400,12 +401,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                                 if (i > (count - 1)) {
                                     break;
                                 }
-                            }
+//                            }
                         }
 
                         MainActivity.this.openPlacesDialog();
                     } else {
-                        Log.e(TAG, "Exception: %s", task.getException());
+                        Log.e(TAG, "Exception Non pas elle : %s", task.getException());
                     }
                 }
             });

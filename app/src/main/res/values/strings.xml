@@ -44,7 +44,8 @@
     <string name="toast_title_no_image_chosen">Aucune image choisie&#8230;</string>
 
     <!-- GoogleMap API -->
-    <string name="google_map_api_key">AIzaSyAu1XocQpG-OXuuNJW4n6kcGWIUns9RdB0</string>
+
+    <string name="google_map_api_key">AIzaSyANygkUK5W0oWtDJQ6TV6dwYEdAe2zkONA</string>
 
     <!-- FACEBOOK PURPOSE -->
     <string name="facebook_app_id">515956462439198</string>
