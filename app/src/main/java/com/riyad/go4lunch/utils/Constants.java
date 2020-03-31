@@ -16,6 +16,9 @@ public class Constants {
     // Used for selecting the current place.
     public static final int M_MAX_ENTRIES = 10;
 
+    // Used for saved instance state
+    public final String SAVED_INSTANCE_STATE_KEY = "SAVED_INSTANCE_STATE_KEY";
+
 
 
 }

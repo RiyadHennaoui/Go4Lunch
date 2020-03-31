@@ -77,7 +77,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/item_worker_tv_name"/>
 
             <Button
-                android:id="@+id/item_worker_iv_expand"
+                android:id="@+id/item_worker_bt_expand"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginEnd="12dp"
@@ -91,7 +91,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="12dp"
-
+            android:visibility="gone"
             android:layout_marginTop="12dp"
             app:layout_constraintTop_toBottomOf="@+id/item_worker_tv_work"
             app:layout_constraintStart_toStartOf="parent"
@@ -109,7 +109,7 @@
                 app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
-                android:id="@+id/phoneNumber"
+                android:id="@+id/item_worker_tv_mail"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="(999) 345 32 45"
