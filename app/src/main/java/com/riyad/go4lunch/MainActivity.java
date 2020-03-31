@@ -390,7 +390,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                         mLikelyPlaceLatLngs = new LatLng[count];
 
                         for (PlaceLikelihood placeLikelihood : likelyPlaces.getPlaceLikelihoods()) {
-//                            if (placeLikelihood.getPlace().getTypes().equals(Place.Type.RESTAURANT)) {
+                            if (placeLikelihood.getPlace().getTypes().equals(Place.Type.RESTAURANT)) {
 
                                 mLikelyPlaceNames[i] = placeLikelihood.getPlace().getName();
                                 mLikelyPlaceAddresses[i] = placeLikelihood.getPlace().getAddress();
@@ -401,7 +401,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                                 if (i > (count - 1)) {
                                     break;
                                 }
-//                            }
+                            }
                         }
 
                         MainActivity.this.openPlacesDialog();
