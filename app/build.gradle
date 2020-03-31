@@ -35,11 +35,18 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+    // Recyclerview
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
+
     //Firebase SDK for Google Analytics
     implementation 'com.google.firebase:firebase-analytics:17.2.3'
 
     // Firebase UI Auth
     implementation 'com.firebaseui:firebase-ui-auth:6.2.0'
+
+    // Firebase Database
+    implementation 'com.google.firebase:firebase-database:19.2.1'
+
 
     // SDK Facebook Login
 //    implementation 'com.facebook.android:facebook-login:[5,6)'
