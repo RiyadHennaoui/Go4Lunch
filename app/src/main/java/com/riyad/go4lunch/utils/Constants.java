@@ -19,6 +19,9 @@ public class Constants {
     // Used for saved instance state
     public final String SAVED_INSTANCE_STATE_KEY = "SAVED_INSTANCE_STATE_KEY";
 
+    //for collections
+    public static final String COLLECTION_USER_NAME = "user";
+
 
 
 }

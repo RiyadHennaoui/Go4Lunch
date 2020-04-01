@@ -10,18 +10,18 @@ public class User {
     private String mFirstname;
     private String mMail;
     @Nullable private String mUrlPicture;
-    @Nullable private String mCurrentRestaurent;
+    @Nullable private String mCurrentRestaurant;
 
     public User() { }
 
-    public User (String mUid, String mUsername, String mMail, String mFirstname, String mUrlPicture, String mCurrentRestaurent){
+    public User (String mUid, String mUsername, String mMail, String mFirstname, String mUrlPicture, String mCurrentRestaurant){
 
         this.mUid = mUid;
         this.mUsername = mUsername;
         this.mFirstname = mFirstname;
         this.mMail = mMail;
         this.mUrlPicture = mUrlPicture;
-        this.mCurrentRestaurent = mCurrentRestaurent;
+        this.mCurrentRestaurant = mCurrentRestaurant;
 
     }
 
@@ -39,7 +39,7 @@ public class User {
     public String getmMail() { return mMail; }
 
     @Nullable
-    public String getmCurrentRestaurent() { return mCurrentRestaurent; }
+    public String getmCurrentRestaurant() { return mCurrentRestaurant; }
 
 
     // --- SETTERS ---
@@ -51,7 +51,7 @@ public class User {
 
     public void setmUrlPicture(@Nullable String mUrlPicture) { this.mUrlPicture = mUrlPicture; }
 
-    public void setmCurrentRestaurent(@Nullable String mCurrentRestaurent) { this.mCurrentRestaurent = mCurrentRestaurent; }
+    public void setmCurrentRestaurant(@Nullable String mCurrentRestaurant) { this.mCurrentRestaurant = mCurrentRestaurant; }
 
     public void setmMail(String mMail) { this.mMail = mMail; }
 }
