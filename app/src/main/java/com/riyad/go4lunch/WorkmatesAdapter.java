@@ -83,7 +83,7 @@ public class WorkmatesAdapter extends RecyclerView.Adapter<WorkmatesAdapter.View
 
         public void bind(User user) {
 
-            mFirstName.setText(user.getmFirstname() + " " + user.getmUsername());
+            mFirstName.setText(user.getmUsername());
             mMailWorkmate.setText(user.getmMail());
 
             Glide.with(mIvProfileMain).load(user.getmUrlPicture()).centerCrop().into(mIvProfileMain);

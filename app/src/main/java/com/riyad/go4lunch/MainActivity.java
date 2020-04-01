@@ -189,10 +189,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.i(TAG, "onRequest");
                     mLocationPermissionGranted = true;
                 }
             }
         }
+        Log.i(TAG, "onRequest 196");
         updateLocationUI();
     }
 
@@ -202,6 +204,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         if (EasyPermissions.hasPermissions(this, perms)) {
             // Already have permission, do the thing
             mLocationPermissionGranted = true;
+            getDeviceLocation();
         } else {
             // Do not have permissions, request them now
             EasyPermissions.requestPermissions(this, getString(R.string.location_rationale),
@@ -274,9 +277,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        mMap.setMyLocationEnabled(true);
-        getDeviceLocation();
+
+//        getDeviceLocation();
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng());
     }
 

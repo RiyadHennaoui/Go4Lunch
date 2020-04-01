@@ -2,14 +2,18 @@ package com.riyad.go4lunch;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.riyad.go4lunch.api.UserHelper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -73,17 +77,35 @@ public class SplashScreen extends AppCompatActivity {
 
     }
 
+    private void creatUserInFirestore(){
+
+        if (userCurrentLogged()){
+
+            String mUid = this.getCurrentUser().getUid();
+            String mUsername = this.getCurrentUser().getDisplayName();
+            String mUrlPicture = (this.getCurrentUser().getPhotoUrl() != null) ?
+                    this.getCurrentUser().getPhotoUrl().toString() : null;
+            String mMail = this.getCurrentUser().getEmail();
+
+            UserHelper.createUser(mUid, mUsername, mMail, mUrlPicture).addOnFailureListener(e ->
+
+                    Toast.makeText(getApplicationContext(), "UserHelper not created error server" + e, Toast.LENGTH_LONG).show());
+        }
+
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_SIGN_IN) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
-
             if (resultCode == RESULT_OK) {
 
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                this.creatUserInFirestore();
                 intentToMainActivity();
+                finish();
             } else {
 
                 //TODO something

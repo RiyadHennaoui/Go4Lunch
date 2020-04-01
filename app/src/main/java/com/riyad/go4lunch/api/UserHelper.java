@@ -14,8 +14,8 @@ public class UserHelper {
         return FirebaseFirestore.getInstance().collection(COLLECTION_USER_NAME);
     }
 
-    public static Task<Void> createUser(String mUid, String mUsername, String mFirstname, String mMail, String mUrlPicture, String mCurrentRestaurant) {
-        User userToCreat = new User(mUid, mUsername, mFirstname, mMail, mUrlPicture, mCurrentRestaurant);
+    public static Task<Void> createUser(String mUid, String mUsername,  String mMail, String mUrlPicture) {
+        User userToCreat = new User(mUid, mUsername, mMail, mUrlPicture);
         return UserHelper.getUsersCollection().document(mUid).set(userToCreat);
     }
 
@@ -29,11 +29,6 @@ public class UserHelper {
         return UserHelper.getUsersCollection().document(mUid).update("mUsername", mUsername);
     }
 
-
-    public static Task<Void> updateFsername(String mFirstname, String mUid) {
-        return UserHelper.getUsersCollection().document(mUid).update("mFirstname", mFirstname);
-    }
-
     public static Task<Void> updateUrlPicture(String mUrlPicture, String mUid) {
         return UserHelper.getUsersCollection().document(mUid).update("mUrlPicture", mUrlPicture);
     }
@@ -41,12 +36,6 @@ public class UserHelper {
     public static Task<Void> updateMail(String mMail, String mUid) {
         return UserHelper.getUsersCollection().document(mUid).update("mMail", mMail);
     }
-
-    public static Task<Void> updateCurrentRestaurant(String mCurrentRestaurant, String mUid) {
-        return UserHelper.getUsersCollection().document(mUid).update("mCurrentRestaurant", mCurrentRestaurant);
-    }
-
-
 
     // --- DELETE ---
 
