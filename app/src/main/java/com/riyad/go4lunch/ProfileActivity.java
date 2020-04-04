@@ -74,4 +74,6 @@ public class ProfileActivity extends AppCompatActivity {
         this.textViewEmail.setText(email);
 
     }
+
+
 }

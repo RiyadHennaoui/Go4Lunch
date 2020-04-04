@@ -1,7 +1,6 @@
 package com.riyad.go4lunch;
 
 import android.Manifest;
-import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -21,6 +20,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -189,12 +190,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.i(TAG, "onRequest");
                     mLocationPermissionGranted = true;
                 }
             }
         }
-        Log.i(TAG, "onRequest 196");
         updateLocationUI();
     }
 
@@ -204,7 +203,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         if (EasyPermissions.hasPermissions(this, perms)) {
             // Already have permission, do the thing
             mLocationPermissionGranted = true;
-            getDeviceLocation();
         } else {
             // Do not have permissions, request them now
             EasyPermissions.requestPermissions(this, getString(R.string.location_rationale),
@@ -229,7 +227,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 break;
             case R.id.action_workmates:
                 //TODO afficher le fragement workmates
-                openPlacesDialog();
+//                openPlacesDialog();
+                displayWorkematesFragment();
                 Toast.makeText(this, "Workmates", Toast.LENGTH_LONG).show();
                 break;
             case R.id.nav_your_lunch:
@@ -244,6 +243,14 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         return true;
+    }
+
+    private void displayWorkematesFragment() {
+        Log.i("MainActivity", "displayWorkerFragment");
+        WorkmateFragment workmateFragment = WorkmateFragment.newInstance();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.activity_main_frame_layout, workmateFragment).commit();
     }
 
     private void intentToProfileActivity() {
@@ -277,15 +284,16 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-
-//        getDeviceLocation();
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+        mMap.setMyLocationEnabled(true);
+        getDeviceLocation();
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng());
     }
 
     private void openMap() {
 
         mMapFragment = MapFragment.newInstance();
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.activity_main_frame_layout, mMapFragment);
         ft.commit();
         mMapFragment.getMapAsync(this);

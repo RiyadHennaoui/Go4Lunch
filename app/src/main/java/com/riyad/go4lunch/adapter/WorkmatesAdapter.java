@@ -1,6 +1,7 @@
-package com.riyad.go4lunch;
+package com.riyad.go4lunch.adapter;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,19 +17,23 @@ import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
+import com.riyad.go4lunch.R;
+import com.riyad.go4lunch.User;
 
 import java.util.List;
 
 
-public class WorkmatesAdapter extends RecyclerView.Adapter<WorkmatesAdapter.ViewHolder> {
+public class WorkmatesAdapter extends FirestoreAdapter<WorkmatesAdapter.ViewHolder> {
 
-    private List<User> mDataUsers;
+
     private Context context;
 
-
-    public WorkmatesAdapter(Context con) {
-        this.context = con;
+    public WorkmatesAdapter(Query query, Context context) {
+        super(query);
     }
+
 
     @NonNull
     @Override
@@ -42,16 +47,9 @@ public class WorkmatesAdapter extends RecyclerView.Adapter<WorkmatesAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(mDataUsers.get(position));
+        holder.bind(getSnapshot(position));
     }
 
-    @Override
-    public int getItemCount() { return mDataUsers != null ? mDataUsers.size() : 0; }
-
-    public void setData(@NonNull List<User> users){
-        mDataUsers = users;
-        notifyDataSetChanged();
-    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -81,7 +79,11 @@ public class WorkmatesAdapter extends RecyclerView.Adapter<WorkmatesAdapter.View
             mMainCardView = itemView.findViewById(R.id.item_worker_main_cardview);
         }
 
-        public void bind(User user) {
+        public void bind(final DocumentSnapshot snapshot) {
+
+
+            User user = snapshot.toObject(User.class);
+            Resources resources = itemView.getResources();
 
             mFirstName.setText(user.getmUsername());
             mMailWorkmate.setText(user.getmMail());
