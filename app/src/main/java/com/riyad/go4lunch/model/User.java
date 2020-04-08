@@ -1,4 +1,4 @@
-package com.riyad.go4lunch;
+package com.riyad.go4lunch.model;
 
 import androidx.annotation.Nullable;
 
@@ -9,9 +9,8 @@ public class User {
     private String mUsername;
     private String mMail;
     @Nullable private String mUrlPicture;
-    @Nullable private String mCurrentRestaurant;
 
-    public User() { }
+    public User() { } // Needed for Firebase
 
     public User (String mUid, String mUsername, String mMail, String mUrlPicture){
 

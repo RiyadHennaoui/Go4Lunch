@@ -27,8 +27,8 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -59,8 +59,11 @@ import static com.riyad.go4lunch.utils.Constants.PERMISSION_REQUEST_ACCESS_FINE_
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
 
 
+    // For testing rv workmates
+
+
     private static final String TAG = "MainActivity";
-    private MapFragment mMapFragment;
+    private SupportMapFragment mMapFragment;
     private GoogleMap mMap;
     private CameraPosition mCameraPosition;
     private BottomNavigationView bottomNavigationView;
@@ -227,9 +230,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 break;
             case R.id.action_workmates:
                 //TODO afficher le fragement workmates
-//                openPlacesDialog();
-                displayWorkematesFragment();
-                Toast.makeText(this, "Workmates", Toast.LENGTH_LONG).show();
+
+               displayWorkematesFragment();
+
                 break;
             case R.id.nav_your_lunch:
                 //TODO intent vers le fragment/Activité souhaité.
@@ -245,19 +248,27 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         return true;
     }
 
+    private void openMap() {
+
+        mMapFragment = SupportMapFragment.newInstance();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.activity_main_frame_layout, mMapFragment).commit();
+        mMapFragment.getMapAsync(this);
+    }
+
     private void displayWorkematesFragment() {
         Log.i("MainActivity", "displayWorkerFragment");
         WorkmateFragment workmateFragment = WorkmateFragment.newInstance();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.activity_main_frame_layout, workmateFragment).commit();
+        fragmentTransaction.replace(R.id.activity_main_frame_layout, workmateFragment).commit();
     }
 
     private void intentToProfileActivity() {
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -288,15 +299,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setMyLocationEnabled(true);
         getDeviceLocation();
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng());
-    }
-
-    private void openMap() {
-
-        mMapFragment = MapFragment.newInstance();
-        android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.activity_main_frame_layout, mMapFragment);
-        ft.commit();
-        mMapFragment.getMapAsync(this);
     }
 
     private void initPlaces() {

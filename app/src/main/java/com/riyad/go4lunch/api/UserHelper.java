@@ -4,7 +4,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.riyad.go4lunch.User;
+import com.riyad.go4lunch.model.User;
 
 import static com.riyad.go4lunch.utils.Constants.COLLECTION_USER_NAME;
 

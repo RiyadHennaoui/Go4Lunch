@@ -1,7 +1,5 @@
 package com.riyad.go4lunch.adapter;
 
-import android.content.Context;
-import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,41 +15,65 @@ import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.Query;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.riyad.go4lunch.R;
-import com.riyad.go4lunch.User;
+import com.riyad.go4lunch.model.User;
 
-import java.util.List;
-
-
-public class WorkmatesAdapter extends FirestoreAdapter<WorkmatesAdapter.ViewHolder> {
+public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesAdapter.UsersHolder> {
 
 
-    private Context context;
-
-    public WorkmatesAdapter(Query query, Context context) {
-        super(query);
+    /**
+     * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
+     * FirestoreRecyclerOptions} for configuration options.
+     *
+     * @param options
+     */
+    public WorkmatesAdapter(@NonNull FirestoreRecyclerOptions<User> options) {
+        super(options);
     }
 
+    @Override
+    protected void onBindViewHolder(@NonNull UsersHolder holder, int position, @NonNull User user) {
+
+        holder.bind(user);
+
+/*
+        holder.mFirstName.setText(model.getmUsername());
+        holder.mMailWorkmate.setText(model.getmMail());
+
+
+        Log.i("urlpicture", model.getmUrlPicture());
+        Glide.with(holder.mIvProfileMain).load(model.getmUrlPicture()).centerCrop().into(holder.mIvProfileMain);
+        Glide.with(holder.mIvProfileCircle).load(model.getmUrlPicture()).circleCrop().into(holder.mIvProfileCircle);
+
+        holder.mExtandButton.setOnClickListener(view -> {
+
+            if (holder.expandableCardView.getVisibility() == View.GONE) {
+
+                TransitionManager.beginDelayedTransition(holder.mMainCardView, new AutoTransition());
+                holder.expandableCardView.setVisibility(View.VISIBLE);
+                holder.mExtandButton.setBackgroundResource(R.drawable.ic_expand_less_black_24dp);
+
+            } else {
+                TransitionManager.beginDelayedTransition(holder.mMainCardView, new AutoTransition());
+                holder.expandableCardView.setVisibility(View.GONE);
+                holder.mExtandButton.setBackgroundResource(R.drawable.ic_expand_more_black_24dp);
+            }
+
+        });
+*/
+    }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public UsersHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_worker, parent, false);
-
-        return new ViewHolder(v);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_worker, parent, false);
+        return new UsersHolder(v);
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(getSnapshot(position));
-    }
-
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class UsersHolder extends RecyclerView.ViewHolder {
 
         private ConstraintLayout expandableCardView;
         private CardView mMainCardView;
@@ -63,9 +85,7 @@ public class WorkmatesAdapter extends FirestoreAdapter<WorkmatesAdapter.ViewHold
         private final Button mChat;
 
 
-
-
-        public ViewHolder(@NonNull View itemView) {
+        public UsersHolder(@NonNull View itemView) {
             super(itemView);
 
 
@@ -77,13 +97,11 @@ public class WorkmatesAdapter extends FirestoreAdapter<WorkmatesAdapter.ViewHold
             mChat = itemView.findViewById(R.id.item_worker_bt_chat);
             expandableCardView = itemView.findViewById(R.id.item_worker_expandableView);
             mMainCardView = itemView.findViewById(R.id.item_worker_main_cardview);
+            mIvProfileMain.setVisibility(View.GONE);
         }
 
-        public void bind(final DocumentSnapshot snapshot) {
+        public void bind(final User user) {
 
-
-            User user = snapshot.toObject(User.class);
-            Resources resources = itemView.getResources();
 
             mFirstName.setText(user.getmUsername());
             mMailWorkmate.setText(user.getmMail());
@@ -93,13 +111,13 @@ public class WorkmatesAdapter extends FirestoreAdapter<WorkmatesAdapter.ViewHold
 
             mExtandButton.setOnClickListener(view -> {
 
-                if (expandableCardView.getVisibility() == View.GONE){
+                if (expandableCardView.getVisibility() == View.GONE) {
 
                     TransitionManager.beginDelayedTransition(mMainCardView, new AutoTransition());
                     expandableCardView.setVisibility(View.VISIBLE);
                     mExtandButton.setBackgroundResource(R.drawable.ic_expand_less_black_24dp);
 
-                }else{
+                } else {
                     TransitionManager.beginDelayedTransition(mMainCardView, new AutoTransition());
                     expandableCardView.setVisibility(View.GONE);
                     mExtandButton.setBackgroundResource(R.drawable.ic_expand_more_black_24dp);
@@ -115,6 +133,4 @@ public class WorkmatesAdapter extends FirestoreAdapter<WorkmatesAdapter.ViewHold
 
         }
     }
-
-
 }

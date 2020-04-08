@@ -42,7 +42,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics:17.2.3'
 
     // Firebase UI Auth
-    implementation 'com.firebaseui:firebase-ui-auth:6.2.0'
+    implementation 'com.firebaseui:firebase-ui-auth:6.2.1'
 
     // Firebase Database
     implementation 'com.google.firebase:firebase-database:19.2.1'
@@ -50,6 +50,7 @@ dependencies {
     //Firebase Firestore
 //    implementation 'com.firebaseui:firebase-ui-firestore:3.1.3'
     implementation 'com.google.firebase:firebase-firestore:21.4.2'
+    implementation 'com.firebaseui:firebase-ui-firestore:6.2.1'
 
     // SDK Facebook Login
 //    implementation 'com.facebook.android:facebook-login:[5,6)'
