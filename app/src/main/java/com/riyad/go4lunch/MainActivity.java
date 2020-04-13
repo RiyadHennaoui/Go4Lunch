@@ -43,6 +43,7 @@ import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.riyad.go4lunch.fragments.WorkmateFragment;
 
 import java.util.Arrays;
 import java.util.List;

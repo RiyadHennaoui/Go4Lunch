@@ -22,6 +22,13 @@ public class Constants {
     //for collections
     public static final String COLLECTION_USER_NAME = "user";
 
+    //for message type
+    public static final int MSG_TYPE_LEFT = 0;
+    public static final int MSG_TYPE_RIGHT = 1;
+
+
+
+
 
 
 }

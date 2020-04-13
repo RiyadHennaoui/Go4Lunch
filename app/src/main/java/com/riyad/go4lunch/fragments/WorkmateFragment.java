@@ -1,4 +1,4 @@
-package com.riyad.go4lunch;
+package com.riyad.go4lunch.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +15,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.riyad.go4lunch.R;
 import com.riyad.go4lunch.adapter.WorkmatesAdapter;
 import com.riyad.go4lunch.model.User;
 
