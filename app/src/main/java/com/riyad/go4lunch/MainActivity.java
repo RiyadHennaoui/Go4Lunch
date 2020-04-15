@@ -221,7 +221,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             case R.id.action_map_view:
                 //TODO afficher le fragement map view
                 openMap();
-
+                showCurrentPlace();
                 break;
             case R.id.action_list_view:
                 //TODO afficher le fragement list map

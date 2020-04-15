@@ -127,7 +127,7 @@ public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesAd
 
             mChat.setOnClickListener(view -> {
 
-                //TODO Crée un intent vers l'activité CHAT.
+                //TODO Crée un intent vers l'activitée CHAT.
 
             });
 

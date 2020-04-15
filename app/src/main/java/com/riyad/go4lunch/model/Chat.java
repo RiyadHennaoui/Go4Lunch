@@ -5,29 +5,29 @@ import com.google.firebase.firestore.ServerTimestamp;
 import java.util.Date;
 
 public class Chat {
-    private String mName;
+    private String mReceiver;
     private String mMessage;
-    private String mUid;
+    private String mSender;
     private Date mTimestamp;
 
     public Chat() { } // Needed for Firebase
 
-    public Chat(String name, String message, String uid) {
-        mName = name;
+    public Chat(String receiver, String message, String sender) {
+        mReceiver = receiver;
         mMessage = message;
-        mUid = uid;
+        mSender = sender;
     }
 
     // --- GETTERS --
-    public String getName() { return mName; }
+    public String getReceiver() { return mReceiver; }
     public String getMessage() { return mMessage; }
-    public String getUid() { return mUid; }
+    public String getSender() { return mSender; }
     @ServerTimestamp
     public Date getTimestamp() { return mTimestamp; }
 
     // --- SETTERS ---
     public void setMessage(String message) { mMessage = message; }
-    public void setName(String name) { mName = name; }
-    public void setUid(String uid) { mUid = uid; }
+    public void setRecieiver(String name) { mReceiver = name; }
+    public void setSender(String uid) { mSender = uid; }
     public void setTimestamp(Date timestamp) { mTimestamp = timestamp; }
 }
