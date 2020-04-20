@@ -18,11 +18,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -46,11 +48,13 @@ import com.google.android.material.navigation.NavigationView;
 import com.riyad.go4lunch.fragments.WorkmateFragment;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static com.riyad.go4lunch.utils.Constants.DEFAULT_ZOOM;
 import static com.riyad.go4lunch.utils.Constants.KEY_CAMERA_POSITION;
 import static com.riyad.go4lunch.utils.Constants.KEY_Location;
@@ -89,6 +93,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private String[] mLikelyPlaceAddresses;
     private List[] mLikelyPlaceAttributions;
     private LatLng[] mLikelyPlaceLatLngs;
+    private String[] mLikelyPlaceType;
 
 
     @Override
@@ -104,6 +109,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_main);
 
 
+//        Places.initialize(getApplicationContext(), getString(R.string.google_api_key));
+//        mPlacesClient = Places.createClient(this);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         myNavView = findViewById(R.id.main_navigation_view);
         myMainToolbar = findViewById(R.id.main_toolbar);
@@ -203,7 +210,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     @AfterPermissionGranted(PERMISSION_REQUEST_ACCESS_FINE_LOCATION)
     private void getLocationPermission() {
-        String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
+        String[] perms = {ACCESS_FINE_LOCATION};
         if (EasyPermissions.hasPermissions(this, perms)) {
             // Already have permission, do the thing
             mLocationPermissionGranted = true;
@@ -221,18 +228,19 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             case R.id.action_map_view:
                 //TODO afficher le fragement map view
                 openMap();
+//                showPlacesGetStarted();
                 showCurrentPlace();
                 break;
             case R.id.action_list_view:
                 //TODO afficher le fragement list map
-
-                showCurrentPlace();
+                    showPlacesGetStarted();
+//              showCurrentPlace();
 //                Toast.makeText(this, "Map List View", Toast.LENGTH_LONG).show();
                 break;
             case R.id.action_workmates:
                 //TODO afficher le fragement workmates
 
-               displayWorkematesFragment();
+                displayWorkematesFragment();
 
                 break;
             case R.id.nav_your_lunch:
@@ -303,7 +311,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void initPlaces() {
-        Places.initialize(getApplicationContext(), getString(R.string.google_api_key));
+        Places.initialize(getApplicationContext(), "AIzaSyANygkUK5W0oWtDJQ6TV6dwYEdAe2zkONA");
         mPlacesClient = Places.createClient(this);
     }
 
@@ -376,7 +384,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         if (mLocationPermissionGranted) {
             List<Place.Field> placeFields = Arrays.asList(Place.Field.NAME, Place.Field.ADDRESS,
-                    Place.Field.LAT_LNG);
+                    Place.Field.LAT_LNG, Place.Field.TYPES);
 
             FindCurrentPlaceRequest request =
                     FindCurrentPlaceRequest.newInstance(placeFields);
@@ -402,19 +410,20 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                         mLikelyPlaceAttributions = new List[count];
                         mLikelyPlaceLatLngs = new LatLng[count];
 
+
                         for (PlaceLikelihood placeLikelihood : likelyPlaces.getPlaceLikelihoods()) {
-                            if (placeLikelihood.getPlace().getTypes().equals(Place.Type.RESTAURANT)) {
 
                                 mLikelyPlaceNames[i] = placeLikelihood.getPlace().getName();
                                 mLikelyPlaceAddresses[i] = placeLikelihood.getPlace().getAddress();
                                 mLikelyPlaceAttributions[i] = placeLikelihood.getPlace().getAttributions();
                                 mLikelyPlaceLatLngs[i] = placeLikelihood.getPlace().getLatLng();
 
+
                                 i++;
                                 if (i > (count - 1)) {
                                     break;
                                 }
-                            }
+
                         }
 
                         MainActivity.this.openPlacesDialog();
@@ -430,6 +439,40 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
             getLocationPermission();
         }
+    }
+
+    private void showPlacesGetStarted() {
+        List<Place.Field> placeFields = Collections.singletonList(Place.Field.TYPES);
+        Place place;
+        FindCurrentPlaceRequest request = FindCurrentPlaceRequest.newInstance(placeFields);
+
+        if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            Task<FindCurrentPlaceResponse> placeResponse = mPlacesClient.findCurrentPlace(request);
+            placeResponse.addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    FindCurrentPlaceResponse response = task.getResult();
+                    for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
+                        Log.i("GetStarted", String.format("Place '%s' likelihood: %f",
+                                placeLikelihood.getPlace().getName(),
+                                placeLikelihood.getLikelihood()));
+                    }
+                } else {
+                    Exception e = task.getException();
+                    if (e instanceof ApiException) {
+                        ApiException apiException = (ApiException) e;
+                        Log.e("GetStarted", "Place not found" + apiException.getStatusCode());
+                    }
+                }
+
+            });
+
+
+        } else {
+            Log.i("GetStarted", "non pas elle punaise");
+
+
+        }
+
     }
 
 }
