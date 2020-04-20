@@ -76,5 +76,7 @@ dependencies {
     //Multidex
     implementation 'com.android.support:multidex:1.0.3'
 
+    //Retrofit
+   implementation 'com.squareup.retrofit2:retrofit:2.8.1'
 }
 apply plugin: 'com.google.gms.google-services'
