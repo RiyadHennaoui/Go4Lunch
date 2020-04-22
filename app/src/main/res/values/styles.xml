@@ -46,4 +46,16 @@
     <style name="bottom_navigation_menu_list_view">List View</style>
     <style name="bottom_navigation_menu_workmates">Workmates</style>
 
+    <!-- ITEM RESTAURANT -->
+    <style name="Subheader" parent="AppTheme">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- RATING BAR -->
+    <style name="customRatingBar"
+        parent="android:style/Widget.Material.RatingBar.Small">
+        <item name="android:numStars">3</item>
+    </style>
+
 </resources>

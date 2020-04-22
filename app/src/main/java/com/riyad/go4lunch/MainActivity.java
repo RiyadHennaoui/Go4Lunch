@@ -45,6 +45,7 @@ import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.riyad.go4lunch.fragments.RestaurantsFragment;
 import com.riyad.go4lunch.fragments.WorkmateFragment;
 
 import java.util.Arrays;
@@ -233,7 +234,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 break;
             case R.id.action_list_view:
                 //TODO afficher le fragement list map
-                    showPlacesGetStarted();
+                displayRestaurantFragment();
+//                    showPlacesGetStarted();
 //              showCurrentPlace();
 //                Toast.makeText(this, "Map List View", Toast.LENGTH_LONG).show();
                 break;
@@ -272,6 +274,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.activity_main_frame_layout, workmateFragment).commit();
+    }
+
+    private void displayRestaurantFragment(){
+        RestaurantsFragment restaurantsFragment = RestaurantsFragment.newInstance();
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.activity_main_frame_layout, restaurantsFragment).commit();
     }
 
     private void intentToProfileActivity() {

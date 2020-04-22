@@ -6,13 +6,16 @@ import androidx.lifecycle.ViewModel;
 
 import com.riyad.go4lunch.data.Restaurants;
 import com.riyad.go4lunch.networking.RestaurantRepository;
+import com.riyad.go4lunch.ui.Restaurant;
+
+import java.util.List;
 
 import static com.riyad.go4lunch.utils.Constants.API_KEY_PLACES;
 import static com.riyad.go4lunch.utils.Constants.RESTAURANT_TYPE;
 
 public class RestaurantsViewModel extends ViewModel {
 
-    private MutableLiveData<Restaurants> restaurantsMutableLiveData;
+    private MutableLiveData<List<Restaurant>> restaurantsMutableLiveData;
     private RestaurantRepository restaurantRepository;
     private String currentLocation;
 
@@ -28,7 +31,7 @@ public class RestaurantsViewModel extends ViewModel {
                 API_KEY_PLACES);
     }
 
-    public LiveData<Restaurants> getRestaurantRepository(){
+    public LiveData<List<Restaurant>> getRestaurantRepository(){
         return restaurantsMutableLiveData;
     }
 }
