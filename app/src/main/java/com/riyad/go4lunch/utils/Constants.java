@@ -26,11 +26,13 @@ public class Constants {
     public static final int MSG_TYPE_LEFT = 0;
     public static final int MSG_TYPE_RIGHT = 1;
 
-
+    //Places, Nearby Search requests
     public static final String API_KEY_PLACES = "AIzaSyA55BEn4vL47MvxLsWLR_Nvlcd0uawEVdQ";
     public static final String RESTAURANT_TYPE = "restaurant";
+    public static final String BASE_PHOTO_URL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=";
 
-
+    //Shared Preferences Key
+    public static final String CURRENT_DEVICE_LOCATION = "CURRENT_DEVICE_LOCATION";
 
 
 }

@@ -15,6 +15,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.riyad.go4lunch.utils.Constants.API_KEY_PLACES;
+import static com.riyad.go4lunch.utils.Constants.BASE_PHOTO_URL;
+
 public class RestaurantRepository {
 
     private static RestaurantRepository restaurantRepository;
@@ -63,7 +66,10 @@ public class RestaurantRepository {
         for(Result resto : restaurant.getResults()){
             if (resto.getPhotos() != null && !resto.getPhotos().isEmpty()){
 
-                String imageUrl = resto.getPhotos().get(0).getHtmlAttributions().get(0);
+
+                String imageReference = resto.getPhotos().get(0).getPhotoReference();
+                String endOfUrl = "&sensor=false&key=";
+                String imageUrl = BASE_PHOTO_URL + imageReference + endOfUrl + API_KEY_PLACES;
 
                 restaurants.add(new Restaurant(resto.getName(),
                         resto.getRating().toString(),
@@ -73,7 +79,7 @@ public class RestaurantRepository {
             }
         }
 
-        return (List<Restaurant>) restaurant;
+        return restaurants;
     }
 
 //    private void setNewRestaurants(List<Restaurant> restaurants){

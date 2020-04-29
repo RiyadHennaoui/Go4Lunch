@@ -1,8 +1,10 @@
 package com.riyad.go4lunch;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -23,6 +25,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -47,6 +50,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.riyad.go4lunch.fragments.RestaurantsFragment;
 import com.riyad.go4lunch.fragments.WorkmateFragment;
+import com.riyad.go4lunch.viewmodels.RestaurantsViewModel;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -56,6 +60,7 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static com.riyad.go4lunch.utils.Constants.CURRENT_DEVICE_LOCATION;
 import static com.riyad.go4lunch.utils.Constants.DEFAULT_ZOOM;
 import static com.riyad.go4lunch.utils.Constants.KEY_CAMERA_POSITION;
 import static com.riyad.go4lunch.utils.Constants.KEY_Location;
@@ -96,6 +101,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private LatLng[] mLikelyPlaceLatLngs;
     private String[] mLikelyPlaceType;
 
+    private SharedPreferences sharedPreferences;
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -109,7 +117,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        sharedPreferences = getSharedPreferences("go4lunch",MODE_PRIVATE);
 //        Places.initialize(getApplicationContext(), getString(R.string.google_api_key));
 //        mPlacesClient = Places.createClient(this);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -138,6 +146,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         myDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        if (mLastKnownLocation != null){
+
+        }
     }
 
     /**
@@ -167,10 +178,24 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 if (task.isSuccessful()) {
                     //Set the map's camera position to the current location of the device.
                     mLastKnownLocation = task.getResult();
+
                     if (mLastKnownLocation != null) {
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                 new LatLng(mLastKnownLocation.getLatitude(),
                                         mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                        String nearbySearchLocationFormat = mLastKnownLocation.getLatitude() + "," + mLastKnownLocation.getLongitude();
+
+                        sharedPreferences.edit().putString(CURRENT_DEVICE_LOCATION, nearbySearchLocationFormat).apply();
+                        RestaurantsViewModel restaurantsViewModel;
+                        restaurantsViewModel = ViewModelProviders.of(MainActivity.this).get(RestaurantsViewModel.class);
+                        restaurantsViewModel.init(nearbySearchLocationFormat);
+                        restaurantsViewModel.getRestaurantRepository().observe(MainActivity.this, restaurants ->  {
+//                            restaurantAdapter.setData(restaurants);
+                            Log.e("map", restaurants.size() + "");
+
+                            //TODO le rendre plus propre.
+                            //TODO Ici faire les marqueurs.
+                        });
                     }
                 } else {
                     Log.d(TAG, "Current location is null. Using defaults.");
@@ -472,17 +497,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                         Log.e("GetStarted", "Place not found" + apiException.getStatusCode());
                     }
                 }
-
             });
-
-
         } else {
             Log.i("GetStarted", "non pas elle punaise");
-
-
         }
-
     }
+
+
 
 }
 

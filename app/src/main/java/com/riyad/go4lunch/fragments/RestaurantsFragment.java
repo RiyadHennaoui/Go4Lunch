@@ -1,7 +1,9 @@
 package com.riyad.go4lunch.fragments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,14 +27,22 @@ import com.riyad.go4lunch.viewmodels.RestaurantsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
+
+import static android.content.Context.MODE_PRIVATE;
+import static com.riyad.go4lunch.utils.Constants.CURRENT_DEVICE_LOCATION;
 
 public class RestaurantsFragment extends Fragment {
 
     private RestaurantAdapter restaurantAdapter;
     private ArrayList<Restaurant> restaurantArrayList = new ArrayList<>();
     private RestaurantsViewModel restaurantsViewModel;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+
+
 
 
     public RestaurantsFragment() { }
@@ -66,10 +76,12 @@ public class RestaurantsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        restaurantsViewModel.init();
+        sharedPreferences = Objects.requireNonNull(this.getActivity()).getSharedPreferences("go4lunch",MODE_PRIVATE);
+
+        String currentLocation = sharedPreferences.getString(CURRENT_DEVICE_LOCATION,"");
+        restaurantsViewModel.init(currentLocation);
         restaurantsViewModel.getRestaurantRepository().observe(this, restaurants ->  {
             restaurantAdapter.setData(restaurants);
-
         });
     }
 
