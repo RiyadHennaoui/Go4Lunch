@@ -34,6 +34,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -50,6 +51,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.riyad.go4lunch.fragments.RestaurantsFragment;
 import com.riyad.go4lunch.fragments.WorkmateFragment;
+import com.riyad.go4lunch.ui.Restaurant;
 import com.riyad.go4lunch.viewmodels.RestaurantsViewModel;
 
 import java.util.Arrays;
@@ -68,9 +70,6 @@ import static com.riyad.go4lunch.utils.Constants.M_MAX_ENTRIES;
 import static com.riyad.go4lunch.utils.Constants.PERMISSION_REQUEST_ACCESS_FINE_LOCATION;
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
-
-
-    // For testing rv workmates
 
 
     private static final String TAG = "MainActivity";
@@ -104,7 +103,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private SharedPreferences sharedPreferences;
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -117,9 +115,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sharedPreferences = getSharedPreferences("go4lunch",MODE_PRIVATE);
-//        Places.initialize(getApplicationContext(), getString(R.string.google_api_key));
-//        mPlacesClient = Places.createClient(this);
+        sharedPreferences = getSharedPreferences("go4lunch", MODE_PRIVATE);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         myNavView = findViewById(R.id.main_navigation_view);
         myMainToolbar = findViewById(R.id.main_toolbar);
@@ -127,7 +123,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-//        mGeoDataClient = Places.
+
 
         getLocationPermission();
 
@@ -146,7 +142,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         myDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        if (mLastKnownLocation != null){
+        if (mLastKnownLocation != null) {
 
         }
     }
@@ -186,16 +182,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                         String nearbySearchLocationFormat = mLastKnownLocation.getLatitude() + "," + mLastKnownLocation.getLongitude();
 
                         sharedPreferences.edit().putString(CURRENT_DEVICE_LOCATION, nearbySearchLocationFormat).apply();
-                        RestaurantsViewModel restaurantsViewModel;
-                        restaurantsViewModel = ViewModelProviders.of(MainActivity.this).get(RestaurantsViewModel.class);
-                        restaurantsViewModel.init(nearbySearchLocationFormat);
-                        restaurantsViewModel.getRestaurantRepository().observe(MainActivity.this, restaurants ->  {
-//                            restaurantAdapter.setData(restaurants);
-                            Log.e("map", restaurants.size() + "");
-
-                            //TODO le rendre plus propre.
-                            //TODO Ici faire les marqueurs.
-                        });
+                        displayRestaurants(nearbySearchLocationFormat);
                     }
                 } else {
                     Log.d(TAG, "Current location is null. Using defaults.");
@@ -254,15 +241,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             case R.id.action_map_view:
                 //TODO afficher le fragement map view
                 openMap();
-//                showPlacesGetStarted();
-                showCurrentPlace();
                 break;
             case R.id.action_list_view:
                 //TODO afficher le fragement list map
                 displayRestaurantFragment();
-//                    showPlacesGetStarted();
-//              showCurrentPlace();
-//                Toast.makeText(this, "Map List View", Toast.LENGTH_LONG).show();
+
                 break;
             case R.id.action_workmates:
                 //TODO afficher le fragement workmates
@@ -284,6 +267,29 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         return true;
     }
 
+    private void displayRestaurants(String nearbySearchLocationFormat) {
+        RestaurantsViewModel restaurantsViewModel;
+        restaurantsViewModel = ViewModelProviders.of(MainActivity.this).get(RestaurantsViewModel.class);
+        restaurantsViewModel.init(nearbySearchLocationFormat);
+        restaurantsViewModel.getRestaurantRepository().observe(MainActivity.this, restaurants -> {
+//                            restaurantAdapter.setData(restaurants);
+            Log.e("mapList", restaurants.size() + "");
+
+            for (Restaurant restaurant: restaurants) {
+
+                mMap.addMarker(new MarkerOptions()
+                .title(restaurant.getName())
+                .position(new LatLng(restaurant.getLat(), restaurant.getLng())))
+                .setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+
+            }
+            //TODO le rendre plus propre.
+            //TODO Ici faire les marqueurs.
+
+
+        });
+    }
+
     private void openMap() {
 
         mMapFragment = SupportMapFragment.newInstance();
@@ -301,7 +307,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         fragmentTransaction.replace(R.id.activity_main_frame_layout, workmateFragment).commit();
     }
 
-    private void displayRestaurantFragment(){
+    private void displayRestaurantFragment() {
         RestaurantsFragment restaurantsFragment = RestaurantsFragment.newInstance();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
@@ -341,7 +347,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.setMyLocationEnabled(true);
         getDeviceLocation();
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng());
     }
 
     private void initPlaces() {
@@ -405,105 +410,5 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 .setItems(mLikelyPlaceNames, listener)
                 .show();
     }
-
-    /**
-     * Prompts the user to select the current place from a List of Lickly places,
-     * and shows the current place on the map - provided the user has granted Location Location permission.
-     */
-
-    private void showCurrentPlace() {
-        if (mMap == null) {
-            return;
-        }
-
-        if (mLocationPermissionGranted) {
-            List<Place.Field> placeFields = Arrays.asList(Place.Field.NAME, Place.Field.ADDRESS,
-                    Place.Field.LAT_LNG, Place.Field.TYPES);
-
-            FindCurrentPlaceRequest request =
-                    FindCurrentPlaceRequest.newInstance(placeFields);
-
-            @SuppressWarnings("MissingPermission") final Task<FindCurrentPlaceResponse> placeResult =
-                    mPlacesClient.findCurrentPlace(request);
-            placeResult.addOnCompleteListener(new OnCompleteListener<FindCurrentPlaceResponse>() {
-                @Override
-                public void onComplete(@NonNull Task<FindCurrentPlaceResponse> task) {
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        FindCurrentPlaceResponse likelyPlaces = task.getResult();
-
-                        int count;
-                        if (likelyPlaces.getPlaceLikelihoods().size() < M_MAX_ENTRIES) {
-                            count = likelyPlaces.getPlaceLikelihoods().size();
-                        } else {
-                            count = M_MAX_ENTRIES;
-                        }
-
-                        int i = 0;
-                        mLikelyPlaceNames = new String[count];
-                        mLikelyPlaceAddresses = new String[count];
-                        mLikelyPlaceAttributions = new List[count];
-                        mLikelyPlaceLatLngs = new LatLng[count];
-
-
-                        for (PlaceLikelihood placeLikelihood : likelyPlaces.getPlaceLikelihoods()) {
-
-                                mLikelyPlaceNames[i] = placeLikelihood.getPlace().getName();
-                                mLikelyPlaceAddresses[i] = placeLikelihood.getPlace().getAddress();
-                                mLikelyPlaceAttributions[i] = placeLikelihood.getPlace().getAttributions();
-                                mLikelyPlaceLatLngs[i] = placeLikelihood.getPlace().getLatLng();
-
-
-                                i++;
-                                if (i > (count - 1)) {
-                                    break;
-                                }
-
-                        }
-
-                        MainActivity.this.openPlacesDialog();
-                    } else {
-                        Log.e(TAG, "Exception Non pas elle : %s", task.getException());
-                    }
-                }
-            });
-        } else {
-            Log.i(TAG, "The User did not grant location permission.");
-
-            Toast.makeText(this, "Aucune Permission", Toast.LENGTH_LONG).show();
-
-            getLocationPermission();
-        }
-    }
-
-    private void showPlacesGetStarted() {
-        List<Place.Field> placeFields = Collections.singletonList(Place.Field.TYPES);
-        Place place;
-        FindCurrentPlaceRequest request = FindCurrentPlaceRequest.newInstance(placeFields);
-
-        if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            Task<FindCurrentPlaceResponse> placeResponse = mPlacesClient.findCurrentPlace(request);
-            placeResponse.addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    FindCurrentPlaceResponse response = task.getResult();
-                    for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
-                        Log.i("GetStarted", String.format("Place '%s' likelihood: %f",
-                                placeLikelihood.getPlace().getName(),
-                                placeLikelihood.getLikelihood()));
-                    }
-                } else {
-                    Exception e = task.getException();
-                    if (e instanceof ApiException) {
-                        ApiException apiException = (ApiException) e;
-                        Log.e("GetStarted", "Place not found" + apiException.getStatusCode());
-                    }
-                }
-            });
-        } else {
-            Log.i("GetStarted", "non pas elle punaise");
-        }
-    }
-
-
-
 }
 

@@ -73,8 +73,8 @@ public class RestaurantRepository {
 
                 restaurants.add(new Restaurant(resto.getName(),
                         resto.getRating().toString(),
-                        resto.getGeometry().getLocation().getLat().toString(),
-                        resto.getGeometry().getLocation().getLng().toString(),
+                        resto.getGeometry().getLocation().getLat(),
+                        resto.getGeometry().getLocation().getLng(),
                         imageUrl));
             }
         }

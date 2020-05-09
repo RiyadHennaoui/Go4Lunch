@@ -67,6 +67,10 @@ dependencies {
     //Google maps
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
+    //Google maps utils for clustering
+    implementation 'com.google.maps.android:android-maps-utils:1.2.1'
+
+
     //Google Places
     implementation 'com.google.android.libraries.places:places:2.2.0'
 
@@ -84,5 +88,7 @@ dependencies {
 
     //Retrofit interceptor
     implementation 'com.squareup.okhttp3:logging-interceptor:4.5.0'
+
+
 }
 apply plugin: 'com.google.gms.google-services'

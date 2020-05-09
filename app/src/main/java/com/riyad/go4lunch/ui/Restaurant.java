@@ -7,12 +7,12 @@ public class Restaurant implements Parcelable {
 
     private String name;
     private String rating;
-    private String lat;
-    private String lng;
+    private Double lat;
+    private Double lng;
     private String restaurantImageUrl;
 
 
-    public Restaurant(String name, String rating, String lat, String lng, String restaurantImageUrl) {
+    public Restaurant(String name, String rating, Double lat, Double lng, String restaurantImageUrl) {
         this.name = name;
         this.rating = rating;
         this.lat = lat;
@@ -24,15 +24,15 @@ public class Restaurant implements Parcelable {
     //GETTERS
     public String getName() { return name; }
     public String getRating() { return rating; }
-    public String getLat() { return lat; }
-    public String getLng() { return lng; }
+    public Double getLat() { return lat; }
+    public Double getLng() { return lng; }
     public String getRestaurantImageUrl() { return restaurantImageUrl; }
 
     //SETTERS
     public void setName(String name) { this.name = name; }
     public void setRating(String rating) { this.rating = rating; }
-    public void setLat(String lat) { this.lat = lat; }
-    public void setLng(String lng) { this.lng = lng; }
+    public void setLat(Double lat) { this.lat = lat; }
+    public void setLng(Double lng) { this.lng = lng; }
     public void setRestaurantImageUrl(String restaurantImageUrl) { this.restaurantImageUrl = restaurantImageUrl; }
 
 
@@ -43,8 +43,8 @@ public class Restaurant implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.name);
         dest.writeString(this.restaurantImageUrl);
-        dest.writeString(this.lat);
-        dest.writeString(this.lng);
+        dest.writeDouble(this.lat);
+        dest.writeDouble(this.lng);
         dest.writeString(this.rating);
 
     }
@@ -52,8 +52,8 @@ public class Restaurant implements Parcelable {
     Restaurant(Parcel in) {
         this.name = in.readString();
         this.rating = in.readString();
-        this.lat = in.readString();
-        this.lng = in.readString();
+        this.lat = in.readDouble();
+        this.lng = in.readDouble();
         this.restaurantImageUrl = in.readString();
     }
 
