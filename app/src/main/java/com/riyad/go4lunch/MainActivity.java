@@ -86,22 +86,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     // The geographical location where the device is currently located. That is, the last-know location retrieved by the Fused Location Provider
     private Location mLastKnownLocation;
+    private boolean mLocationPermissionGranted;
 
     // The entry point to the Places API.
     private PlacesClient mPlacesClient;
 
-    //
-    private boolean mLocationPermissionGranted;
-
-    // Used for selecting the current place.
-    private String[] mLikelyPlaceNames;
-    private String[] mLikelyPlaceAddresses;
-    private List[] mLikelyPlaceAttributions;
-    private LatLng[] mLikelyPlaceLatLngs;
-    private String[] mLikelyPlaceType;
-
     private SharedPreferences sharedPreferences;
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -130,7 +120,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         this.configureBottomView();
         this.configureNavView();
         myNavView.setCheckedItem(R.id.action_map_view);
-        initPlaces();
+//        initPlaces();
         openMap();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
@@ -141,10 +131,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         myDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
-        if (mLastKnownLocation != null) {
-
-        }
     }
 
     /**
@@ -158,7 +144,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             super.onSaveInstanceState(outState);
         }
     }
-
 
     /**
      * Gets the current location of the device, and the positions the map's camera.
@@ -193,7 +178,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
     }
-
 
     private void configureNavView() {
         myNavView.setNavigationItemSelectedListener(item -> updateButtons(item.getItemId()));
@@ -239,23 +223,21 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         switch (integer) {
 
             case R.id.action_map_view:
-                //TODO afficher le fragement map view
                 openMap();
                 break;
+
             case R.id.action_list_view:
-                //TODO afficher le fragement list map
                 displayRestaurantFragment();
-
                 break;
+
             case R.id.action_workmates:
-                //TODO afficher le fragement workmates
-
                 displayWorkematesFragment();
-
                 break;
+
             case R.id.nav_your_lunch:
                 //TODO intent vers le fragment/Activité souhaité.
                 break;
+
             case R.id.nav_settings:
                 Toast.makeText(this, "serieux", Toast.LENGTH_LONG).show();
                 intentToProfileActivity();
@@ -276,16 +258,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             Log.e("mapList", restaurants.size() + "");
 
             for (Restaurant restaurant: restaurants) {
-
                 mMap.addMarker(new MarkerOptions()
                 .title(restaurant.getName())
                 .position(new LatLng(restaurant.getLat(), restaurant.getLng())))
                 .setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
-
             }
             //TODO le rendre plus propre.
-            //TODO Ici faire les marqueurs.
-
 
         });
     }
@@ -349,10 +327,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         getDeviceLocation();
     }
 
-    private void initPlaces() {
-        Places.initialize(getApplicationContext(), "AIzaSyANygkUK5W0oWtDJQ6TV6dwYEdAe2zkONA");
-        mPlacesClient = Places.createClient(this);
-    }
 
     /**
      * Updates the map's UI settings based on whether the user has granted location permission.
@@ -376,39 +350,39 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    /**
-     * Displays a form allowing the user to select a place from a list of likely places.
-     */
-    private void openPlacesDialog() {
-        // Ask the user to choose the place where they are now.
-        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // The "which" argument contains the position of the selected item.
-                LatLng markerLatLng = mLikelyPlaceLatLngs[which];
-                String markerSnippet = mLikelyPlaceAddresses[which];
-                if (mLikelyPlaceAttributions[which] != null) {
-                    markerSnippet = markerSnippet + "\n" + mLikelyPlaceAttributions[which];
-                }
-
-                // Add a marker for the selected place, with an info window
-                // showing information about that place.
-                mMap.addMarker(new MarkerOptions()
-                        .title(mLikelyPlaceNames[which])
-                        .position(markerLatLng)
-                        .snippet(markerSnippet));
-
-                // Position the map's camera at the location of the marker.
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng,
-                        DEFAULT_ZOOM));
-            }
-        };
-
-        // Display the dialog.
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle(R.string.pick_place)
-                .setItems(mLikelyPlaceNames, listener)
-                .show();
-    }
+//    /**
+//     * Displays a form allowing the user to select a place from a list of likely places.
+//     */
+//    private void openPlacesDialog() {
+//        // Ask the user to choose the place where they are now.
+//        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                // The "which" argument contains the position of the selected item.
+//                LatLng markerLatLng = mLikelyPlaceLatLngs[which];
+//                String markerSnippet = mLikelyPlaceAddresses[which];
+//                if (mLikelyPlaceAttributions[which] != null) {
+//                    markerSnippet = markerSnippet + "\n" + mLikelyPlaceAttributions[which];
+//                }
+//
+//                // Add a marker for the selected place, with an info window
+//                // showing information about that place.
+//                mMap.addMarker(new MarkerOptions()
+//                        .title(mLikelyPlaceNames[which])
+//                        .position(markerLatLng)
+//                        .snippet(markerSnippet));
+//
+//                // Position the map's camera at the location of the marker.
+//                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng,
+//                        DEFAULT_ZOOM));
+//            }
+//        };
+//
+//        // Display the dialog.
+//        AlertDialog dialog = new AlertDialog.Builder(this)
+//                .setTitle(R.string.pick_place)
+//                .setItems(mLikelyPlaceNames, listener)
+//                .show();
+//    }
 }
 

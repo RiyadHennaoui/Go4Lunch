@@ -71,7 +71,8 @@ public class RestaurantRepository {
                 String endOfUrl = "&sensor=false&key=";
                 String imageUrl = BASE_PHOTO_URL + imageReference + endOfUrl + API_KEY_PLACES;
 
-                restaurants.add(new Restaurant(resto.getName(),
+                restaurants.add(new Restaurant(resto.getId(),
+                        resto.getName(),
                         resto.getRating().toString(),
                         resto.getGeometry().getLocation().getLat(),
                         resto.getGeometry().getLocation().getLng(),
