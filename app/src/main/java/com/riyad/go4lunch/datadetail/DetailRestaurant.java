@@ -1,19 +1,18 @@
 
-package com.riyad.go4lunch.data;
+package com.riyad.go4lunch.datadetail;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-
-public class  Restaurants {
+public class DetailRestaurant {
 
     @SerializedName("html_attributions")
     @Expose
     private List<Object> htmlAttributions = null;
-    @SerializedName("results")
+    @SerializedName("result")
     @Expose
-    private List<Result> results = null;
+    private Result result;
     @SerializedName("status")
     @Expose
     private String status;
@@ -26,12 +25,12 @@ public class  Restaurants {
         this.htmlAttributions = htmlAttributions;
     }
 
-    public List<Result> getResults() {
-        return results;
+    public Result getResult() {
+        return result;
     }
 
-    public void setResults(List<Result> results) {
-        this.results = results;
+    public void setResult(Result result) {
+        this.result = result;
     }
 
     public String getStatus() {

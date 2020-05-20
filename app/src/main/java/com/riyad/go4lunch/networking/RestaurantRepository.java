@@ -22,8 +22,8 @@ public class RestaurantRepository {
 
     private static RestaurantRepository restaurantRepository;
 
-    public static RestaurantRepository getInstance(){
-        if (restaurantRepository == null){
+    public static RestaurantRepository getInstance() {
+        if (restaurantRepository == null) {
             restaurantRepository = new RestaurantRepository();
         }
         return restaurantRepository;
@@ -31,17 +31,22 @@ public class RestaurantRepository {
 
     private GooglePlacesAPI googlePlacesAPI;
 
-    public RestaurantRepository(){
+    public RestaurantRepository() {
         googlePlacesAPI = RetrofitService.createService(GooglePlacesAPI.class);
     }
 
-    public MutableLiveData<List<Restaurant>> getRestaurants(String location, String radius, String type, String keyword, String key){
+    public MutableLiveData<List<Restaurant>> getRestaurants(String location, String radius, String type, String keyword, String key) {
         MutableLiveData<List<Restaurant>> restaurantData = new MutableLiveData<>();
         googlePlacesAPI.getRestaurant(location, radius, type, keyword, key)
                 .enqueue(new Callback<Restaurants>() {
                     @Override
                     public void onResponse(Call<Restaurants> call, Response<Restaurants> response) {
-                        if (response.isSuccessful()){
+                        if (response.isSuccessful()) {
+
+                            //TODO recuperer la liste des restaurants mappé mapResult(response.body() a mettre dans un Objet.
+                            //TODO vérifier que le nextPage existe, différent de null. s'il n'existe pas faire  restaurantData.setValue("Objet");
+                            //TODO s'il existe alors il faut appelé la méthode getNextPageRestaurant.
+
                             //TODO faire le if pour vérifier si response.body est null
                             restaurantData.setValue(mapResult(response.body()));
                             Log.i("RestaurantCall", "Success");
@@ -56,15 +61,52 @@ public class RestaurantRepository {
                     }
                 });
 
-            return restaurantData;
+        return restaurantData;
     }
 
-    private List<Restaurant> mapResult(Restaurants restaurant){
+    private void getNextPageRestaurants(MutableLiveData<List<Restaurant>> restaurantData, ArrayList<Restaurant> restaurants, String nextPageToken){
+
+
+        //TODO faire l'appel retrofit de getNextPageRestaurant.
+
+        googlePlacesAPI.getNextPageRestaurant(API_KEY_PLACES, nextPageToken)
+                .enqueue(new Callback<Restaurants>() {
+                    @Override
+                    public void onResponse(Call<Restaurants> call, Response<Restaurants> response) {
+
+                        ArrayList<Restaurants> restaurantsList = new ArrayList<>();
+
+                        //TODO dans la réponse success récupérer la liste des restaurants mappé.
+//                        restaurantData.setValue(mapResult(response.body()));
+                        restaurantData.setValue(mapResult(response.body()));
+//                        restaurantsList.addAll(mapResult(response.body()));
+
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<Restaurants> call, Throwable t) {
+
+                    }
+                });
+
+
+
+
+        //TODO ajouter la liste récupéré dans l'objet passé en param. restaurants.addAll("de la liste récupéré")
+
+        //TODO vérifier que le nextPage existe, différent de null. s'il n'existe pas faire restaurantData.setValue(restaurants)
+
+        //TODO s'il existe alors il faut appelé la méthode getNextPageRestaurant.
+
+    }
+
+    private List<Restaurant> mapResult(Restaurants restaurant) {
 
         List<Restaurant> restaurants = new ArrayList<>();
 
-        for(Result resto : restaurant.getResults()){
-            if (resto.getPhotos() != null && !resto.getPhotos().isEmpty()){
+        for (Result resto : restaurant.getResults()) {
+            if (resto.getPhotos() != null && !resto.getPhotos().isEmpty()) {
 
 
                 String imageReference = resto.getPhotos().get(0).getPhotoReference();

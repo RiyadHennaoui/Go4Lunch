@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,8 +7,7 @@
     android:paddingTop="8dp"
     android:paddingEnd="8dp"
     android:paddingStart="8dp"
-    android:paddingBottom="8dp"
-    >
+    android:paddingBottom="8dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/item_restaurant_main_cardview"
@@ -32,22 +30,23 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:scaleType="centerCrop"
+                android:visibility="gone"
                 app:layout_constraintDimensionRatio="H,16:9"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <ImageView
                 android:id="@+id/item_restaurant_iv_circle_picture_country_food"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
                 android:scaleType="centerCrop"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/item_restaurant_iv_main_picture_profile"/>
+                app:layout_constraintTop_toBottomOf="@+id/item_restaurant_iv_main_picture_profile" />
 
-            
+
             <TextView
                 android:id="@+id/item_restaurant_tv_name"
                 android:layout_width="0dp"
@@ -57,7 +56,8 @@
                 android:layout_marginStart="12dp"
                 app:layout_constraintStart_toEndOf="@+id/item_restaurant_iv_circle_picture_country_food"
                 app:layout_constraintTop_toTopOf="@+id/item_restaurant_iv_circle_picture_country_food"
-                app:layout_constraintBottom_toTopOf="@+id/item_restaurant_rating_star"/>
+                app:layout_constraintBottom_toTopOf="@+id/item_restaurant_rating_star"
+                />
 
             <RatingBar
                 android:id="@+id/item_restaurant_rating_star"
@@ -68,7 +68,54 @@
                 android:textColor="#8A000000"
                 android:layout_marginStart="12dp"
                 app:layout_constraintStart_toEndOf="@+id/item_restaurant_iv_circle_picture_country_food"
-                app:layout_constraintTop_toBottomOf="@+id/item_restaurant_tv_name"/>
+                app:layout_constraintTop_toBottomOf="@+id/item_restaurant_tv_name"
+                app:layout_constraintBottom_toTopOf="@+id/item_restaurant_tv_adresse"/>
+
+            <TextView
+                android:id="@+id/item_restaurant_tv_adresse"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@+id/item_restaurant_rating_star"
+                app:layout_constraintTop_toBottomOf="@+id/item_restaurant_rating_star"
+                app:layout_constraintBottom_toBottomOf="@+id/item_restaurant_tv_opening"
+
+                android:text="Adresse" />
+
+            <TextView
+                android:id="@+id/item_restaurant_tv_distance"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/item_restaurant_tv_name"
+                android:text="500m" />
+
+            <ImageView
+                android:id="@+id/person"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_person_outline_black_24dp"
+                app:layout_constraintTop_toBottomOf="@+id/item_restaurant_tv_distance"
+                app:layout_constraintEnd_toStartOf="@+id/item_restaurant_tv_number_of_workmates" />
+
+            <TextView
+                android:id="@+id/item_restaurant_tv_number_of_workmates"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:text="(2)"
+                app:layout_constraintTop_toBottomOf="@+id/item_restaurant_tv_distance"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/person" />
+
+            <TextView
+                android:id="@+id/item_restaurant_tv_opening"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Open"
+                app:layout_constraintTop_toBottomOf="@+id/person"
+                app:layout_constraintEnd_toEndOf="@+id/item_restaurant_tv_distance"/>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

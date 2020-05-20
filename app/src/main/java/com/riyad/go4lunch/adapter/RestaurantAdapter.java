@@ -79,7 +79,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
             //TODO trouver comment implemanter les etoiles et une image pour le type de cuisine.
 
 
-            Glide.with(restaurantPicture).load(restaurant.getRestaurantImageUrl()).centerCrop().into(restaurantPicture);
+            Glide.with(countryFood).load(restaurant.getRestaurantImageUrl()).circleCrop().into(countryFood);
 
             itemView.setOnClickListener(view -> {
                         //TODO INTENT vers l'acitivtée détail Restaurant.
