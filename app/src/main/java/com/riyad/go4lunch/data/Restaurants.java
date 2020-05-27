@@ -11,6 +11,9 @@ public class  Restaurants {
     @SerializedName("html_attributions")
     @Expose
     private List<Object> htmlAttributions = null;
+    @SerializedName("next_page_token")
+    @Expose
+    private String nextPageToken = null;
     @SerializedName("results")
     @Expose
     private List<Result> results = null;
@@ -24,6 +27,10 @@ public class  Restaurants {
 
     public void setHtmlAttributions(List<Object> htmlAttributions) {
         this.htmlAttributions = htmlAttributions;
+    }
+
+    public String getNextPageToken() {
+        return nextPageToken;
     }
 
     public List<Result> getResults() {

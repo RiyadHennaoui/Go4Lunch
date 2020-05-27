@@ -35,20 +35,23 @@ public class RestaurantRepository {
         googlePlacesAPI = RetrofitService.createService(GooglePlacesAPI.class);
     }
 
-    public MutableLiveData<List<Restaurant>> getRestaurants(String location, String radius, String type, String keyword, String key) {
+    public MutableLiveData<List<Restaurant>> getRestaurants(String location, String radius, String type, String key) {
         MutableLiveData<List<Restaurant>> restaurantData = new MutableLiveData<>();
-        googlePlacesAPI.getRestaurant(location, radius, type, keyword, key)
+        googlePlacesAPI.getRestaurant(location, radius, type, key)
                 .enqueue(new Callback<Restaurants>() {
                     @Override
                     public void onResponse(Call<Restaurants> call, Response<Restaurants> response) {
                         if (response.isSuccessful()) {
 
-                            //TODO recuperer la liste des restaurants mappé mapResult(response.body() a mettre dans un Objet.
-                            //TODO vérifier que le nextPage existe, différent de null. s'il n'existe pas faire  restaurantData.setValue("Objet");
-                            //TODO s'il existe alors il faut appelé la méthode getNextPageRestaurant.
+                            ArrayList<Restaurant> restaurantsList = new ArrayList<>(mapResult(response.body()));
+                            if (response.body().getNextPageToken() == null) {
+                                Log.i("RestaurantCall", "noNextPageToken");
+                                restaurantData.setValue(restaurantsList);
+                            } else {
+                                Log.i("RestaurantCall", "NextPageToken");
+                                getNextPageRestaurants(restaurantData, restaurantsList, response.body().getNextPageToken());
+                            }
 
-                            //TODO faire le if pour vérifier si response.body est null
-                            restaurantData.setValue(mapResult(response.body()));
                             Log.i("RestaurantCall", "Success");
                         }
                     }
@@ -64,23 +67,28 @@ public class RestaurantRepository {
         return restaurantData;
     }
 
-    private void getNextPageRestaurants(MutableLiveData<List<Restaurant>> restaurantData, ArrayList<Restaurant> restaurants, String nextPageToken){
-
-
-        //TODO faire l'appel retrofit de getNextPageRestaurant.
-
+    private void getNextPageRestaurants(MutableLiveData<List<Restaurant>> restaurantData, ArrayList<Restaurant> restaurants, String nextPageToken) {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         googlePlacesAPI.getNextPageRestaurant(API_KEY_PLACES, nextPageToken)
                 .enqueue(new Callback<Restaurants>() {
                     @Override
                     public void onResponse(Call<Restaurants> call, Response<Restaurants> response) {
 
-                        ArrayList<Restaurants> restaurantsList = new ArrayList<>();
+                        if (response.isSuccessful()) {
+                            ArrayList<Restaurant> restaurantsList = new ArrayList<>(mapResult(response.body()));
 
-                        //TODO dans la réponse success récupérer la liste des restaurants mappé.
-//                        restaurantData.setValue(mapResult(response.body()));
-                        restaurantData.setValue(mapResult(response.body()));
-//                        restaurantsList.addAll(mapResult(response.body()));
+                            restaurants.addAll(restaurantsList);
 
+                            if (response.body().getNextPageToken() == null) {
+                                restaurantData.setValue(restaurants);
+                            } else {
+                                getNextPageRestaurants(restaurantData, restaurants, response.body().getNextPageToken());
+                            }
+                        }
 
                     }
 
@@ -89,16 +97,6 @@ public class RestaurantRepository {
 
                     }
                 });
-
-
-
-
-        //TODO ajouter la liste récupéré dans l'objet passé en param. restaurants.addAll("de la liste récupéré")
-
-        //TODO vérifier que le nextPage existe, différent de null. s'il n'existe pas faire restaurantData.setValue(restaurants)
-
-        //TODO s'il existe alors il faut appelé la méthode getNextPageRestaurant.
-
     }
 
     private List<Restaurant> mapResult(Restaurants restaurant) {

@@ -97,7 +97,7 @@ public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesAd
             mChat = itemView.findViewById(R.id.item_worker_bt_chat);
             expandableCardView = itemView.findViewById(R.id.item_worker_expandableView);
             mMainCardView = itemView.findViewById(R.id.item_worker_main_cardview);
-            mIvProfileMain.setVisibility(View.GONE);
+            mIvProfileMain.setVisibility(View.VISIBLE);
         }
 
         public void bind(final User user) {

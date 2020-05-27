@@ -33,7 +33,6 @@ public class RestaurantsViewModel extends ViewModel {
         restaurantsMutableLiveData = restaurantRepository.getRestaurants(currentLocation,
                 "1500",
                 RESTAURANT_TYPE,
-                "cruise",
                 API_KEY_PLACES);
     }
 

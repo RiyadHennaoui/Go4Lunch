@@ -15,7 +15,6 @@ public interface GooglePlacesAPI {
     Call<Restaurants> getRestaurant(@Query("location") String location,
                                     @Query("radius") String radius,
                                     @Query("type") String type,
-                                    @Query("keyword") String keyword,
                                     @Query("key") String key);
 
     // TODO ajouter le pagetoken "getNextPageRestaurant".
