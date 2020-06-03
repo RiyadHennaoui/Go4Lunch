@@ -1,9 +1,11 @@
 package com.riyad.go4lunch.networking;
 
+import android.location.Location;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.riyad.go4lunch.AppControler;
 import com.riyad.go4lunch.data.Restaurants;
 import com.riyad.go4lunch.data.Result;
 import com.riyad.go4lunch.ui.Restaurant;
@@ -46,6 +48,8 @@ public class RestaurantRepository {
                             ArrayList<Restaurant> restaurantsList = new ArrayList<>(mapResult(response.body()));
                             if (response.body().getNextPageToken() == null) {
                                 Log.i("RestaurantCall", "noNextPageToken");
+                                //TODO trié les restaurants par distance : Collection.sort
+                                
                                 restaurantData.setValue(restaurantsList);
                             } else {
                                 Log.i("RestaurantCall", "NextPageToken");
@@ -83,7 +87,10 @@ public class RestaurantRepository {
 
                             restaurants.addAll(restaurantsList);
 
+
+
                             if (response.body().getNextPageToken() == null) {
+                                //TODO trié les restaurants par distance
                                 restaurantData.setValue(restaurants);
                             } else {
                                 getNextPageRestaurants(restaurantData, restaurants, response.body().getNextPageToken());
@@ -116,15 +123,12 @@ public class RestaurantRepository {
                         resto.getRating().toString(),
                         resto.getGeometry().getLocation().getLat(),
                         resto.getGeometry().getLocation().getLng(),
-                        imageUrl));
+                        imageUrl,
+                        resto.getGeometry().getLocation()));
             }
         }
 
         return restaurants;
     }
 
-//    private void setNewRestaurants(List<Restaurant> restaurants){
-//        restaurantsData = restaurants;
-//        restaurantAdapter.setData(restaurants);
-//    }
 }

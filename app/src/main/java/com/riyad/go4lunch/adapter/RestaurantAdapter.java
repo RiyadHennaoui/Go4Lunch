@@ -1,6 +1,7 @@
 package com.riyad.go4lunch.adapter;
 
 import android.content.Context;
+import android.location.Location;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,6 +63,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         private final ImageView countryFood;
         private final TextView restaurantName;
         private final RatingBar ratingBar;
+        private final TextView distance;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -69,6 +71,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
             countryFood = itemView.findViewById(R.id.item_restaurant_iv_circle_picture_country_food);
             restaurantName = itemView.findViewById(R.id.item_restaurant_tv_name);
             ratingBar = itemView.findViewById(R.id.item_restaurant_rating_star);
+            distance = itemView.findViewById(R.id.item_restaurant_tv_distance);
         }
 
         public void bind(Restaurant restaurant) {
@@ -76,8 +79,12 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
             Log.i("restaurant" + getAdapterPosition(), restaurant.getName() + "");
             restaurantName.setText(restaurant.getName());
 
+            distance.setText(restaurant.getDistanceAsString() + "m");
             //TODO trouver comment implemanter les etoiles et une image pour le type de cuisine.
 
+            //TODO afficher l'adresse,
+
+            //TODO afficher l'ouverture ou fermeture du restaurant
 
             Glide.with(countryFood).load(restaurant.getRestaurantImageUrl()).circleCrop().into(countryFood);
 

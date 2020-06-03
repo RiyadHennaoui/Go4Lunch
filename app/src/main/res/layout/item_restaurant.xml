@@ -54,9 +54,12 @@
                 android:text="Name of Restaurant"
                 style="@style/TextAppearance.AppCompat.Title"
                 android:layout_marginStart="12dp"
+                android:lines="1"
+                android:ellipsize="end"
                 app:layout_constraintStart_toEndOf="@+id/item_restaurant_iv_circle_picture_country_food"
                 app:layout_constraintTop_toTopOf="@+id/item_restaurant_iv_circle_picture_country_food"
                 app:layout_constraintBottom_toTopOf="@+id/item_restaurant_rating_star"
+                app:layout_constraintEnd_toStartOf="@+id/item_restaurant_tv_distance"
                 />
 
             <RatingBar

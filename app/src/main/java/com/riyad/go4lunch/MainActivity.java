@@ -159,6 +159,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 if (task.isSuccessful()) {
                     //Set the map's camera position to the current location of the device.
                     mLastKnownLocation = task.getResult();
+                    AppControler.getInstance().setCurrentLocation(mLastKnownLocation);
 
                     if (mLastKnownLocation != null) {
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(

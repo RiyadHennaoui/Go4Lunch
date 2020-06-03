@@ -3,6 +3,9 @@ package com.riyad.go4lunch.ui;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.riyad.go4lunch.AppControler;
+import com.riyad.go4lunch.data.Location;
+
 public class Restaurant implements Parcelable {
 
     private String id;
@@ -11,15 +14,18 @@ public class Restaurant implements Parcelable {
     private Double lat;
     private Double lng;
     private String restaurantImageUrl;
+    private Location restaurantLocation;
 
 
-    public Restaurant(String id, String name, String rating, Double lat, Double lng, String restaurantImageUrl) {
+
+    public Restaurant(String id, String name, String rating, Double lat, Double lng, String restaurantImageUrl, Location restaurantLocation) {
         this.id = id;
         this.name = name;
         this.rating = rating;
         this.lat = lat;
         this.lng = lng;
         this.restaurantImageUrl = restaurantImageUrl;
+        this.restaurantLocation = restaurantLocation;
 
     }
 
@@ -30,6 +36,7 @@ public class Restaurant implements Parcelable {
     public Double getLat() { return lat; }
     public Double getLng() { return lng; }
     public String getRestaurantImageUrl() { return restaurantImageUrl; }
+    public Location getRestaurantLocation() { return restaurantLocation; }
 
     //SETTERS
     public void setId(String id) { this.id = id; }
@@ -71,5 +78,18 @@ public class Restaurant implements Parcelable {
         public Restaurant[] newArray(int size) { return new Restaurant[size]; }
     };
 
+    public int getDistance(){
+
+        android.location.Location placeLocation = new android.location.Location("");
+        placeLocation.setLatitude(this.lat);
+        placeLocation.setLongitude(this.lng);
+        int distance = (int) AppControler.getInstance().getCurrentLocation().distanceTo(placeLocation);
+
+        return distance;
+    }
+
+    public String getDistanceAsString(){
+        return getDistance() + "";
+    }
 
 }
