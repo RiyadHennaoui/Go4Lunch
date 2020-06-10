@@ -64,6 +64,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         private final TextView restaurantName;
         private final RatingBar ratingBar;
         private final TextView distance;
+        private final TextView restaurantAdress;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -72,6 +73,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
             restaurantName = itemView.findViewById(R.id.item_restaurant_tv_name);
             ratingBar = itemView.findViewById(R.id.item_restaurant_rating_star);
             distance = itemView.findViewById(R.id.item_restaurant_tv_distance);
+            restaurantAdress = itemView.findViewById(R.id.item_restaurant_tv_adresse);
         }
 
         public void bind(Restaurant restaurant) {
@@ -81,8 +83,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
 
             distance.setText(restaurant.getDistanceAsString() + "m");
             //TODO trouver comment implemanter les etoiles et une image pour le type de cuisine.
-
-            //TODO afficher l'adresse,
+            restaurantAdress.setText(restaurant.getRestaurantAdress());
 
             //TODO afficher l'ouverture ou fermeture du restaurant
 

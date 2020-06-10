@@ -15,10 +15,11 @@ public class Restaurant implements Parcelable {
     private Double lng;
     private String restaurantImageUrl;
     private Location restaurantLocation;
+    private String restaurantAdress;
 
 
 
-    public Restaurant(String id, String name, String rating, Double lat, Double lng, String restaurantImageUrl, Location restaurantLocation) {
+    public Restaurant(String id, String name, String rating, Double lat, Double lng, String restaurantImageUrl, Location restaurantLocation, String restaurantAdress) {
         this.id = id;
         this.name = name;
         this.rating = rating;
@@ -26,6 +27,7 @@ public class Restaurant implements Parcelable {
         this.lng = lng;
         this.restaurantImageUrl = restaurantImageUrl;
         this.restaurantLocation = restaurantLocation;
+        this.restaurantAdress = restaurantAdress;
 
     }
 
@@ -37,6 +39,7 @@ public class Restaurant implements Parcelable {
     public Double getLng() { return lng; }
     public String getRestaurantImageUrl() { return restaurantImageUrl; }
     public Location getRestaurantLocation() { return restaurantLocation; }
+    public String getRestaurantAdress() { return restaurantAdress; }
 
     //SETTERS
     public void setId(String id) { this.id = id; }
@@ -45,6 +48,7 @@ public class Restaurant implements Parcelable {
     public void setLat(Double lat) { this.lat = lat; }
     public void setLng(Double lng) { this.lng = lng; }
     public void setRestaurantImageUrl(String restaurantImageUrl) { this.restaurantImageUrl = restaurantImageUrl; }
+    public void setRestaurantAdress(String restaurantAdress) { this.restaurantAdress = restaurantAdress; }
 
 
     @Override

@@ -9,8 +9,11 @@ import com.riyad.go4lunch.AppControler;
 import com.riyad.go4lunch.data.Restaurants;
 import com.riyad.go4lunch.data.Result;
 import com.riyad.go4lunch.ui.Restaurant;
+import com.riyad.go4lunch.utils.SortByDistance;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
@@ -48,8 +51,9 @@ public class RestaurantRepository {
                             ArrayList<Restaurant> restaurantsList = new ArrayList<>(mapResult(response.body()));
                             if (response.body().getNextPageToken() == null) {
                                 Log.i("RestaurantCall", "noNextPageToken");
-                                //TODO trié les restaurants par distance : Collection.sort
-                                
+                                //TODO trié les restaurants par distance : Collections.sort
+
+                                Collections.sort(restaurantsList, new SortByDistance());
                                 restaurantData.setValue(restaurantsList);
                             } else {
                                 Log.i("RestaurantCall", "NextPageToken");
@@ -88,9 +92,9 @@ public class RestaurantRepository {
                             restaurants.addAll(restaurantsList);
 
 
-
                             if (response.body().getNextPageToken() == null) {
                                 //TODO trié les restaurants par distance
+                                Collections.sort(restaurants, new SortByDistance());
                                 restaurantData.setValue(restaurants);
                             } else {
                                 getNextPageRestaurants(restaurantData, restaurants, response.body().getNextPageToken());
@@ -124,7 +128,8 @@ public class RestaurantRepository {
                         resto.getGeometry().getLocation().getLat(),
                         resto.getGeometry().getLocation().getLng(),
                         imageUrl,
-                        resto.getGeometry().getLocation()));
+                        resto.getGeometry().getLocation(),
+                        resto.getVicinity()));
             }
         }
 
