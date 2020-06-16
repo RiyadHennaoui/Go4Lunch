@@ -34,5 +34,8 @@ public class Constants {
     //Shared Preferences Key
     public static final String CURRENT_DEVICE_LOCATION = "CURRENT_DEVICE_LOCATION";
 
+    //Place id
+    public static final String PLACE_ID = "PLACE_ID";
+
 
 }

@@ -3,16 +3,22 @@ package com.riyad.go4lunch.networking;
 import androidx.lifecycle.MutableLiveData;
 
 import com.riyad.go4lunch.datadetail.DetailRestaurant;
+import com.riyad.go4lunch.datadetail.Result;
 import com.riyad.go4lunch.ui.Restaurant;
+import com.riyad.go4lunch.ui.RestaurantDetail;
 
 import java.util.List;
 
-public class DetailRestaurantRepository {
-    private static DetailRestaurant detailRestaurant;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-    public static DetailRestaurant getInstance(){
+public class DetailRestaurantRepository {
+    private static DetailRestaurantRepository detailRestaurant;
+
+    public static DetailRestaurantRepository getInstance(){
         if(detailRestaurant == null){
-            detailRestaurant = new DetailRestaurant();
+            detailRestaurant = new DetailRestaurantRepository();
         }
         return detailRestaurant;
     }
@@ -21,6 +27,38 @@ public class DetailRestaurantRepository {
 
     public DetailRestaurantRepository(){
         googlePlacesAPI = RetrofitService.createService(GooglePlacesAPI.class);
+    }
+
+    public MutableLiveData<RestaurantDetail> getRestaurantDetail(String id, String key){
+        MutableLiveData<RestaurantDetail> restaurantDetailData = new MutableLiveData<>();
+        googlePlacesAPI.getRestaurantDetail(id, key)
+                .enqueue(new Callback<DetailRestaurant>() {
+                    @Override
+                    public void onResponse(Call<DetailRestaurant> call, Response<DetailRestaurant> response) {
+                       if (response.isSuccessful()) {
+
+                           restaurantDetailData.setValue(restaurantDetailMapResult(response.body()));
+                       }
+                   }
+
+                    @Override
+                    public void onFailure(Call<DetailRestaurant> call, Throwable t) {
+
+                    }
+                });
+
+
+        return restaurantDetailData;
+    }
+
+    public RestaurantDetail restaurantDetailMapResult (DetailRestaurant restaurantDetail){
+
+
+        return new RestaurantDetail(restaurantDetail.getResult().getName(),
+         restaurantDetail.getResult().getVicinity(),
+         restaurantDetail.getResult().getWebsite(),
+         restaurantDetail.getResult().getFormattedPhoneNumber(),
+         "restaurantDetail.getResult().getPhotos().get(0)).getUrlPicture()");
     }
 
 

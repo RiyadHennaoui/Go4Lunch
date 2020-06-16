@@ -7,6 +7,7 @@
     tools:context=".DetailActivity">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/detail_activity_fbtn_booking_restaurant"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -45,6 +46,7 @@
             android:padding="16dp"/>
 
         <TextView
+            android:id="@+id/detail_activity_tv_restaurant_adress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Adresse"
