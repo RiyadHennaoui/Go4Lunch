@@ -25,5 +25,6 @@ public interface GooglePlacesAPI {
     //TODO ajouter les fields comme dans postman pour intégrer "name,formatted_phone_number,opening_hours,photos,website,vicinity,formatted_address"
     @GET("maps/api/place/details/json")
     Call<DetailRestaurant> getRestaurantDetail(@Query("place_id") String place_id,
+                                                @Query("fields") String fields,
                                                 @Query("key") String key);
 }

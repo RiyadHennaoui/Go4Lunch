@@ -16,7 +16,7 @@ public class DetailRestaurantViewModel extends ViewModel {
     private DetailRestaurantRepository detailRestaurantRepository;
     public void init(String restaurantId){
 
-        if(restaurantDetailMutableLiveData == null){
+        if(restaurantDetailMutableLiveData != null){
             return;
         }
 

@@ -31,7 +31,7 @@ public class DetailRestaurantRepository {
 
     public MutableLiveData<RestaurantDetail> getRestaurantDetail(String id, String key){
         MutableLiveData<RestaurantDetail> restaurantDetailData = new MutableLiveData<>();
-        googlePlacesAPI.getRestaurantDetail(id, key)
+        googlePlacesAPI.getRestaurantDetail(id,"name,formatted_phone_number,opening_hours,photos,website,vicinity,formatted_address", key)
                 .enqueue(new Callback<DetailRestaurant>() {
                     @Override
                     public void onResponse(Call<DetailRestaurant> call, Response<DetailRestaurant> response) {
