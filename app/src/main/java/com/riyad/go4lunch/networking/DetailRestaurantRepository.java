@@ -13,6 +13,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.riyad.go4lunch.utils.Constants.API_KEY_PLACES;
+import static com.riyad.go4lunch.utils.Constants.BASE_PHOTO_URL;
+
 public class DetailRestaurantRepository {
     private static DetailRestaurantRepository detailRestaurant;
 
@@ -53,12 +56,16 @@ public class DetailRestaurantRepository {
 
     public RestaurantDetail restaurantDetailMapResult (DetailRestaurant restaurantDetail){
 
+//        if (restaurantDetail.getResult().getPhotos() != null || !restaurantDetail.getResult().getPhotos().isEmpty()) {
+            String photoReference = restaurantDetail.getResult().getPhotos().get(0).getPhotoReference();
+            String photoUrlFormated = BASE_PHOTO_URL + photoReference + "&key=" + API_KEY_PLACES;
+//        }
 
         return new RestaurantDetail(restaurantDetail.getResult().getName(),
          restaurantDetail.getResult().getVicinity(),
          restaurantDetail.getResult().getWebsite(),
          restaurantDetail.getResult().getFormattedPhoneNumber(),
-         "restaurantDetail.getResult().getPhotos().get(0)).getUrlPicture()");
+         photoUrlFormated);
     }
 
 

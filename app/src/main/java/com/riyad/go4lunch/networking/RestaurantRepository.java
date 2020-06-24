@@ -11,6 +11,8 @@ import com.riyad.go4lunch.data.Result;
 import com.riyad.go4lunch.ui.Restaurant;
 import com.riyad.go4lunch.utils.SortByDistance;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -118,9 +120,7 @@ public class RestaurantRepository {
             if (resto.getPhotos() != null && !resto.getPhotos().isEmpty()) {
 
 
-                String imageReference = resto.getPhotos().get(0).getPhotoReference();
-                String endOfUrl = "&sensor=false&key=";
-                String imageUrl = BASE_PHOTO_URL + imageReference + endOfUrl + API_KEY_PLACES;
+                String imageUrl = getImageUrlFormat(resto);
 
                 restaurants.add(new Restaurant(resto.getPlaceId(),
                         resto.getName(),
@@ -134,6 +134,13 @@ public class RestaurantRepository {
         }
 
         return restaurants;
+    }
+
+    @NotNull
+    public static String getImageUrlFormat(Result photoReference) {
+        String imageReference = photoReference.getPhotos().get(0).getPhotoReference();
+        String endOfUrl = "&sensor=false&key=";
+        return BASE_PHOTO_URL + imageReference + endOfUrl + API_KEY_PLACES;
     }
 
 }

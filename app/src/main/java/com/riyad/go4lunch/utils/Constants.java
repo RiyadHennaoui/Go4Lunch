@@ -37,5 +37,8 @@ public class Constants {
     //Place id
     public static final String PLACE_ID = "PLACE_ID";
 
+    //for Permission to call
+    public static final int  PERMISSION_TO_CALL = 123;
+
 
 }
