@@ -125,8 +125,6 @@ public class RestaurantRepository {
                 restaurants.add(new Restaurant(resto.getPlaceId(),
                         resto.getName(),
                         resto.getRating().toString(),
-                        resto.getGeometry().getLocation().getLat(),
-                        resto.getGeometry().getLocation().getLng(),
                         imageUrl,
                         resto.getGeometry().getLocation(),
                         resto.getVicinity()));

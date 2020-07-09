@@ -1,6 +1,13 @@
 package com.riyad.go4lunch.model;
 
+import android.util.Pair;
+
 import androidx.annotation.Nullable;
+
+import com.riyad.go4lunch.ui.Restaurant;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
 
 public class User {
 
@@ -9,6 +16,9 @@ public class User {
     private String mUsername;
     private String mMail;
     @Nullable private String mUrlPicture;
+    private ArrayList<Pair<Restaurant, com.google.firebase.Timestamp>> bookingRestaurant = new ArrayList<>();
+    private ArrayList<Pair<Restaurant, Integer>> ratedRestaurant = new ArrayList<>();
+
 
     public User() { } // Needed for Firebase
 

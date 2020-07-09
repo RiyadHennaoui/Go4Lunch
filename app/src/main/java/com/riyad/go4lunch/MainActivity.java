@@ -261,7 +261,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             for (Restaurant restaurant: restaurants) {
                 mMap.addMarker(new MarkerOptions()
                 .title(restaurant.getName())
-                .position(new LatLng(restaurant.getLat(), restaurant.getLng())))
+                .position(new LatLng(restaurant.getRestaurantLocation().getLat(), restaurant.getRestaurantLocation().getLng())))
                 .setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
             }
             //TODO le rendre plus propre.
