@@ -9,7 +9,11 @@ public class RestaurantDetail {
     private String formattedNumber;
     private String urlPicture;
 
-    public RestaurantDetail( String name, String formatedAdress, String website, String formattedNumber, String urlPicture) {
+
+    public RestaurantDetail() {
+    }
+
+    public RestaurantDetail(String name, String formatedAdress, String website, String formattedNumber, String urlPicture) {
 
         this.name = name;
         this.formatedAdress = formatedAdress;

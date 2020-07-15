@@ -3,12 +3,15 @@ package com.riyad.go4lunch.viewmodels;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.riyad.go4lunch.data.Restaurants;
 import com.riyad.go4lunch.networking.RestaurantRepository;
 import com.riyad.go4lunch.ui.Restaurant;
@@ -24,10 +27,12 @@ public class RestaurantsViewModel extends ViewModel {
     private MutableLiveData<List<Restaurant>> restaurantsMutableLiveData;
     private RestaurantRepository restaurantRepository;
 
+
     public void init(String currentLocation){
         if (restaurantsMutableLiveData != null) {
             return;
         }
+
 
         restaurantRepository = RestaurantRepository.getInstance();
         restaurantsMutableLiveData = restaurantRepository.getRestaurants(currentLocation,
@@ -39,4 +44,5 @@ public class RestaurantsViewModel extends ViewModel {
     public LiveData<List<Restaurant>> getRestaurantRepository(){
         return restaurantsMutableLiveData;
     }
+
 }

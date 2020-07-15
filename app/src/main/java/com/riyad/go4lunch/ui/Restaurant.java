@@ -19,11 +19,13 @@ public class Restaurant implements Parcelable {
     private String restaurantImageUrl;
     private Location restaurantLocation;
     private String restaurantAdress;
+    private RestaurantDetail restaurantDetail;
     private ArrayList<Pair<User, Timestamp>> bookingUser = new ArrayList<>();
     private ArrayList<Pair<User, Integer>> ratedUser = new ArrayList<>();
 
 
-
+    public Restaurant() {
+    }
 
     public Restaurant(String id, String name, String rating, String restaurantImageUrl, Location restaurantLocation, String restaurantAdress) {
         this.id = id;
@@ -43,6 +45,10 @@ public class Restaurant implements Parcelable {
     public Location getRestaurantLocation() { return restaurantLocation; }
     public String getRestaurantAdress() { return restaurantAdress; }
 
+    public RestaurantDetail getRestaurantDetail() {
+        return restaurantDetail;
+    }
+
     //SETTERS
     public void setId(String id) { this.id = id; }
     public void setName(String name) { this.name = name; }
@@ -50,6 +56,9 @@ public class Restaurant implements Parcelable {
     public void setRestaurantImageUrl(String restaurantImageUrl) { this.restaurantImageUrl = restaurantImageUrl; }
     public void setRestaurantAdress(String restaurantAdress) { this.restaurantAdress = restaurantAdress; }
 
+    public void setRestaurantDetail(RestaurantDetail restaurantDetail) {
+        this.restaurantDetail = restaurantDetail;
+    }
 
     @Override
     public int describeContents() { return 0; }

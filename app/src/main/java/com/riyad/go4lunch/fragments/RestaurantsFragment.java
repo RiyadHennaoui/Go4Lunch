@@ -82,6 +82,7 @@ public class RestaurantsFragment extends Fragment {
         restaurantsViewModel.init(currentLocation);
         restaurantsViewModel.getRestaurantRepository().observe(this, restaurants ->  {
             restaurantAdapter.setData(restaurants);
+
         });
     }
 
