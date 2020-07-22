@@ -19,8 +19,8 @@ import static com.riyad.go4lunch.utils.Constants.BASE_PHOTO_URL;
 public class DetailRestaurantRepository {
     private static DetailRestaurantRepository detailRestaurant;
 
-    public static DetailRestaurantRepository getInstance(){
-        if(detailRestaurant == null){
+    public static DetailRestaurantRepository getInstance() {
+        if (detailRestaurant == null) {
             detailRestaurant = new DetailRestaurantRepository();
         }
         return detailRestaurant;
@@ -28,21 +28,21 @@ public class DetailRestaurantRepository {
 
     private GooglePlacesAPI googlePlacesAPI;
 
-    public DetailRestaurantRepository(){
+    public DetailRestaurantRepository() {
         googlePlacesAPI = RetrofitService.createService(GooglePlacesAPI.class);
     }
 
-    public MutableLiveData<RestaurantDetail> getRestaurantDetail(String id, String key){
+    public MutableLiveData<RestaurantDetail> getRestaurantDetail(String id, String key) {
         MutableLiveData<RestaurantDetail> restaurantDetailData = new MutableLiveData<>();
-        googlePlacesAPI.getRestaurantDetail(id,"name,formatted_phone_number,opening_hours,photos,website,vicinity,formatted_address", key)
+        googlePlacesAPI.getRestaurantDetail(id, "name,formatted_phone_number,opening_hours,photos,website,vicinity,formatted_address", key)
                 .enqueue(new Callback<DetailRestaurant>() {
                     @Override
                     public void onResponse(Call<DetailRestaurant> call, Response<DetailRestaurant> response) {
-                       if (response.isSuccessful()) {
+                        if (response.isSuccessful()) {
 
-                           restaurantDetailData.setValue(restaurantDetailMapResult(response.body()));
-                       }
-                   }
+                            restaurantDetailData.setValue(restaurantDetailMapResult(response.body()));
+                        }
+                    }
 
                     @Override
                     public void onFailure(Call<DetailRestaurant> call, Throwable t) {
@@ -50,22 +50,22 @@ public class DetailRestaurantRepository {
                     }
                 });
 
-
         return restaurantDetailData;
     }
 
-    public RestaurantDetail restaurantDetailMapResult (DetailRestaurant restaurantDetail){
+    public RestaurantDetail restaurantDetailMapResult(DetailRestaurant restaurantDetail) {
 
 //        if (restaurantDetail.getResult().getPhotos() != null || !restaurantDetail.getResult().getPhotos().isEmpty()) {
-            String photoReference = restaurantDetail.getResult().getPhotos().get(0).getPhotoReference();
-            String photoUrlFormated = BASE_PHOTO_URL + photoReference + "&key=" + API_KEY_PLACES;
+        String photoReference = restaurantDetail.getResult().getPhotos().get(0).getPhotoReference();
+        String photoUrlFormated = BASE_PHOTO_URL + photoReference + "&key=" + API_KEY_PLACES;
 //        }
 
         return new RestaurantDetail(restaurantDetail.getResult().getName(),
-         restaurantDetail.getResult().getVicinity(),
-         restaurantDetail.getResult().getWebsite(),
-         restaurantDetail.getResult().getFormattedPhoneNumber(),
-         photoUrlFormated);
+                restaurantDetail.getResult().getVicinity(),
+                restaurantDetail.getResult().getWebsite(),
+                restaurantDetail.getResult().getFormattedPhoneNumber(),
+                photoUrlFormated,
+                restaurantDetail.getResult().getOpeningHours());
     }
 
 

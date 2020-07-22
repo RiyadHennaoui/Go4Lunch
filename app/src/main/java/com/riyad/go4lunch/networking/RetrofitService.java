@@ -21,7 +21,7 @@ public class RetrofitService {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder()
-//                .addInterceptor(logging)
+                .addInterceptor(logging)
                 .build();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://maps.googleapis.com/")

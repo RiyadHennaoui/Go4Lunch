@@ -21,6 +21,7 @@ import com.riyad.go4lunch.R;
 import com.riyad.go4lunch.ui.Restaurant;
 import com.riyad.go4lunch.data.Result;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +70,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         private final RatingBar ratingBar;
         private final TextView distance;
         private final TextView restaurantAdress;
+        private final TextView opening_hour;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -78,6 +80,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
             ratingBar = itemView.findViewById(R.id.item_restaurant_rating_star);
             distance = itemView.findViewById(R.id.item_restaurant_tv_distance);
             restaurantAdress = itemView.findViewById(R.id.item_restaurant_tv_adresse);
+            opening_hour = itemView.findViewById(R.id.item_restaurant_tv_opening);
         }
 
         public void bind(Restaurant restaurant) {
@@ -90,6 +93,9 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
             restaurantAdress.setText(restaurant.getRestaurantAdress());
 
             //TODO afficher l'ouverture ou fermeture du restaurant
+
+            opening_hour.setText(restaurant.getRestaurantDetail().getFormattedOpeningHour());
+
 
             Glide.with(countryFood).load(restaurant.getRestaurantImageUrl()).circleCrop().into(countryFood);
 
