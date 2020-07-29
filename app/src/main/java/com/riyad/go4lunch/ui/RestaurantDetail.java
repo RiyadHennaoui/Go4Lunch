@@ -40,20 +40,54 @@ public class RestaurantDetail {
     }
 
     //GETTER
-    public String getName() { return name; }
-    public String getFormatedAdress() { return formatedAdress; }
-    public String getWebsite() { return website; }
-    public String getFormattedNumber() { return formattedNumber; }
-    public String getUrlPicture() { return urlPicture; }
-    public OpeningHours getOpeningHours() { return openingHours; }
+    public String getName() {
+        return name;
+    }
+
+    public String getFormatedAdress() {
+        return formatedAdress;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public String getFormattedNumber() {
+        return formattedNumber;
+    }
+
+    public String getUrlPicture() {
+        return urlPicture;
+    }
+
+    public OpeningHours getOpeningHours() {
+        return openingHours;
+    }
 
     //SETTER
-    public void setName(String name) { this.name = name; }
-    public void setFormatedAdress(String formatedAdress) { this.formatedAdress = formatedAdress; }
-    public void setWebsite(String website) { this.website = website; }
-    public void setFormattedNumber(String formattedNumber) { this.formattedNumber = formattedNumber; }
-    public void setUrlPicture(String urlPicture) { this.urlPicture = urlPicture; }
-    public void setOpeningHours(OpeningHours openingHours) { this.openingHours = openingHours; }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setFormatedAdress(String formatedAdress) {
+        this.formatedAdress = formatedAdress;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public void setFormattedNumber(String formattedNumber) {
+        this.formattedNumber = formattedNumber;
+    }
+
+    public void setUrlPicture(String urlPicture) {
+        this.urlPicture = urlPicture;
+    }
+
+    public void setOpeningHours(OpeningHours openingHours) {
+        this.openingHours = openingHours;
+    }
 
 
     public String getFormattedOpeningHour() {
@@ -61,7 +95,6 @@ public class RestaurantDetail {
 
         //TODO récupérer l'heure actuelle. utiliser Calendar.
         Calendar rightNow = Calendar.getInstance();
-        rightNow.getTime();
         //TODO récupérer le jour de la semaine du user.
         int dayOfWeek = rightNow.get(Calendar.DAY_OF_WEEK);
         int hour = rightNow.get(Calendar.HOUR_OF_DAY);
@@ -70,7 +103,6 @@ public class RestaurantDetail {
         Boolean isOpen = false;
         dayOfWeek = switchSunday(dayOfWeek);
         //TODO vérifier si Opening Hour n'est pas null.
-        String previousName = "";
         if (getOpeningHours() != null) {
             //TODO parcourir la liste des périods
 
@@ -83,31 +115,30 @@ public class RestaurantDetail {
                 if (dayOfWeek == getOpeningHours().getPeriods().get(i).getOpen().getDay()
                         && dayOfWeek == getOpeningHours().getPeriods().get(i).getClose().getDay()) {
                     //TODO chercher l'interval actuel, si l'interval est trouvé affiché l'heure de fermeture sinon c'est fermé.
-//                    String openHour = getOpeningHours().getPeriods().get(i).getOpen().getTime();
-//                    String CloseHour = getOpeningHours().getPeriods().get(i).getClose().getTime();
-
+                    String openHour = getOpeningHours().getPeriods().get(i).getOpen().getTime();
+                    String closeHour = getOpeningHours().getPeriods().get(i).getClose().getTime();
+                    String closeHourFormatted = closeHour.substring(0, 2) + ":" + closeHour.substring(2);
+                    String openHourFormatted = openHour.substring(0, 2) + ":" + openHour.substring(2);
                     Log.e("name : " + getName(), "dayOfWeek : " + dayOfWeek);
-                    previousName = getName();
+
                     Log.e("for period", gson.toJson(getName()) + " " + gson.toJson(getOpeningHours().getPeriods().get(i)) + " " + dayOfWeek + " " + formatedCurrentHour);
 
-                    if (formatedCurrentHour > Integer.parseInt(getOpeningHours().getPeriods().get(i).getOpen().getTime())
-                            && formatedCurrentHour < Integer.parseInt(getOpeningHours().getPeriods().get(i).getClose().getTime())) {
+                    if (formatedCurrentHour > Integer.parseInt(openHour)
+                            && formatedCurrentHour < Integer.parseInt(closeHour)) {
                         Log.e("forattedHour", getOpeningHours().getPeriods().get(i).getClose().getTime() + ": " + getName());
-                        result = "Open";
+                        result = "Open until : " + closeHourFormatted;
                         isOpen = true;
 
                     } else {
                         Log.i("heure", String.valueOf(formatedCurrentHour));
                         if (!isOpen) {
-//                            DateFormat format = new SimpleDateFormat("kk:mm");
-//                            Date date  = format.parse(openHour);
-                            result = "Close, Open to : " +  getOpeningHours().getPeriods().get(i).getOpen().getTime() ;
+                            result = "Close, Open at : " + openHourFormatted;
                         } else {
                             result = "Open";
                         }
                     }
-                } else if (result == "" ) {
-                    Log.e(" else if " + getName(), "dayOfWeek : " + dayOfWeek + " Real Hour " + getOpeningHours().getPeriods().get(i).getOpen().getDay() );
+                } else if (result == "") {
+                    Log.e(" else if " + getName(), "dayOfWeek : " + dayOfWeek + " Real Hour " + getOpeningHours().getPeriods().get(i).getOpen().getDay());
                     result = "Closed Today";
                 }
             }
@@ -119,13 +150,9 @@ public class RestaurantDetail {
     }
 
     private int switchSunday(int dayOfWeek) {
-        Log.e("swithSunday before if", String.valueOf(dayOfWeek));
         if (dayOfWeek == 7) {
             dayOfWeek = 0;
-            Log.e("swithSunday after if", String.valueOf(dayOfWeek));
-            return dayOfWeek;
         }
-        Log.e("swithSunday without if", String.valueOf(dayOfWeek));
         return dayOfWeek;
     }
 }

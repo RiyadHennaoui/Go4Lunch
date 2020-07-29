@@ -226,7 +226,7 @@ public class RestaurantRepository {
                                 }
                             }
                             if (!isPresent) {
-                                firestoreRestaurants.add(restaurants.get(i));
+                                firestoreRestaurants.document(restaurants.get(i).getId()).set(restaurants.get(i));
                             }
                         }
                     }

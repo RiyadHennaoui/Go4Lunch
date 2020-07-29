@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import android.util.Pair;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.Exclude;
 import com.riyad.go4lunch.AppControler;
 import com.riyad.go4lunch.data.Location;
 import com.riyad.go4lunch.model.User;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 public class Restaurant implements Parcelable {
 
     private String id;
+    private String documentId;
     private String name;
     private String rating;
     private String restaurantImageUrl;
@@ -38,19 +40,26 @@ public class Restaurant implements Parcelable {
     }
 
     //GETTERS
-    public String getId() { return id; }
+    public String  getId() { return id; }
+    @Exclude
+    public String getDocumentId() { return documentId; }
     public String getName() { return name; }
     public String getRating() { return rating; }
     public String getRestaurantImageUrl() { return restaurantImageUrl; }
     public Location getRestaurantLocation() { return restaurantLocation; }
-    public String getRestaurantAdress() { return restaurantAdress; }
 
+    public void setBookingUser(ArrayList<Pair<User, Timestamp>> bookingUser) {
+        this.bookingUser = bookingUser;
+    }
+
+    public String getRestaurantAdress() { return restaurantAdress; }
     public RestaurantDetail getRestaurantDetail() {
         return restaurantDetail;
     }
 
     //SETTERS
     public void setId(String id) { this.id = id; }
+    public void setDocumentId(String documentId) { this.documentId = documentId; }
     public void setName(String name) { this.name = name; }
     public void setRating(String rating) { this.rating = rating; }
     public void setRestaurantImageUrl(String restaurantImageUrl) { this.restaurantImageUrl = restaurantImageUrl; }
