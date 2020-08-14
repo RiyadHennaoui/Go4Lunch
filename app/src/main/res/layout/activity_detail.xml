@@ -57,6 +57,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/detail_activity_under_bar"
         android:layout_width="match_parent"
@@ -129,6 +130,7 @@
         app:layout_constraintStart_toStartOf="@+id/detail_activity_btn_website"
         app:layout_constraintTop_toBottomOf="@+id/detail_activity_btn_website"
         />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

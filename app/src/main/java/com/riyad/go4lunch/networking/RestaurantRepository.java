@@ -66,26 +66,19 @@ public class RestaurantRepository {
 
                                                 ArrayList<Restaurant> restaurantsList = new ArrayList<>(mapResult(response.body()));
                                                 if (response.body().getNextPageToken() == null) {
-                                                    Log.i("RestaurantCall", "noNextPageToken");
-
                                                     getDetailRestaurant(restaurantData, restaurantsList);
                                                 } else {
-                                                    Log.i("RestaurantCall", "NextPageToken");
                                                     getNextPageRestaurants(restaurantData, restaurantsList, response.body().getNextPageToken());
                                                 }
-
-                                                Log.i("RestaurantCall", "Success");
                                             }
                                         }
 
                                         @Override
                                         public void onFailure(Call<Restaurants> call, Throwable t) {
                                             restaurantData.setValue(null);
-                                            Log.e("RestaurantCall", "arf onFailure", t);
                                         }
                                     });
                         } else {
-                            Log.i("else", "yes");
                             ArrayList<Restaurant> restaurants = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Restaurant restaurant = document.toObject(Restaurant.class);
@@ -111,16 +104,13 @@ public class RestaurantRepository {
                     public void onResponse(Call<Restaurants> call, Response<Restaurants> response) {
 
                         if (response.isSuccessful()) {
-                            Log.i("next page", "success");
                             ArrayList<Restaurant> restaurantsList = new ArrayList<>(mapResult(response.body()));
 
                             restaurants.addAll(restaurantsList);
 
                             if (response.body().getNextPageToken() == null) {
-                                Log.i("next page", "success 2");
                                 getDetailRestaurant(restaurantData, restaurants);
                             } else {
-                                Log.i("next page", "success 3");
                                 getNextPageRestaurants(restaurantData, restaurants, response.body().getNextPageToken());
                             }
                         }
@@ -133,7 +123,6 @@ public class RestaurantRepository {
     }
 
     private void getDetailRestaurant(MutableLiveData<List<Restaurant>> restaurantData, ArrayList<Restaurant> restaurants) {
-        Log.i("method", " detail restaurant" + restaurants.size());
         countRestaurants = 0;
         for (int i = 0; i < restaurants.size(); i++) {
 
@@ -145,7 +134,6 @@ public class RestaurantRepository {
                             if (response.isSuccessful()) {
                                 restaurants.get(finalI).setRestaurantDetail(restaurantDetailMapResult(response.body()));
                                 countRestaurants++;
-                                Log.i("Detail Restaurant", finalI + "");
                                 if (countRestaurants == restaurants.size()) {
                                     Collections.sort(restaurants, new SortByDistance());
                                     restaurantData.setValue(restaurants);
@@ -217,7 +205,6 @@ public class RestaurantRepository {
                             restaurantsFirestore.add(restaurant);
                         }
                         for (int i = 0; i < restaurants.size() - 1; i++) {
-                            Log.i("saveRestaurant", "in for");
                             Boolean isPresent = false;
                             for (Restaurant restaurant : restaurantsFirestore) {
                                 if (restaurant.getId().equals(restaurants.get(i).getId())) {

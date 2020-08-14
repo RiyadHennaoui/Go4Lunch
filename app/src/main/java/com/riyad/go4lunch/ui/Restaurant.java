@@ -4,10 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Pair;
 
-import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.Exclude;
 import com.riyad.go4lunch.AppControler;
 import com.riyad.go4lunch.data.Location;
+import com.riyad.go4lunch.model.BookingRestaurant;
 import com.riyad.go4lunch.model.User;
 
 import java.util.ArrayList;
@@ -15,14 +14,13 @@ import java.util.ArrayList;
 public class Restaurant implements Parcelable {
 
     private String id;
-    private String documentId;
     private String name;
     private String rating;
     private String restaurantImageUrl;
     private Location restaurantLocation;
     private String restaurantAdress;
     private RestaurantDetail restaurantDetail;
-    private ArrayList<Pair<User, Timestamp>> bookingUser = new ArrayList<>();
+    private ArrayList<BookingRestaurant> bookingUser = new ArrayList<>();
     private ArrayList<Pair<User, Integer>> ratedUser = new ArrayList<>();
 
 
@@ -40,37 +38,71 @@ public class Restaurant implements Parcelable {
     }
 
     //GETTERS
-    public String  getId() { return id; }
-    @Exclude
-    public String getDocumentId() { return documentId; }
-    public String getName() { return name; }
-    public String getRating() { return rating; }
-    public String getRestaurantImageUrl() { return restaurantImageUrl; }
-    public Location getRestaurantLocation() { return restaurantLocation; }
+    public String getId() {
+        return id;
+    }
 
-    public void setBookingUser(ArrayList<Pair<User, Timestamp>> bookingUser) {
+    public String getName() {
+        return name;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public String getRestaurantImageUrl() {
+        return restaurantImageUrl;
+    }
+
+    public Location getRestaurantLocation() {
+        return restaurantLocation;
+    }
+
+    public ArrayList<BookingRestaurant> getBookingUser() {
+        return bookingUser;
+    }
+
+    public void setBookingUser(ArrayList<BookingRestaurant> bookingUser) {
         this.bookingUser = bookingUser;
     }
 
-    public String getRestaurantAdress() { return restaurantAdress; }
+    public String getRestaurantAdress() {
+        return restaurantAdress;
+    }
+
     public RestaurantDetail getRestaurantDetail() {
         return restaurantDetail;
     }
 
     //SETTERS
-    public void setId(String id) { this.id = id; }
-    public void setDocumentId(String documentId) { this.documentId = documentId; }
-    public void setName(String name) { this.name = name; }
-    public void setRating(String rating) { this.rating = rating; }
-    public void setRestaurantImageUrl(String restaurantImageUrl) { this.restaurantImageUrl = restaurantImageUrl; }
-    public void setRestaurantAdress(String restaurantAdress) { this.restaurantAdress = restaurantAdress; }
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    public void setRestaurantImageUrl(String restaurantImageUrl) {
+        this.restaurantImageUrl = restaurantImageUrl;
+    }
+
+    public void setRestaurantAdress(String restaurantAdress) {
+        this.restaurantAdress = restaurantAdress;
+    }
 
     public void setRestaurantDetail(RestaurantDetail restaurantDetail) {
         this.restaurantDetail = restaurantDetail;
     }
 
     @Override
-    public int describeContents() { return 0; }
+    public int describeContents() {
+        return 0;
+    }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
@@ -90,13 +122,17 @@ public class Restaurant implements Parcelable {
 
     public static final Creator<Restaurant> CREATOR = new Creator<Restaurant>() {
         @Override
-        public Restaurant createFromParcel(Parcel in) { return new Restaurant(in); }
+        public Restaurant createFromParcel(Parcel in) {
+            return new Restaurant(in);
+        }
 
         @Override
-        public Restaurant[] newArray(int size) { return new Restaurant[size]; }
+        public Restaurant[] newArray(int size) {
+            return new Restaurant[size];
+        }
     };
 
-    public int getDistance(){
+    public int getDistance() {
 
         android.location.Location placeLocation = new android.location.Location("");
         placeLocation.setLatitude(this.getRestaurantLocation().getLat());
@@ -106,7 +142,7 @@ public class Restaurant implements Parcelable {
         return distance;
     }
 
-    public String getDistanceAsString(){
+    public String getDistanceAsString() {
         return getDistance() + "";
     }
 

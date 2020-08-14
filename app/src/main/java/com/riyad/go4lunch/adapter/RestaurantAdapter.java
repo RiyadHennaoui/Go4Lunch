@@ -101,6 +101,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
 
             itemView.setOnClickListener(view -> {
                         //TODO INTENT vers l'acitivtée détail Restaurant.
+
                         Intent intent = new Intent(context, DetailActivity.class);
                         intent.putExtra(PLACE_ID, restaurant.getId());
                         context.startActivity(intent);

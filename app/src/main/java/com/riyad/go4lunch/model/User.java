@@ -6,7 +6,6 @@ import androidx.annotation.Nullable;
 
 import com.riyad.go4lunch.ui.Restaurant;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 
 public class User {
@@ -16,9 +15,18 @@ public class User {
     private String mUsername;
     private String mMail;
     @Nullable private String mUrlPicture;
-    private ArrayList<Pair<Restaurant, com.google.firebase.Timestamp>> bookingRestaurant = new ArrayList<>();
+
+    //TODO pas besoin de list pour le bookingRestaurant
+    private ArrayList<BookingRestaurant> bookingRestaurant = new ArrayList<>();
     private ArrayList<Pair<Restaurant, Integer>> ratedRestaurant = new ArrayList<>();
 
+    public void setBookingRestaurant(ArrayList<BookingRestaurant> bookingRestaurant) {
+        this.bookingRestaurant = bookingRestaurant;
+    }
+
+    public ArrayList<BookingRestaurant> getBookingRestaurant() {
+        return bookingRestaurant;
+    }
 
     public User() { } // Needed for Firebase
 

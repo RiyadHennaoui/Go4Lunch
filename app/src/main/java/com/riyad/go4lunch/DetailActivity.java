@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,12 +18,19 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.riyad.go4lunch.ui.Restaurant;
+import com.riyad.go4lunch.model.BookingRestaurant;
+import com.riyad.go4lunch.model.User;
 import com.riyad.go4lunch.viewmodels.DetailRestaurantViewModel;
 import com.riyad.go4lunch.viewmodels.RestaurantsViewModel;
+import com.riyad.go4lunch.viewmodels.UserViewModel;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 import static com.riyad.go4lunch.utils.Constants.PERMISSION_TO_CALL;
 import static com.riyad.go4lunch.utils.Constants.PLACE_ID;
@@ -38,9 +46,8 @@ public class DetailActivity extends AppCompatActivity {
     private FloatingActionButton fbBookingRestaurant;
     private String restaurantID;
     private String phoneNumber;
-
     private FirebaseFirestore restaurantDb = FirebaseFirestore.getInstance();
-
+    private DetailRestaurantViewModel detailRestaurantViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,40 +63,39 @@ public class DetailActivity extends AppCompatActivity {
         fbBookingRestaurant = findViewById(R.id.detail_activity_fbtn_booking_restaurant);
 
         restaurantID = getIntent().getStringExtra(PLACE_ID);
+
+
         displayDetailRestaurant(restaurantID);
 
     }
 
+
     private void displayDetailRestaurant(String restaurantId) {
 
-        DetailRestaurantViewModel detailRestaurantViewModel;
+
         detailRestaurantViewModel = ViewModelProviders.of(DetailActivity.this).get(DetailRestaurantViewModel.class);
         detailRestaurantViewModel.init(restaurantId);
         detailRestaurantViewModel.getDetailRestaurant().observe(DetailActivity.this, restaurantDetail -> {
             restaurantName.setText(restaurantDetail.getName());
-            restaurantAdress.setText(restaurantDetail.getFormatedAdress());
-            Glide.with(restaurantPicture).load(restaurantDetail.getUrlPicture()).centerCrop().into(restaurantPicture);
+            restaurantAdress.setText(restaurantDetail.getRestaurantAdress());
+            Glide.with(restaurantPicture).load(restaurantDetail.getRestaurantImageUrl()).centerCrop().into(restaurantPicture);
 
 
-            restaurantCall.setOnClickListener(v -> callPhoneNumber(restaurantDetail.getFormattedNumber()));
-            restaurantWebsite.setOnClickListener(v -> displayWebsite(restaurantDetail.getWebsite()));
-            fbBookingRestaurant.setOnClickListener(v -> bookingRestaurant(restaurantID)); });
-
-
-    }
-
-    private void updateRestaurant(String restaurantId) {
-
-        RestaurantsViewModel restaurantsViewModel;
-        restaurantsViewModel = ViewModelProviders.of(DetailActivity.this).get(RestaurantsViewModel.class);
-        restaurantsViewModel.init(restaurantId);
-        restaurantsViewModel.getRestaurantRepository().observe(DetailActivity.this, restaurants -> {
-            fbBookingRestaurant.setOnClickListener(v -> bookingRestaurant(restaurantId));
-
+            restaurantCall.setOnClickListener(v -> callPhoneNumber(restaurantDetail.getRestaurantDetail().getFormattedNumber()));
+            restaurantWebsite.setOnClickListener(v -> displayWebsite(restaurantDetail.getRestaurantDetail().getWebsite()));
+            fbBookingRestaurant.setOnClickListener(v ->
+                    bookRestaurantNew(restaurantId)
+            //        bookingRestaurant(restaurantID, getCurrentUser().getUid())
+            );
         });
 
+
+
     }
 
+    private FirebaseUser getCurrentUser() {
+        return FirebaseAuth.getInstance().getCurrentUser();
+    }
 
     public void callPhoneNumber(String phoneNumber) {
 
@@ -117,12 +123,40 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
-    public void bookingRestaurant (String restaurantID){
+    public void bookRestaurantNew(String restaurantId){
+        detailRestaurantViewModel.getBookingRestaurantMutableLiveData(restaurantId)
+                .observe(DetailActivity.this, bookingRestaurants -> {
+            if() {
+                //TODO mettre le fba en vert.
+
+            }else{
+                //TODO mettre en gris.
+            }
+
+        });
+    }
+
+    public void bookingRestaurant (String restaurantID, String currentUser){
 
         DocumentReference firestoreRestaurants = restaurantDb.collection("restaurants").document(restaurantID);
+        DocumentReference currentUserDocument = restaurantDb.collection("user").document(getCurrentUser().getUid());
 
+        BookingRestaurant newBookingRestaurant = new BookingRestaurant();
+        ArrayList<BookingRestaurant> bookinfRef = new ArrayList<>();
+        Timestamp currentTime = new Timestamp(new Date());
+        newBookingRestaurant.setUserId(currentUser);
+        newBookingRestaurant.setRestaurantId(restaurantID);
+        newBookingRestaurant.setTimestamp(currentTime);
+
+
+        bookinfRef.add(newBookingRestaurant);
+
+
+        firestoreRestaurants.update("bookingUser", bookinfRef);
+        currentUserDocument.update("bookingUser", bookinfRef);
 //        firestoreRestaurants.set()
 //        firestoreRestaurants.update()
+//        firestoreRestaurants.update(restaurant.getBookingUser(), new Timestamp(new Date() ).
 
 
 
