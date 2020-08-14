@@ -18,19 +18,10 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.riyad.go4lunch.model.BookingRestaurant;
-import com.riyad.go4lunch.model.User;
 import com.riyad.go4lunch.viewmodels.DetailRestaurantViewModel;
-import com.riyad.go4lunch.viewmodels.RestaurantsViewModel;
-import com.riyad.go4lunch.viewmodels.UserViewModel;
-
-import java.util.ArrayList;
-import java.util.Date;
 
 import static com.riyad.go4lunch.utils.Constants.PERMISSION_TO_CALL;
 import static com.riyad.go4lunch.utils.Constants.PLACE_ID;
@@ -65,6 +56,7 @@ public class DetailActivity extends AppCompatActivity {
         restaurantID = getIntent().getStringExtra(PLACE_ID);
 
 
+
         displayDetailRestaurant(restaurantID);
 
     }
@@ -83,10 +75,8 @@ public class DetailActivity extends AppCompatActivity {
 
             restaurantCall.setOnClickListener(v -> callPhoneNumber(restaurantDetail.getRestaurantDetail().getFormattedNumber()));
             restaurantWebsite.setOnClickListener(v -> displayWebsite(restaurantDetail.getRestaurantDetail().getWebsite()));
-            fbBookingRestaurant.setOnClickListener(v ->
-                    bookRestaurantNew(restaurantId)
-            //        bookingRestaurant(restaurantID, getCurrentUser().getUid())
-            );
+            fbBookingRestaurant.setOnClickListener(v -> bookRestaurant(restaurantId));
+            restaurantLike.setOnClickListener(v -> likeThisRestaurant(restaurantId));
         });
 
 
@@ -123,44 +113,39 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
-    public void bookRestaurantNew(String restaurantId){
+    public void bookRestaurant(String restaurantId){
         detailRestaurantViewModel.getBookingRestaurantMutableLiveData(restaurantId)
                 .observe(DetailActivity.this, bookingRestaurants -> {
-            if() {
-                //TODO mettre le fba en vert.
 
-            }else{
-                //TODO mettre en gris.
-            }
+                    for (int i = 0; i < bookingRestaurants.size(); i++) {
+                        if (bookingRestaurants.get(i).getUserId().equals(getCurrentUser().getUid())) {
+                            //TODO mettre le fba en vert.
+                            Log.i("detailActivity", "oui il est la bordel");
+                            fbBookingRestaurant.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_clear_24));
+
+                        } else {
+                            //TODO mettre en gris.
+                            Log.i("detailActivity", "non il est pas la bordel");
+                            fbBookingRestaurant.setImageResource(R.drawable.ic_baseline_check_24);
+                        }
+                    }
 
         });
     }
 
-    public void bookingRestaurant (String restaurantID, String currentUser){
+    public void likeThisRestaurant(String restaurantId){
+        detailRestaurantViewModel.getRestaurantLikes(restaurantId)
+                .observe(DetailActivity.this, like -> {
 
-        DocumentReference firestoreRestaurants = restaurantDb.collection("restaurants").document(restaurantID);
-        DocumentReference currentUserDocument = restaurantDb.collection("user").document(getCurrentUser().getUid());
+                    for (int i = 0; i < like.size(); i++){
+                        if (like.get(i).getUserId().equals(getCurrentUser().getUid())){
+                            restaurantLike.setBackground(getResources().getDrawable(R.drawable.ic_star_black_24dp));
+                        }else{
+                            restaurantLike.setBackground(getResources().getDrawable(R.drawable.ic_baseline_star_border_24));
+                        }
+                    }
 
-        BookingRestaurant newBookingRestaurant = new BookingRestaurant();
-        ArrayList<BookingRestaurant> bookinfRef = new ArrayList<>();
-        Timestamp currentTime = new Timestamp(new Date());
-        newBookingRestaurant.setUserId(currentUser);
-        newBookingRestaurant.setRestaurantId(restaurantID);
-        newBookingRestaurant.setTimestamp(currentTime);
-
-
-        bookinfRef.add(newBookingRestaurant);
-
-
-        firestoreRestaurants.update("bookingUser", bookinfRef);
-        currentUserDocument.update("bookingUser", bookinfRef);
-//        firestoreRestaurants.set()
-//        firestoreRestaurants.update()
-//        firestoreRestaurants.update(restaurant.getBookingUser(), new Timestamp(new Date() ).
-
-
-
-
+                });
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.riyad.go4lunch.datadetail.DetailRestaurant;
 import com.riyad.go4lunch.model.BookingRestaurant;
+import com.riyad.go4lunch.model.RatingRestaurant;
 import com.riyad.go4lunch.model.User;
 import com.riyad.go4lunch.networking.DetailRestaurantRepository;
 import com.riyad.go4lunch.networking.UserRepository;
@@ -24,6 +25,7 @@ public class DetailRestaurantViewModel extends ViewModel {
     private MutableLiveData<Restaurant> restaurantDetailMutableLiveData;
     private DetailRestaurantRepository detailRestaurantRepository;
     private MutableLiveData<ArrayList<BookingRestaurant>> bookingRestaurantMutableLiveData;
+    private MutableLiveData<ArrayList<RatingRestaurant>> restaurantLikes;
     public void init(String restaurantId){
 
         if(restaurantDetailMutableLiveData != null){
@@ -46,5 +48,10 @@ public class DetailRestaurantViewModel extends ViewModel {
     public MutableLiveData<ArrayList<BookingRestaurant>> getBookingRestaurantMutableLiveData (String restaurantId){
         bookingRestaurantMutableLiveData = detailRestaurantRepository.bookingRestaurantRepo(restaurantId);
         return  bookingRestaurantMutableLiveData;
+    }
+
+    public MutableLiveData<ArrayList<RatingRestaurant>> getRestaurantLikes (String restaurantId){
+        restaurantLikes = detailRestaurantRepository.restaurantLike(restaurantId);
+        return restaurantLikes;
     }
 }
