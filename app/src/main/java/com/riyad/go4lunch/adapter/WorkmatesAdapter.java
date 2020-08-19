@@ -35,34 +35,7 @@ public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesAd
 
     @Override
     protected void onBindViewHolder(@NonNull UsersHolder holder, int position, @NonNull User user) {
-
         holder.bind(user);
-
-/*
-        holder.mFirstName.setText(model.getmUsername());
-        holder.mMailWorkmate.setText(model.getmMail());
-
-
-        Log.i("urlpicture", model.getmUrlPicture());
-        Glide.with(holder.mIvProfileMain).load(model.getmUrlPicture()).centerCrop().into(holder.mIvProfileMain);
-        Glide.with(holder.mIvProfileCircle).load(model.getmUrlPicture()).circleCrop().into(holder.mIvProfileCircle);
-
-        holder.mExtandButton.setOnClickListener(view -> {
-
-            if (holder.expandableCardView.getVisibility() == View.GONE) {
-
-                TransitionManager.beginDelayedTransition(holder.mMainCardView, new AutoTransition());
-                holder.expandableCardView.setVisibility(View.VISIBLE);
-                holder.mExtandButton.setBackgroundResource(R.drawable.ic_expand_less_black_24dp);
-
-            } else {
-                TransitionManager.beginDelayedTransition(holder.mMainCardView, new AutoTransition());
-                holder.expandableCardView.setVisibility(View.GONE);
-                holder.mExtandButton.setBackgroundResource(R.drawable.ic_expand_more_black_24dp);
-            }
-
-        });
-*/
     }
 
     @NonNull

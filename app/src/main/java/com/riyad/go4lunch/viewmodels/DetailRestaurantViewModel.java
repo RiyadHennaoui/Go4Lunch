@@ -26,6 +26,7 @@ public class DetailRestaurantViewModel extends ViewModel {
     private DetailRestaurantRepository detailRestaurantRepository;
     private MutableLiveData<ArrayList<BookingRestaurant>> bookingRestaurantMutableLiveData;
     private MutableLiveData<ArrayList<RatingRestaurant>> restaurantLikes;
+    private MutableLiveData<ArrayList<User>> workmateBookingRestaurantMutableLiveData;
     public void init(String restaurantId){
 
         if(restaurantDetailMutableLiveData != null){
@@ -53,5 +54,10 @@ public class DetailRestaurantViewModel extends ViewModel {
     public MutableLiveData<ArrayList<RatingRestaurant>> getRestaurantLikes (String restaurantId){
         restaurantLikes = detailRestaurantRepository.restaurantLike(restaurantId);
         return restaurantLikes;
+    }
+
+    public MutableLiveData<ArrayList<User>> getWorkmateBookingRestaurantMutableLiveData (String restaurantId){
+        workmateBookingRestaurantMutableLiveData = detailRestaurantRepository.workmatesBookingRestaurantRepo(restaurantId);
+        return workmateBookingRestaurantMutableLiveData;
     }
 }

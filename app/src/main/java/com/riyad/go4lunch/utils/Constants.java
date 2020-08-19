@@ -21,6 +21,7 @@ public class Constants {
 
     //for collections
     public static final String COLLECTION_USER_NAME = "user";
+    public static final String COLLECTION_RESTAURANTS_NAME = "restaurants";
 
     //for message type
     public static final int MSG_TYPE_LEFT = 0;
@@ -39,6 +40,8 @@ public class Constants {
 
     //for Permission to call
     public static final int  PERMISSION_TO_CALL = 123;
+
+
 
 
 }
