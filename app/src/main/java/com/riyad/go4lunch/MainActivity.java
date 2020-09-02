@@ -258,11 +258,21 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 //                            restaurantAdapter.setData(restaurants);
             Log.e("mapList", restaurants.size() + "");
 
+            int index = 0;
             for (Restaurant restaurant: restaurants) {
-                mMap.addMarker(new MarkerOptions()
-                .title(restaurant.getName())
-                .position(new LatLng(restaurant.getRestaurantLocation().getLat(), restaurant.getRestaurantLocation().getLng())))
-                .setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+                if (!restaurants.get(index).getBookingUser().isEmpty()) {
+                    //TODO trouver comment ajouter l'info de l'id du restaurant.
+                    mMap.addMarker(new MarkerOptions()
+                            .title(restaurant.getName())
+                            .position(new LatLng(restaurant.getRestaurantLocation().getLat(), restaurant.getRestaurantLocation().getLng())))
+                            .setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                } else {
+                    mMap.addMarker(new MarkerOptions()
+                            .title(restaurant.getName())
+                            .position(new LatLng(restaurant.getRestaurantLocation().getLat(), restaurant.getRestaurantLocation().getLng())))
+                            .setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+                }
+                index++;
             }
             //TODO le rendre plus propre.
 
@@ -325,6 +335,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.setMyLocationEnabled(true);
+        mMap.setOnInfoWindowClickListener(marker -> {
+            //TODO intent vers detail restaurant
+            Log.e("test", "test");
+        });
         getDeviceLocation();
     }
 

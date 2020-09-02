@@ -30,9 +30,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.riyad.go4lunch.adapter.WorkmatesBookingRestaurantAdapter;
+import com.riyad.go4lunch.model.BookingRestaurant;
+import com.riyad.go4lunch.model.RatingRestaurant;
 import com.riyad.go4lunch.model.User;
 import com.riyad.go4lunch.viewmodels.DetailRestaurantViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.riyad.go4lunch.utils.Constants.PERMISSION_TO_CALL;
@@ -77,7 +80,6 @@ public class DetailActivity extends AppCompatActivity {
         displayDetailRestaurant(restaurantID);
         initRv();
         displayWorkmatesBoonkingThisRestaurant(restaurantID);
-
     }
 
 
@@ -88,15 +90,14 @@ public class DetailActivity extends AppCompatActivity {
         detailRestaurantViewModel.init(restaurantId);
         detailRestaurantViewModel.getDetailRestaurant().observe(DetailActivity.this, restaurantDetail -> {
             Glide.with(restaurantPicture).load(restaurantDetail.getRestaurantImageUrl()).centerCrop().into(restaurantPicture);
-            fbBookingRestaurant.setOnClickListener(v -> {
-                bookRestaurant(restaurantId);
-            });
+            setBookingIcon(restaurantDetail.getBookingUser());
+            setRatingIcon(restaurantDetail.getRatingUser());
+            fbBookingRestaurant.setOnClickListener(v -> bookRestaurant(restaurantId));
             restaurantLike.setOnClickListener(v -> likeThisRestaurant(restaurantId));
             restaurantName.setText(restaurantDetail.getName());
             restaurantCall.setOnClickListener(v -> callPhoneNumber(restaurantDetail.getRestaurantDetail().getFormattedNumber()));
             restaurantWebsite.setOnClickListener(v -> displayWebsite(restaurantDetail.getRestaurantDetail().getWebsite()));
             restaurantAdress.setText(restaurantDetail.getRestaurantAdress());
-
         });
     }
 
@@ -142,38 +143,45 @@ public class DetailActivity extends AppCompatActivity {
 
     public void bookRestaurant(String restaurantId) {
         detailRestaurantViewModel.getBookingRestaurantMutableLiveData(restaurantId)
-                .observe(DetailActivity.this, bookingRestaurants -> {
-                    Boolean isBook = false;
-                    for (int i = 0; i < bookingRestaurants.size(); i++) {
-                        if (bookingRestaurants.get(i).getUserId().equals(getCurrentUser().getUid())) {
-                            //TODO mettre le fba en vert.
+                .observe(DetailActivity.this, this::setBookingIcon);
 
-                            isBook = true;
-                        }
-                    }
-                    Log.i("detailActivity", "oui  " + isBook);
-                    if (isBook) {
+    }
 
-                        fbBookingRestaurant.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_check_24));
-                    } else {
-                        fbBookingRestaurant.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_clear_24));
-                    }
-                });
-
+    private void setBookingIcon(ArrayList<BookingRestaurant> bookingRestaurants) {
+        boolean isBook = false;
+        for (int i = 0; i < bookingRestaurants.size(); i++) {
+            if (bookingRestaurants.get(i).getUserId().equals(getCurrentUser().getUid())) {
+                isBook = true;
+            }
+        }
+        //TODO le changement d'icone ne fonctionne pas lors de chaque lancement de l'activité.
+        if (isBook) {
+            fbBookingRestaurant.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_clear_24));
+        } else {
+            fbBookingRestaurant.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_check_24));
+        }
     }
 
     public void likeThisRestaurant(String restaurantId) {
         detailRestaurantViewModel.getRestaurantLikes(restaurantId)
-                .observe(DetailActivity.this, like -> {
+                .observe(DetailActivity.this, this::setRatingIcon);
+    }
 
-                    for (int i = 0; i < like.size(); i++) {
-                        if (like.get(i).getUserId().equals(getCurrentUser().getUid())) {
-                            restaurantLike.setBackground(getResources().getDrawable(R.drawable.ic_star_black_24dp));
-                        } else {
-                            restaurantLike.setBackground(getResources().getDrawable(R.drawable.ic_baseline_star_border_24));
-                        }
-                    }
-                });
+    private void setRatingIcon(ArrayList<RatingRestaurant> like) {
+        boolean isLike = false;
+        Log.e("rating", "click");
+//                    if (like != null || like.isEmpty()) {
+        for (int i = 0; i < like.size(); i++) {
+            if (like.get(i).getUserId().equals(getCurrentUser().getUid())) {
+                    isLike = true;
+//                            }
+            }
+        }
+        if (isLike) {
+            restaurantLike.setBackground(getResources().getDrawable(R.drawable.ic_star_black_24dp));
+        } else {
+            restaurantLike.setBackground(getResources().getDrawable(R.drawable.ic_baseline_star_border_24));
+        }
     }
 
 

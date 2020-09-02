@@ -8,7 +8,7 @@ public class Chat {
     private String mReceiver;
     private String mMessage;
     private String mSender;
-    private Date mTimestamp;
+//    private Date mTimestamp;
 
     public Chat() { } // Needed for Firebase
 
@@ -22,12 +22,12 @@ public class Chat {
     public String getReceiver() { return mReceiver; }
     public String getMessage() { return mMessage; }
     public String getSender() { return mSender; }
-    @ServerTimestamp
-    public Date getTimestamp() { return mTimestamp; }
+//    @ServerTimestamp
+//    public Date getTimestamp() { return mTimestamp; }
 
     // --- SETTERS ---
     public void setMessage(String message) { mMessage = message; }
     public void setRecieiver(String name) { mReceiver = name; }
     public void setSender(String uid) { mSender = uid; }
-    public void setTimestamp(Date timestamp) { mTimestamp = timestamp; }
+//    public void setTimestamp(Date timestamp) { mTimestamp = timestamp; }
 }

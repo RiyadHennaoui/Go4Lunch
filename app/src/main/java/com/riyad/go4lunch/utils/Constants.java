@@ -22,6 +22,9 @@ public class Constants {
     //for collections
     public static final String COLLECTION_USER_NAME = "user";
     public static final String COLLECTION_RESTAURANTS_NAME = "restaurants";
+    public static final String FIELD_RATING_USER_FOR_RESTAURANT_DOCUMENT = "ratingUser";
+    public static final String FIELD_BOOKING_USER_FOR_RESTAURANT_DOCUMENT = "bookingUser";
+    public static final String COLLECTION_CHAT = "chat";
 
     //for message type
     public static final int MSG_TYPE_LEFT = 0;
@@ -35,8 +38,9 @@ public class Constants {
     //Shared Preferences Key
     public static final String CURRENT_DEVICE_LOCATION = "CURRENT_DEVICE_LOCATION";
 
-    //Place id
+    //ids
     public static final String PLACE_ID = "PLACE_ID";
+    public static final String WORKMATE_ID = "workmateId";
 
     //for Permission to call
     public static final int  PERMISSION_TO_CALL = 123;

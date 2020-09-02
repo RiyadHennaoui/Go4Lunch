@@ -16,7 +16,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/chat_activity_linearLayout_bottom"
-        android:orientation="vertical"/>
+        android:orientation="vertical">
+
+    <include
+        android:id="@+id/chat_activity_main_rv"
+        layout="@layout/main_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+    </LinearLayout>
 
 
     <LinearLayout
@@ -35,6 +44,7 @@
             android:id="@+id/chat_activity_iv_add"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:visibility="gone"
             android:src="@drawable/ic_add_black_24dp"/>
 
         <EditText
@@ -42,11 +52,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:textColor="@color/white"
             android:layout_weight="1"/>
 
-        <ImageView
+        <ImageButton
+            android:id="@+id/chat_activity_ib_send"
             android:layout_width="40dp"
             android:layout_height="50dp"
+            android:backgroundTint="@color/colorPrimary"
             android:src="@drawable/ic_send_black_24dp"
             android:layout_marginStart="5dp"/>
 

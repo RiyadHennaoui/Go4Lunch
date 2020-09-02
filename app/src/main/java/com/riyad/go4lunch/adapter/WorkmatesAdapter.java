@@ -1,5 +1,8 @@
 package com.riyad.go4lunch.adapter;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +20,16 @@ import androidx.transition.TransitionManager;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.riyad.go4lunch.ChatActivity;
+import com.riyad.go4lunch.MainActivity;
 import com.riyad.go4lunch.R;
 import com.riyad.go4lunch.model.User;
 
+import static com.riyad.go4lunch.utils.Constants.WORKMATE_ID;
+
 public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesAdapter.UsersHolder> {
 
-
+    Context context;
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
      * FirestoreRecyclerOptions} for configuration options.
@@ -101,9 +108,18 @@ public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesAd
             mChat.setOnClickListener(view -> {
 
                 //TODO Crée un intent vers l'activitée CHAT.
+            toChat(user.getmUid(), view.getContext());
+
 
             });
 
         }
+    }
+
+    private void toChat(String workmateId, Context context){
+        Intent intent = new Intent(context, ChatActivity.class);
+        intent.putExtra(WORKMATE_ID, workmateId);
+        context.startActivity(intent);
+
     }
 }

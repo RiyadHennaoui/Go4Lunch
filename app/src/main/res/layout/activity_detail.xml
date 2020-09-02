@@ -86,9 +86,9 @@
                 android:layout_height="30dp"
                 android:background="@drawable/ic_call_black_24dp"
                 android:gravity="top"
-                app:layout_constraintEnd_toStartOf="@+id/detail_activity_btn_like"
+                app:layout_constraintEnd_toStartOf="@id/detail_activity_btn_like"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/detail_activity_under_bar" />
+                app:layout_constraintTop_toTopOf="@id/detail_activity_under_bar" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -99,9 +99,9 @@
                 android:textColor="@color/colorSecondary"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@+id/detail_activity_btn_call"
-                app:layout_constraintStart_toStartOf="@+id/detail_activity_btn_call"
-                app:layout_constraintTop_toBottomOf="@+id/detail_activity_btn_call" />
+                app:layout_constraintEnd_toEndOf="@id/detail_activity_btn_call"
+                app:layout_constraintStart_toStartOf="@id/detail_activity_btn_call"
+                app:layout_constraintTop_toBottomOf="@id/detail_activity_btn_call" />
 
         </LinearLayout>
 
@@ -117,9 +117,9 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:background="@drawable/ic_star_black_24dp"
-                app:layout_constraintEnd_toStartOf="@+id/detail_activity_btn_website"
-                app:layout_constraintStart_toEndOf="@+id/detail_activity_btn_call"
-                app:layout_constraintTop_toTopOf="@+id/detail_activity_under_bar" />
+                app:layout_constraintEnd_toStartOf="@id/detail_activity_btn_website"
+                app:layout_constraintStart_toEndOf="@id/detail_activity_btn_call"
+                app:layout_constraintTop_toTopOf="@id/detail_activity_under_bar" />
 
             <TextView
                 android:id="@+id/textView"
@@ -130,9 +130,9 @@
                 android:textColor="@color/colorSecondary"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@+id/detail_activity_btn_like"
-                app:layout_constraintStart_toStartOf="@+id/detail_activity_btn_like"
-                app:layout_constraintTop_toBottomOf="@+id/detail_activity_btn_like" />
+                app:layout_constraintEnd_toEndOf="@id/detail_activity_btn_like"
+                app:layout_constraintStart_toStartOf="@id/detail_activity_btn_like"
+                app:layout_constraintTop_toBottomOf="@id/detail_activity_btn_like" />
         </LinearLayout>
 
         <LinearLayout
@@ -148,8 +148,8 @@
             android:layout_height="30dp"
             android:background="@drawable/ic_public_black_24dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/detail_activity_btn_like"
-            app:layout_constraintTop_toTopOf="@+id/detail_activity_under_bar" />
+            app:layout_constraintStart_toEndOf="@id/detail_activity_btn_like"
+            app:layout_constraintTop_toTopOf="@id/detail_activity_under_bar" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -159,9 +159,9 @@
             android:textColor="@color/colorSecondary"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/detail_activity_btn_website"
-            app:layout_constraintStart_toStartOf="@+id/detail_activity_btn_website"
-            app:layout_constraintTop_toBottomOf="@+id/detail_activity_btn_website" />
+            app:layout_constraintEnd_toEndOf="@id/detail_activity_btn_website"
+            app:layout_constraintStart_toStartOf="@id/detail_activity_btn_website"
+            app:layout_constraintTop_toBottomOf="@id/detail_activity_btn_website" />
         </LinearLayout>
     </LinearLayout>
 
@@ -174,7 +174,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detail_activity_under_bar" />
+        app:layout_constraintTop_toBottomOf="@id/detail_activity_under_bar" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -42,7 +42,7 @@ public class MessageAdapter extends FirestoreRecyclerAdapter<Chat, MessageAdapte
 
     @Override
     protected void onBindViewHolder(@NonNull ChatHolder holder, int position, @NonNull Chat model) {
-
+            holder.bind(model);
     }
 
     @NonNull
@@ -79,7 +79,7 @@ public class MessageAdapter extends FirestoreRecyclerAdapter<Chat, MessageAdapte
 
         mMessage.setText(chat.getMessage());
         mUsername.setText(chat.getSender());
-        mTimestamp.setText(chat.getTimestamp().toString());
+//        mTimestamp.setText(chat.getTimestamp().toString());
 
 
 
