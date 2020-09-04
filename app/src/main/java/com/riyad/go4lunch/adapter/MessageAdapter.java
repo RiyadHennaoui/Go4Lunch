@@ -23,26 +23,18 @@ import java.util.List;
 import static com.riyad.go4lunch.utils.Constants.MSG_TYPE_LEFT;
 import static com.riyad.go4lunch.utils.Constants.MSG_TYPE_RIGHT;
 
-public class MessageAdapter extends FirestoreRecyclerAdapter<Chat, MessageAdapter.ChatHolder > {
+public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ChatHolder> {
 
     private Context mContext;
     private List<Chat> mChat;
     private String mImageUrl;
     private FirebaseUser mCurrentUser;
 
-    /**
-     * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
-     * FirestoreRecyclerOptions} for configuration options.
-     *
-     * @param options
-     */
-    public MessageAdapter(@NonNull FirestoreRecyclerOptions<Chat> options) {
-        super(options);
-    }
 
-    @Override
-    protected void onBindViewHolder(@NonNull ChatHolder holder, int position, @NonNull Chat model) {
-            holder.bind(model);
+    public MessageAdapter(Context mContext, List<Chat> mChat, String mImageUrl) {
+        this.mContext = mContext;
+        this.mChat = mChat;
+        this.mImageUrl = mImageUrl;
     }
 
     @NonNull
@@ -57,6 +49,14 @@ public class MessageAdapter extends FirestoreRecyclerAdapter<Chat, MessageAdapte
         }
     }
 
+    @Override
+    public void onBindViewHolder(@NonNull ChatHolder holder, int position) {
+        holder.bind(mChat.get(position));
+    }
+    @Override
+    public int getItemCount() {
+        return mChat != null ? mChat.size() : 0;
+    }
 
     public class ChatHolder extends RecyclerView.ViewHolder {
         ImageView mProfilePicture;
@@ -74,15 +74,13 @@ public class MessageAdapter extends FirestoreRecyclerAdapter<Chat, MessageAdapte
 
         }
 
+
         public void bind(final Chat chat){
 
 
         mMessage.setText(chat.getMessage());
         mUsername.setText(chat.getSender());
 //        mTimestamp.setText(chat.getTimestamp().toString());
-
-
-
 
         }
     }
@@ -96,4 +94,5 @@ public class MessageAdapter extends FirestoreRecyclerAdapter<Chat, MessageAdapte
             return MSG_TYPE_LEFT;
         }
     }
+
 }
