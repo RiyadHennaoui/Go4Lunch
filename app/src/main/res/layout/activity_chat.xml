@@ -8,7 +8,8 @@
     tools:context=".ChatActivity"
     android:background="@drawable/message_background">
 
-    <LinearLayout
+    <include
+        layout="@layout/main_rv"
         android:id="@+id/chat_activity_main_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -18,14 +19,7 @@
         app:layout_constraintBottom_toTopOf="@+id/chat_activity_linearLayout_bottom"
         android:orientation="vertical">
 
-    <include
-        android:id="@+id/chat_activity_main_rv"
-        layout="@layout/main_rv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-
-    </LinearLayout>
+    </include>
 
 
     <LinearLayout

@@ -24,9 +24,11 @@ public class UserRepository {
                 .get()
                 .addOnCompleteListener(task -> {
                     User currentUser;
-                    DocumentSnapshot currentUserDocument = task.getResult();
-                    currentUser = currentUserDocument.toObject(User.class);
-                    userMutableLiveData.setValue(currentUser);
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot currentUserDocument = task.getResult();
+                        currentUser = currentUserDocument.toObject(User.class);
+                        userMutableLiveData.setValue(currentUser);
+                    }
                 });
 
         return userMutableLiveData;

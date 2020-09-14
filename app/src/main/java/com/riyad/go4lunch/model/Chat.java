@@ -5,29 +5,32 @@ import com.google.firebase.firestore.ServerTimestamp;
 import java.util.Date;
 
 public class Chat {
-    private String mReceiver;
+    private User mReceiver;
     private String mMessage;
-    private String mSender;
-//    private Date mTimestamp;
+    private User mTheSender;
+    private Boolean isSender;
+    private Date mCreatedDate;
 
     public Chat() { } // Needed for Firebase
 
-    public Chat(String receiver, String message, String sender) {
+    public Chat(User receiver, String message, User sender) {
         mReceiver = receiver;
         mMessage = message;
-        mSender = sender;
+        mTheSender = sender;
     }
 
     // --- GETTERS --
-    public String getReceiver() { return mReceiver; }
+    public User getReceiver() { return mReceiver; }
     public String getMessage() { return mMessage; }
-    public String getSender() { return mSender; }
-//    @ServerTimestamp
-//    public Date getTimestamp() { return mTimestamp; }
+    public User getSender() { return mTheSender; }
+    public Boolean getIsSender()  { return  isSender; }
+    @ServerTimestamp
+    public Date getCreatedDate() { return mCreatedDate; }
 
     // --- SETTERS ---
     public void setMessage(String message) { mMessage = message; }
-    public void setRecieiver(String name) { mReceiver = name; }
-    public void setSender(String uid) { mSender = uid; }
-//    public void setTimestamp(Date timestamp) { mTimestamp = timestamp; }
+    public void setRecieiver(User receiver) { mReceiver = receiver; }
+    public void setSender(User uid) { mTheSender = uid; }
+    public void setIsSender(Boolean sender) { isSender = sender; }
+    public void setCreatedDate(Date createdDate) { mCreatedDate = createdDate; }
 }

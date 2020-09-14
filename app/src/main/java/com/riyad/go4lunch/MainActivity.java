@@ -68,6 +68,7 @@ import static com.riyad.go4lunch.utils.Constants.KEY_CAMERA_POSITION;
 import static com.riyad.go4lunch.utils.Constants.KEY_Location;
 import static com.riyad.go4lunch.utils.Constants.M_MAX_ENTRIES;
 import static com.riyad.go4lunch.utils.Constants.PERMISSION_REQUEST_ACCESS_FINE_LOCATION;
+import static com.riyad.go4lunch.utils.Constants.PLACE_ID;
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -264,11 +265,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     //TODO trouver comment ajouter l'info de l'id du restaurant.
                     mMap.addMarker(new MarkerOptions()
                             .title(restaurant.getName())
+                            .snippet(restaurant.getId())
                             .position(new LatLng(restaurant.getRestaurantLocation().getLat(), restaurant.getRestaurantLocation().getLng())))
                             .setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                 } else {
                     mMap.addMarker(new MarkerOptions()
                             .title(restaurant.getName())
+                            .snippet(restaurant.getId())
                             .position(new LatLng(restaurant.getRestaurantLocation().getLat(), restaurant.getRestaurantLocation().getLng())))
                             .setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
                 }
@@ -326,8 +329,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 TextView title = infoWindow.findViewById(R.id.custom_info_title);
                 title.setText(marker.getTitle());
 
-                TextView snippet = infoWindow.findViewById(R.id.custom_info_snippet);
-                snippet.setText(marker.getSnippet());
+//                TextView snippet = infoWindow.findViewById(R.id.custom_info_snippet);
+//                snippet.setText(marker.getSnippet());
 
                 return infoWindow;
             }
@@ -336,6 +339,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.setMyLocationEnabled(true);
         mMap.setOnInfoWindowClickListener(marker -> {
+            Log.e("intent marker", marker.getId());
+            Intent intent = new Intent(this, DetailActivity.class);
+            intent.putExtra(PLACE_ID, marker.getSnippet());
+            startActivity(intent);
             //TODO intent vers detail restaurant
             Log.e("test", "test");
         });

@@ -28,7 +28,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/chat_item_tv_message"/>
     <TextView
-        android:id="@+id/chat_item_tv_username"
+        android:id="@+id/chat_item_tv_username_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"

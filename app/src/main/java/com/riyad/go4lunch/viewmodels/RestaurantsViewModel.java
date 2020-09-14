@@ -25,6 +25,7 @@ import static com.riyad.go4lunch.utils.Constants.RESTAURANT_TYPE;
 public class RestaurantsViewModel extends ViewModel {
 
     private MutableLiveData<List<Restaurant>> restaurantsMutableLiveData;
+    private MutableLiveData<List<Restaurant>> safeDeleteWithEmptyRestaurantListLiveData;
     private RestaurantRepository restaurantRepository;
 
 
@@ -39,10 +40,15 @@ public class RestaurantsViewModel extends ViewModel {
                 "1500",
                 RESTAURANT_TYPE,
                 API_KEY_PLACES);
+        safeDeleteWithEmptyRestaurantListLiveData = restaurantRepository.deleteAllRestaurants();
     }
 
     public LiveData<List<Restaurant>> getRestaurantRepository(){
         return restaurantsMutableLiveData;
+    }
+
+    public LiveData<List<Restaurant>> safeDeleteRestaurantRepository(){
+        return  safeDeleteWithEmptyRestaurantListLiveData;
     }
 
 }

@@ -29,6 +29,7 @@ import retrofit2.Response;
 
 import static com.riyad.go4lunch.utils.Constants.API_KEY_PLACES;
 import static com.riyad.go4lunch.utils.Constants.BASE_PHOTO_URL;
+import static com.riyad.go4lunch.utils.Constants.COLLECTION_RESTAURANTS_NAME;
 
 public class RestaurantRepository {
     private int countRestaurants;
@@ -53,7 +54,7 @@ public class RestaurantRepository {
     public MutableLiveData<List<Restaurant>> getRestaurants(String location, String radius, String type, String key) {
         MutableLiveData<List<Restaurant>> restaurantData = new MutableLiveData<>();
 
-        restaurantDb.collection("restaurants")
+        restaurantDb.collection(COLLECTION_RESTAURANTS_NAME)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -149,6 +150,17 @@ public class RestaurantRepository {
         }
     }
 
+    public MutableLiveData<List<Restaurant>> deleteAllRestaurants(){
+        MutableLiveData<List<Restaurant>> restaurantData = new MutableLiveData<>();
+        restaurantDb.collection(COLLECTION_RESTAURANTS_NAME)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                   ArrayList<Restaurant> emptyRestaurantList = new ArrayList<>();
+                   restaurantData.setValue(emptyRestaurantList);
+                });
+        return restaurantData;
+    }
+
     private List<Restaurant> mapResult(Restaurants restaurant) {
 
         List<Restaurant> restaurants = new ArrayList<>();
@@ -183,6 +195,8 @@ public class RestaurantRepository {
                 photoUrlFormated,
                 restaurantDetail.getResult().getOpeningHours());
     }
+
+
 
     @NotNull
     public static String getImageUrlFormat(Result photoReference) {
@@ -219,4 +233,6 @@ public class RestaurantRepository {
                     }
                 });
     }
+
+
 }

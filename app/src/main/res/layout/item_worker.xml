@@ -47,12 +47,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/item_worker_iv_main_picture_profile"/>
 
-
-
-
-
-
-
             <TextView
                 android:id="@+id/item_worker_tv_name"
                 android:layout_width="0dp"
