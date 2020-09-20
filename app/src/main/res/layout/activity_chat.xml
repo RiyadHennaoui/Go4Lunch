@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp"
     tools:context=".ChatActivity"
     >
 
@@ -15,14 +14,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/chat_toolbar"
+        android:background="@color/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         android:elevation="4dp"
         >
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="match_parent"
         android:id="@+id/chat_activity_iv_photo_receiver"
         />
     </androidx.appcompat.widget.Toolbar>
@@ -37,6 +37,7 @@
         app:layout_constraintBottom_toTopOf="@+id/chat_activity_linearLayout_bottom"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="10dp"
+        android:padding="8dp"
         android:orientation="vertical">
 
     </include>

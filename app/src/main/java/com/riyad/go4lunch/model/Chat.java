@@ -8,6 +8,7 @@ public class Chat {
     private User mAuther;
     private String mMessage;
     private Boolean isSender;
+    @ServerTimestamp
     private Date mCreatedDate;
 
     public Chat() { } // Needed for Firebase
@@ -21,9 +22,7 @@ public class Chat {
     // --- GETTERS --
     public User getAuther() { return mAuther; }
     public String getMessage() { return mMessage; }
-
     public Boolean getIsSender()  { return  isSender; }
-    @ServerTimestamp
     public Date getCreatedDate() { return mCreatedDate; }
 
     // --- SETTERS ---

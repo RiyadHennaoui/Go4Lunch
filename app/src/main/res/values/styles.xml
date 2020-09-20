@@ -55,7 +55,7 @@
     <!-- RATING BAR -->
     <style name="customRatingBar"
         parent="android:style/Widget.Material.RatingBar.Small">
-        <item name="android:numStars">3</item>
+        <item name="android:numStars">5</item>
     </style>
 
 </resources>

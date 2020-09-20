@@ -88,6 +88,9 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
             Log.i("restaurant" + getAdapterPosition(), restaurant.getName() + "");
             restaurantName.setText(restaurant.getName());
 
+            float ratingFloat = Float.parseFloat(restaurant.getRating());
+            ratingBar.setRating(ratingFloat);
+
             distance.setText(restaurant.getDistanceAsString() + "m");
             //TODO trouver comment implemanter les etoiles et une image pour le type de cuisine.
             restaurantAdress.setText(restaurant.getRestaurantAdress());

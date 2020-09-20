@@ -2,6 +2,7 @@ package com.riyad.go4lunch;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
@@ -36,6 +38,7 @@ import com.riyad.go4lunch.viewmodels.ChatViewModel;
 import com.riyad.go4lunch.viewmodels.UserViewModel;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.riyad.go4lunch.utils.Constants.COLLECTION_USER_NAME;
@@ -53,13 +56,12 @@ public class ChatActivity extends AppCompatActivity{
     ImageView chatpartnerPhoto;
     EditText currentMessage;
     ImageButton sendMessageButton;
+    Toolbar toolbar;
 
     UserViewModel userViewModel;
     ChatViewModel chatViewModel;
 
     ChatAdapter chatAdapter;
-
-
     RecyclerView recyclerView;
 
     @Override
@@ -71,13 +73,18 @@ public class ChatActivity extends AppCompatActivity{
         sendMessageButton = findViewById(R.id.chat_activity_ib_send);
         recyclerView= findViewById(R.id.main_rv);
         chatpartnerPhoto = findViewById(R.id.chat_activity_iv_photo_receiver);
+        currentMessage = findViewById(R.id.chat_activity_et_message);
+        toolbar = findViewById(R.id.chat_toolbar);
 
-
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         currentUser = displayCurrentUser(getCurrentUser().getUid());
         recieverTemp = getIntent().getStringExtra(WORKMATE_ID);
 //        chatReceiver = displayOtherUser(recieverTemp);
-//        Glide.with(chatpartnerPhoto).load(displayOtherUser(recieverTemp).getmUrlPicture()).circleCrop().into(chatpartnerPhoto);
+//        String photoUrl = displayOtherUser(recieverTemp).getmUrlPicture();
+        Glide.with(chatpartnerPhoto).load("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQilpWGZianQ41td4_sPkevbsQ8MXrEWERPUw&usqp=CAU").centerCrop().into(chatpartnerPhoto);
 
 
 
@@ -93,7 +100,6 @@ public class ChatActivity extends AppCompatActivity{
 
         readMessage();
 
-
         sendMessageButton.setOnClickListener(v -> {
             String message = currentMessage.getText().toString();
             sendMessage(message);
@@ -102,7 +108,11 @@ public class ChatActivity extends AppCompatActivity{
 
     }
 
-
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
 
     private User displayCurrentUser(String userId) {
 
@@ -130,6 +140,7 @@ public class ChatActivity extends AppCompatActivity{
 
         Chat chat = new Chat();
         chat.setAuther(displayCurrentUser(getCurrentUser().getUid()));
+        chat.setCreatedDate(new Date());
         chat.setMessage(message);
 
         if (!chat.getMessage().equals("")) {
@@ -155,26 +166,7 @@ public class ChatActivity extends AppCompatActivity{
             chatAdapter = new ChatAdapter(chats, ChatActivity.this);
             configureRecyclerView(chatAdapter);
         });
-//        List<Chat> mchat = new ArrayList<>();
-//
-//        userCollection.document(getCurrentUser().getUid()).collection(recieverTemp)
-//                .orderBy("createdDate", Query.Direction.ASCENDING)
-//                .addSnapshotListener((value, e) -> {
-//                    if (e != null) {
-//
-//                        return;
-//                    }
-//
-//
-//                    for (QueryDocumentSnapshot doc : value) {
-//                        Chat currentDoc;
-//                        currentDoc = doc.toObject(Chat.class);
-//                            mchat.add(currentDoc);
-//                    }
-//
-//                    chatAdapter = new ChatAdapter(mchat, ChatActivity.this);
-//                    configureRecyclerView(chatAdapter);
-//                });
+
     }
 
 

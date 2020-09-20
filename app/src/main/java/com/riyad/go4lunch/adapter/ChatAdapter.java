@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.gson.Gson;
 import com.riyad.go4lunch.R;
 import com.riyad.go4lunch.model.Chat;
 import com.riyad.go4lunch.ui.Restaurant;
@@ -107,12 +108,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder>{
 
         public void bind(final Chat chat) {
 
+            Gson gson = new Gson();
             mMessage.setText(chat.getMessage());
+            Log.e("bind", mTimestamp + ", " +  gson.toJson(chat));
             mTimestamp.setText(convertDateToHour(chat.getCreatedDate()));
             mUsername.setText(chat.getAuther().getmUsername());
             if (chat.getAuther().getmUrlPicture() != null) {
                 Log.e(chat.getAuther().getmUsername(), chat.getAuther().getmUrlPicture());
-                Glide.with(mProfilePicture).load(chat.getAuther().getmUrlPicture()).circleCrop().into(mProfilePicture);
+                 Glide.with(mProfilePicture).load(chat.getAuther().getmUrlPicture()).circleCrop().into(mProfilePicture);
             }
 
         }
