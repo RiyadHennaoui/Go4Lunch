@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseUser;
@@ -20,7 +21,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import static com.riyad.go4lunch.utils.Constants.MSG_TYPE_LEFT;
 import static com.riyad.go4lunch.utils.Constants.MSG_TYPE_RIGHT;
@@ -32,23 +32,19 @@ public class MessageAdapter extends FirestoreRecyclerAdapter<Chat, MessageAdapte
     //    private String mImageUrl;
     private FirebaseUser mCurrentUser;
 
-
-
-    public interface Listner{
-        void onDataChanged();
+    /**
+     * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
+     * FirestoreRecyclerOptions} for configuration options.
+     *
+     * @param options
+     */
+    public MessageAdapter(@NonNull FirestoreRecyclerOptions<Chat> options) {
+        super(options);
     }
 
-    private Listner callback;
-
-    // public MessageAdapter(Context mContext, List<Chat> mChat, String mImageUrl) {
-    // this.mContext = mContext;
-    //   this.mChat = mChat;
-    //     this.mImageUrl = mImageUrl;
-    //   }
-
-    public MessageAdapter(@NonNull FirestoreRecyclerOptions options) {
-        super(options);
-
+    @Override
+    protected void onBindViewHolder(@NonNull ChatHolder holder, int position, @NonNull Chat model) {
+        holder.bind(model);
     }
 
     @NonNull
@@ -56,48 +52,60 @@ public class MessageAdapter extends FirestoreRecyclerAdapter<Chat, MessageAdapte
     public ChatHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
 
-        if (viewType == MSG_TYPE_RIGHT) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_item_right, parent, false);
-            return new ChatHolder(v);
-        } else {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_item_left, parent, false);
-            return new ChatHolder(v);
-        }
+//        if (viewType == MSG_TYPE_RIGHT) {
+//            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_item_right, parent, false);
+//            return new ChatHolder(v);
+//        } else {
+//            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_item_left, parent, false);
+//            return new ChatHolder(v);
+//        }
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_item_right, parent, false);
+        return new ChatHolder(v);
     }
 
-    @Override
-    public void onDataChanged() {
-        super.onDataChanged();
-        this.callback.onDataChanged();
-    }
+//    public interface Listner{
+
+//        void onDataChanged();
+//    }
+//    private Listner callback;
+    // public MessageAdapter(Context mContext, List<Chat> mChat, String mImageUrl) {
+    // this.mContext = mContext;
+    //   this.mChat = mChat;
+
+    //     this.mImageUrl = mImageUrl;
+    //   }
+//    public MessageAdapter(@NonNull FirestoreRecyclerOptions<Chat> options) {
+//        super(options);
+
+//
+
+//    }
+
 
     //    @Override
 //    public void onBindViewHolder(@NonNull ChatHolder holder, int position) {
 //        holder.bind(mChat.get(position));
+
+//    }
+//    @Override
+//    public int getItemViewType(int position) {
+//
+////        if (!mCurrentUser.getUid().equals(mChat.get(position).getSender().getmUid())) {
+//        if (!mChat.get(position).getIsSender()){
+//            return MSG_TYPE_LEFT;
+//        } else {
+//            return MSG_TYPE_RIGHT;
+//        }
+//
+
 //    }
 
-    @Override
-    public int getItemViewType(int position) {
-
-        if (!mCurrentUser.getUid().equals(mChat.get(position).getSender().getmUid())) {
-            return MSG_TYPE_LEFT;
-        } else {
-            return MSG_TYPE_RIGHT;
-        }
-
-    }
-
-
-    @Override
-    protected void onBindViewHolder(@NonNull ChatHolder holder, int position, @NonNull Chat model) {
-        holder.bind(mChat.get(position));
-    }
 
     public class ChatHolder extends RecyclerView.ViewHolder {
         ImageView mProfilePicture;
         TextView mMessage;
         TextView mUsername;
-
+        ImageView receiverPhoto;
         TextView mTimestamp;
 
         public ChatHolder(@NonNull View itemView) {
@@ -105,8 +113,9 @@ public class MessageAdapter extends FirestoreRecyclerAdapter<Chat, MessageAdapte
 
             mProfilePicture = itemView.findViewById(R.id.chat_item_iv_circle_picture);
             mMessage = itemView.findViewById(R.id.chat_item_tv_message);
-            mUsername = itemView.findViewById(R.id.chat_item_tv_username_right);
+//            mUsername = itemView.findViewById(R.id.chat_item_tv_username_right);
             mTimestamp = itemView.findViewById(R.id.chat_item_tv_timestamp);
+            receiverPhoto = itemView.findViewById(R.id.chat_activity_iv_photo_receiver);
 
 
         }
@@ -114,21 +123,22 @@ public class MessageAdapter extends FirestoreRecyclerAdapter<Chat, MessageAdapte
 
         public void bind(final Chat chat) {
 
-
             mMessage.setText(chat.getMessage());
-            mUsername.setText(chat.getSender().getmUsername());
             mTimestamp.setText(convertDateToHour(chat.getCreatedDate()));
+            sortSenderOrReciever(chat);
+            Glide.with(receiverPhoto).load(chat.getAuther().getmUrlPicture()).circleCrop().into(receiverPhoto);
 
         }
 
-        public void updateMessage(Chat chat, String currentUserId) {
-            Boolean isSender = currentUserId.equals(chat.getSender().getmUid());
-
-            mMessage.setText(chat.getMessage());
-            //mMessage.setTextAlignment(isSender ? View.TEXT_ALIGNMENT_TEXT_END : View.TEXT_ALIGNMENT_TEXT_START);
-            if (chat.getCreatedDate() != null)
-                mTimestamp.setText(convertDateToHour(chat.getCreatedDate()));
+        private void sortSenderOrReciever(Chat chat) {
+            if (chat.getIsSender()) {
+                mUsername.setText(mCurrentUser.getDisplayName());
+            } else {
+                mUsername.setText(chat.getAuther().getmUsername());
+            }
         }
+
+
 
 
         private String convertDateToHour(Date date) {

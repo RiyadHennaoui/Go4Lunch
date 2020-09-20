@@ -77,7 +77,7 @@ public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesAd
             mChat = itemView.findViewById(R.id.item_worker_bt_chat);
             expandableCardView = itemView.findViewById(R.id.item_worker_expandableView);
             mMainCardView = itemView.findViewById(R.id.item_worker_main_cardview);
-            mIvProfileMain.setVisibility(View.VISIBLE);
+
         }
 
         public void bind(final User user) {
@@ -95,11 +95,13 @@ public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesAd
 
                     TransitionManager.beginDelayedTransition(mMainCardView, new AutoTransition());
                     expandableCardView.setVisibility(View.VISIBLE);
+                    mIvProfileMain.setVisibility(View.VISIBLE);
                     mExtandButton.setBackgroundResource(R.drawable.ic_expand_less_black_24dp);
 
                 } else {
                     TransitionManager.beginDelayedTransition(mMainCardView, new AutoTransition());
                     expandableCardView.setVisibility(View.GONE);
+                    mIvProfileMain.setVisibility(View.GONE);
                     mExtandButton.setBackgroundResource(R.drawable.ic_expand_more_black_24dp);
                 }
 

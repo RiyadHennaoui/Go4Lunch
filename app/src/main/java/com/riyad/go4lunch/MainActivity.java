@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -40,6 +43,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -49,6 +53,9 @@ import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.riyad.go4lunch.fragments.RestaurantsFragment;
 import com.riyad.go4lunch.fragments.WorkmateFragment;
 import com.riyad.go4lunch.ui.Restaurant;
@@ -69,6 +76,7 @@ import static com.riyad.go4lunch.utils.Constants.KEY_Location;
 import static com.riyad.go4lunch.utils.Constants.M_MAX_ENTRIES;
 import static com.riyad.go4lunch.utils.Constants.PERMISSION_REQUEST_ACCESS_FINE_LOCATION;
 import static com.riyad.go4lunch.utils.Constants.PLACE_ID;
+import static com.riyad.go4lunch.utils.Constants.SIGN_OUT_TASK;
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -81,6 +89,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private DrawerLayout myDrawerLayout;
     private NavigationView myNavView;
     private Toolbar myMainToolbar;
+    private ImageView profileNavDrawer;
+    private TextView usernameNavDrawer;
+    private TextView userMailNavDrawer;
 
     // The entry point to the fused Location Provider
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -91,6 +102,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     // The entry point to the Places API.
     private PlacesClient mPlacesClient;
+
 
     private SharedPreferences sharedPreferences;
 
@@ -111,10 +123,17 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         myNavView = findViewById(R.id.main_navigation_view);
         myMainToolbar = findViewById(R.id.main_toolbar);
         myDrawerLayout = findViewById(R.id.main_drawer_layout);
+        profileNavDrawer = findViewById(R.id.nav_header_profile_picture);
+        usernameNavDrawer = findViewById(R.id.nav_header_profile_name);
+        userMailNavDrawer = findViewById(R.id.nav_header_profile_email);
 
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
+//      TODO Modifier l'image profile dans le nav drawer problème de context avec Glide.with(getContext)??
+//        userMailNavDrawer.setText(getCurrentUser().getEmail());
+//        usernameNavDrawer.setText(getCurrentUser().getDisplayName());
+//          Glide.with(MainActivity.this.profileNavDrawer).load(getCurrentUser().getPhotoUrl()).centerCrop().into(profileNavDrawer);
 
         getLocationPermission();
 
@@ -124,11 +143,16 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 //        initPlaces();
         openMap();
 
+        configureActionBarDrawer();
+    }
+
+    private void configureActionBarDrawer() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
                 myDrawerLayout,
                 myMainToolbar,
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
+
 
         myDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
@@ -220,6 +244,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    private FirebaseUser getCurrentUser() {
+        return FirebaseAuth.getInstance().getCurrentUser();
+    }
+
     private Boolean updateButtons(Integer integer) {
 
         switch (integer) {
@@ -245,6 +273,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 intentToProfileActivity();
 
             case R.id.nav_logout:
+                signOutUserFromFirebase();
                 //TODO ce deconnecter.
         }
 
@@ -370,6 +399,24 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         } catch (SecurityException e) {
             Log.e("Ex UpdateLocation: %s", e.getMessage());
         }
+    }
+
+    private void signOutUserFromFirebase(){
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnSuccessListener(this, this.updateUIAfterRESTRequestsCompleted(SIGN_OUT_TASK));
+    }
+
+    private OnSuccessListener<Void> updateUIAfterRESTRequestsCompleted(final int origin){
+        return aVoid -> {
+            switch (origin){
+                case SIGN_OUT_TASK:
+                    finish();
+                    break;
+                default:
+                    break;
+            }
+        };
     }
 
 //    /**

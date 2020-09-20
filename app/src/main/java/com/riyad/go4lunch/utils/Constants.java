@@ -45,6 +45,9 @@ public class Constants {
     //for Permission to call
     public static final int  PERMISSION_TO_CALL = 123;
 
+    //for Sign out Firebase Auth
+    public static final int SIGN_OUT_TASK = 20;
+
 
 
 

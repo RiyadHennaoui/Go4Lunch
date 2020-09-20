@@ -19,6 +19,22 @@ public class UserRepository {
     }
 
     public MutableLiveData<User> getCurrentUser(String userId){
+        MutableLiveData<User> currentUserMutableLiveData = new MutableLiveData<>();
+        restaurantDb.collection("user").document(userId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    User currentUser;
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot currentUserDocument = task.getResult();
+                        currentUser = currentUserDocument.toObject(User.class);
+                        currentUserMutableLiveData.setValue(currentUser);
+                    }
+                });
+
+        return currentUserMutableLiveData;
+    }
+
+    public MutableLiveData<User> getUser(String userId){
         MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
         restaurantDb.collection("user").document(userId)
                 .get()
@@ -33,4 +49,6 @@ public class UserRepository {
 
         return userMutableLiveData;
     }
+
+
 }

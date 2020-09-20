@@ -5,25 +5,30 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.riyad.go4lunch.model.User;
-import com.riyad.go4lunch.networking.DetailRestaurantRepository;
 import com.riyad.go4lunch.networking.UserRepository;
-import com.riyad.go4lunch.ui.Restaurant;
 
 public class UserViewModel extends ViewModel {
 
-    private MutableLiveData<User> userMutableLiveData;
+    private MutableLiveData<User> currentUserMutableLiveData;
+    private MutableLiveData<User> otherUserMutableLiveData;
     private UserRepository userRepository;
     public void init(String userId){
 
-        if(userMutableLiveData != null){
+        if(currentUserMutableLiveData != null){
             return;
         }
 
         userRepository = UserRepository.getInstance();
-        userMutableLiveData = userRepository.getCurrentUser(userId);
+        currentUserMutableLiveData = userRepository.getCurrentUser(userId);
+        otherUserMutableLiveData = userRepository.getUser(userId);
+
     }
 
-    public LiveData<User> getFirebaseUser(){
-        return userMutableLiveData;
+    public LiveData<User> getFirebaseCurrentUser(){
+        return currentUserMutableLiveData;
+    }
+
+    public LiveData<User> getOtherFirebaseUser(){
+        return otherUserMutableLiveData;
     }
 }
