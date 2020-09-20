@@ -8,9 +8,11 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.riyad.go4lunch.model.Chat;
 import com.riyad.go4lunch.networking.ChatRepository;
 
+import java.util.List;
+
 public class ChatViewModel extends ViewModel {
 
-    private MutableLiveData<FirestoreRecyclerOptions<Chat>> firestoreRecyclerOptionsMutableLiveData;
+    private MutableLiveData<List<Chat>> firestoreRecyclerOptionsMutableLiveData;
     private ChatRepository chatRepository;
 
     public void init(String recieverId){
@@ -22,7 +24,7 @@ public class ChatViewModel extends ViewModel {
         firestoreRecyclerOptionsMutableLiveData = chatRepository.getChat(recieverId);
     }
 
-    public LiveData<FirestoreRecyclerOptions<Chat>> getChat(){
+    public LiveData<List<Chat>> getChat(){
 
         return  firestoreRecyclerOptionsMutableLiveData;
     }

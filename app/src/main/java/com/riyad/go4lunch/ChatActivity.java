@@ -43,17 +43,9 @@ import static com.riyad.go4lunch.utils.Constants.WORKMATE_ID;
 
 public class ChatActivity extends AppCompatActivity{
 
-
-
-    TextView usernameReceiver;
-    TextView usernameCurrentUser;
-    TextView message;
-    TextView timestamp;
-
     String recieverTemp;
     User chatReceiver;
     User currentUser;
-    FirebaseUser firebaseUser;
     CollectionReference firestoreCurrentUserChatCollection;
     CollectionReference firestoreChatPartenerChatCollection;
     CollectionReference userCollection;
@@ -63,7 +55,7 @@ public class ChatActivity extends AppCompatActivity{
     ImageButton sendMessageButton;
 
     UserViewModel userViewModel;
-
+    ChatViewModel chatViewModel;
 
     ChatAdapter chatAdapter;
 
@@ -156,26 +148,33 @@ public class ChatActivity extends AppCompatActivity{
     }
 
     private void readMessage() {
-        List<Chat> mchat = new ArrayList<>();
 
-        userCollection.document(getCurrentUser().getUid()).collection(recieverTemp)
-                .orderBy("createdDate", Query.Direction.ASCENDING)
-                .addSnapshotListener((value, e) -> {
-                    if (e != null) {
-
-                        return;
-                    }
-
-
-                    for (QueryDocumentSnapshot doc : value) {
-                        Chat currentDoc;
-                        currentDoc = doc.toObject(Chat.class);
-                            mchat.add(currentDoc);
-                    }
-
-                    chatAdapter = new ChatAdapter(mchat, ChatActivity.this);
-                    configureRecyclerView(chatAdapter);
-                });
+        chatViewModel = ViewModelProviders.of(ChatActivity.this).get(ChatViewModel.class);
+        chatViewModel.init(recieverTemp);
+        chatViewModel.getChat().observe(ChatActivity.this, chats -> {
+            chatAdapter = new ChatAdapter(chats, ChatActivity.this);
+            configureRecyclerView(chatAdapter);
+        });
+//        List<Chat> mchat = new ArrayList<>();
+//
+//        userCollection.document(getCurrentUser().getUid()).collection(recieverTemp)
+//                .orderBy("createdDate", Query.Direction.ASCENDING)
+//                .addSnapshotListener((value, e) -> {
+//                    if (e != null) {
+//
+//                        return;
+//                    }
+//
+//
+//                    for (QueryDocumentSnapshot doc : value) {
+//                        Chat currentDoc;
+//                        currentDoc = doc.toObject(Chat.class);
+//                            mchat.add(currentDoc);
+//                    }
+//
+//                    chatAdapter = new ChatAdapter(mchat, ChatActivity.this);
+//                    configureRecyclerView(chatAdapter);
+//                });
     }
 
 

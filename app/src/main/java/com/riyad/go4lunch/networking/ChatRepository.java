@@ -2,6 +2,7 @@ package com.riyad.go4lunch.networking;
 
 import android.util.Log;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -10,9 +11,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.riyad.go4lunch.model.Chat;
 
 import java.util.ArrayList;
@@ -38,31 +42,29 @@ public class ChatRepository {
         return chatRepository;
     }
 
-    public MutableLiveData<FirestoreRecyclerOptions<Chat>> getChat(String chatPartnerId){
+    public MutableLiveData<List<Chat>> getChat(String chatPartnerId){
 
-        MutableLiveData<FirestoreRecyclerOptions<Chat>> chatMutableLiveData = new MutableLiveData<>();
-        //TODO J'etais ici
-        Query query = chatDb.document(getCurrentUser().getUid()).collection(chatPartnerId).orderBy("createdDate", Query.Direction.ASCENDING);
-        FirestoreRecyclerOptions<Chat> options = new FirestoreRecyclerOptions.Builder<Chat>()
-                .setQuery(query, Chat.class)
-                .build();
-        chatMutableLiveData.setValue(options);
+        MutableLiveData<List<Chat>> chatMutableLiveData = new MutableLiveData<>();
 
-        Log.e("chatRepo", chatMutableLiveData + " - " + chatPartnerId + " count : "+  options.getSnapshots().size() + options.getOwner());
-//        chatDb.collection(COLLECTION_USER_NAME).document(userId).collection(chatPartnerId)
-//                .get()
-//                .addOnCompleteListener(task -> {
-//                    QueryDocumentSnapshot currentDocument;
-//                    ArrayList<Chat> currentDiscussion = new ArrayList<>();
-//                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
-//                        Chat chat = new Chat();
-//                        chat = documentSnapshot.toObject(Chat.class);
-//                        currentChat
-//                        currentDiscussion
-//                    }
-//                    currentChat = currentDocument.toObject(Chat.class);
-//                    chatMutableLiveData.setValue(currentChat);
-//                });
+        List<Chat> mchat = new ArrayList<>();
+        chatDb.document(getCurrentUser().getUid())
+                .collection(chatPartnerId)
+                .orderBy("createdDate", Query.Direction.ASCENDING)
+                .addSnapshotListener((value, e) -> {
+                    if (e != null) {
+                        return;
+                    }
+
+                    for (QueryDocumentSnapshot doc : value) {
+                        if (doc != null) {
+                            Chat currentChat;
+                            currentChat = doc.toObject(Chat.class);
+                            mchat.add(currentChat);
+                        }
+                    }
+                   chatMutableLiveData.setValue(mchat);
+                });
+
         return chatMutableLiveData;
     }
 }
