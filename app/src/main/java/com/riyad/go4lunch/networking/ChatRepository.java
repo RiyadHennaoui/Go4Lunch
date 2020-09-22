@@ -2,22 +2,15 @@ package com.riyad.go4lunch.networking;
 
 import android.util.Log;
 
-import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.riyad.go4lunch.model.Chat;
 import com.riyad.go4lunch.model.User;
 
@@ -66,6 +59,7 @@ public class ChatRepository {
                     if (e != null) {
                         return;
                     }
+                    mchat.clear();
                     String source = value != null && value.getMetadata().hasPendingWrites()
                             ? "Local" : "Server";
 
@@ -88,7 +82,7 @@ public class ChatRepository {
     public MutableLiveData<Chat> addMessagetoSender(String message, String chatPartenerId, User currentUser){
         MutableLiveData<Chat> messageToSenderMutableLiveData = new MutableLiveData<>();
         Chat chat = new Chat();
-        chat.setAuther(currentUser);
+        chat.setAuthor(currentUser);
         chat.setMessage(message);
         //For save in Current User Collection.
         chatDb.document(currentUser.getmUid()).collection(chatPartenerId)
@@ -112,7 +106,7 @@ public class ChatRepository {
     public MutableLiveData<Chat> addMessageToRecipient(String message, String chatPartenerId, User currentUser){
         MutableLiveData<Chat> messageToRecipientMutableLiveData = new MutableLiveData<>();
         Chat chat = new Chat();
-        chat.setAuther(currentUser);
+        chat.setAuthor(currentUser);
         chat.setMessage(message);
 
 

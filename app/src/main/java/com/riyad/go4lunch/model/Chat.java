@@ -5,7 +5,7 @@ import com.google.firebase.firestore.ServerTimestamp;
 import java.util.Date;
 
 public class Chat {
-    private User mAuther;
+    private User mAuthor;
     private String mMessage;
     private Boolean isSender;
     @ServerTimestamp
@@ -13,21 +13,21 @@ public class Chat {
 
     public Chat() { } // Needed for Firebase
 
-    public Chat(User auther, String message) {
-        mAuther = auther;
+    public Chat(User author, String message) {
+        mAuthor = author;
         mMessage = message;
 
     }
 
     // --- GETTERS --
-    public User getAuther() { return mAuther; }
+    public User getAuthor() { return mAuthor; }
     public String getMessage() { return mMessage; }
     public Boolean getIsSender()  { return  isSender; }
     public Date getCreatedDate() { return mCreatedDate; }
 
     // --- SETTERS ---
     public void setMessage(String message) { mMessage = message; }
-    public void setAuther(User receiver) { mAuther = receiver; }
+    public void setAuthor(User receiver) { mAuthor = receiver; }
     public void setIsSender(Boolean sender) { isSender = sender; }
     public void setCreatedDate(Date createdDate) { mCreatedDate = createdDate; }
 }

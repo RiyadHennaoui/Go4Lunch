@@ -22,9 +22,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static com.riyad.go4lunch.utils.Constants.MSG_TYPE_LEFT;
-import static com.riyad.go4lunch.utils.Constants.MSG_TYPE_RIGHT;
-
 public class MessageAdapter extends FirestoreRecyclerAdapter<Chat, MessageAdapter.ChatHolder> {
 
     private Context mContext;
@@ -126,7 +123,7 @@ public class MessageAdapter extends FirestoreRecyclerAdapter<Chat, MessageAdapte
             mMessage.setText(chat.getMessage());
             mTimestamp.setText(convertDateToHour(chat.getCreatedDate()));
             sortSenderOrReciever(chat);
-            Glide.with(receiverPhoto).load(chat.getAuther().getmUrlPicture()).circleCrop().into(receiverPhoto);
+            Glide.with(receiverPhoto).load(chat.getAuthor().getmUrlPicture()).circleCrop().into(receiverPhoto);
 
         }
 
@@ -134,7 +131,7 @@ public class MessageAdapter extends FirestoreRecyclerAdapter<Chat, MessageAdapte
             if (chat.getIsSender()) {
                 mUsername.setText(mCurrentUser.getDisplayName());
             } else {
-                mUsername.setText(chat.getAuther().getmUsername());
+                mUsername.setText(chat.getAuthor().getmUsername());
             }
         }
 

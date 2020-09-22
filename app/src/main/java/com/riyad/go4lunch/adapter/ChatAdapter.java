@@ -16,7 +16,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 import com.riyad.go4lunch.R;
 import com.riyad.go4lunch.model.Chat;
-import com.riyad.go4lunch.ui.Restaurant;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -112,10 +111,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder>{
             mMessage.setText(chat.getMessage());
             Log.e("bind", mTimestamp + ", " +  gson.toJson(chat));
             mTimestamp.setText(convertDateToHour(chat.getCreatedDate()));
-            mUsername.setText(chat.getAuther().getmUsername());
-            if (chat.getAuther().getmUrlPicture() != null) {
-                Log.e(chat.getAuther().getmUsername(), chat.getAuther().getmUrlPicture());
-                 Glide.with(mProfilePicture).load(chat.getAuther().getmUrlPicture()).circleCrop().into(mProfilePicture);
+            mUsername.setText(chat.getAuthor().getmUsername());
+            if (chat.getAuthor().getmUrlPicture() != null) {
+                Log.e(chat.getAuthor().getmUsername(), chat.getAuthor().getmUrlPicture());
+                 Glide.with(mProfilePicture).load(chat.getAuthor().getmUrlPicture()).circleCrop().into(mProfilePicture);
             }
 
         }
