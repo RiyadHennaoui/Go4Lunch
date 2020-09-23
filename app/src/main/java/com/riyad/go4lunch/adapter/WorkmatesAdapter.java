@@ -121,6 +121,7 @@ public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesAd
     private void toChat(String workmateId, Context context){
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra(WORKMATE_ID, workmateId);
+        //TODO ajouter picture et username.
         context.startActivity(intent);
 
     }

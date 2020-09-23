@@ -17,15 +17,23 @@
         android:background="@color/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        android:elevation="4dp"
+
         >
 
-    <ImageView
-        android:layout_width="24dp"
-        android:layout_height="match_parent"
-        android:id="@+id/chat_activity_iv_photo_receiver"
-        />
+
     </androidx.appcompat.widget.Toolbar>
+
+    <ImageView
+        android:id="@+id/chat_activity_iv_photo_receiver"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_logo_main"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.18"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <include
         layout="@layout/main_rv"
         android:id="@+id/chat_activity_main_container"
@@ -66,6 +74,8 @@
             android:id="@+id/chat_activity_et_message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:textColorHint="@color/white"
+            android:hint="type your message"
             android:layout_gravity="center_vertical"
             android:textColor="@color/white"
             android:layout_weight="1"/>
@@ -80,6 +90,16 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/chat_activity_tv_chat_partner_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/chat_activity_iv_photo_receiver"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.14"
+        app:layout_constraintStart_toEndOf="@+id/chat_activity_iv_photo_receiver"
+        app:layout_constraintTop_toTopOf="@+id/chat_activity_iv_photo_receiver" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

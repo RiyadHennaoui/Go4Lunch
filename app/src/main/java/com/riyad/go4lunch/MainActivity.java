@@ -107,13 +107,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private SharedPreferences sharedPreferences;
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.action_bar_menu, menu);
-        return true;
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -126,9 +119,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         profileNavDrawer = findViewById(R.id.nav_header_profile_picture);
         usernameNavDrawer = findViewById(R.id.nav_header_profile_name);
         userMailNavDrawer = findViewById(R.id.nav_header_profile_email);
-
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
 
 //      TODO Modifier l'image profile dans le nav drawer problème de context avec Glide.with(getContext)??
 //        userMailNavDrawer.setText(getCurrentUser().getEmail());
@@ -136,7 +129,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 //          Glide.with(MainActivity.this.profileNavDrawer).load(getCurrentUser().getPhotoUrl()).centerCrop().into(profileNavDrawer);
 
         getLocationPermission();
-
         this.configureBottomView();
         this.configureNavView();
         myNavView.setCheckedItem(R.id.action_map_view);
@@ -145,6 +137,15 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         configureActionBarDrawer();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getMenuInflater();
+        getMenuInflater().inflate(R.menu.action_bar_menu, menu);
+        return true;
+    }
+
+
 
     private void configureActionBarDrawer() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,

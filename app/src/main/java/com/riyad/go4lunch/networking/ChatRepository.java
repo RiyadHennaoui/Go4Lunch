@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.Query;
@@ -15,6 +16,7 @@ import com.riyad.go4lunch.model.Chat;
 import com.riyad.go4lunch.model.User;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -78,45 +80,35 @@ public class ChatRepository {
         return chatMutableLiveData;
     }
 
+//TODO demander a Thie la meilleur manère de faire.
+    public void sendMessage(String message, String chatPartenerId){
 
-    public MutableLiveData<Chat> addMessagetoSender(String message, String chatPartenerId, User currentUser){
-        MutableLiveData<Chat> messageToSenderMutableLiveData = new MutableLiveData<>();
-        Chat chat = new Chat();
-        chat.setAuthor(currentUser);
-        chat.setMessage(message);
-        //For save in Current User Collection.
-        chatDb.document(currentUser.getmUid()).collection(chatPartenerId)
-                .add(chat)
-                .addOnCompleteListener(task -> Log.e("in Lambda currentUser", chat.getMessage()));
+        chatDb.document(getCurrentUser().getUid())
+                .get()
+                .addOnCompleteListener(task -> {
+                    User currentUser;
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot currentUserDocument = task.getResult();
+                        currentUser = currentUserDocument.toObject(User.class);
+                        Chat chat = new Chat();
+                        chat.setAuthor(currentUser);
+                        chat.setMessage(message);
+                        chat.setCreatedDate(new Date());
+                        //For save in Current User Collection.
+                        chat.setIsSender(true);
+                        chatDb.document(currentUser.getmUid()).collection(chatPartenerId)
+                                .add(chat)
+                                .addOnCompleteListener(task1 -> Log.e("in Lambda currentUser", chat.getMessage()));
 
 
-        //For save in chatPartener Collection.
-        chatDb.document(chatPartenerId).collection(currentUser.getmUid())
-                .add(chat)
-                .addOnCompleteListener(task -> Log.e("in Lambda for chat", chat.getMessage()));
+                        //For save in chatPartener Collection.
+                        chat.setIsSender(false);
+                        chatDb.document(chatPartenerId).collection(currentUser.getmUid())
+                                .add(chat)
+                                .addOnCompleteListener(task2 -> Log.e("in Lambda for chat", chat.getMessage()));
+                    }
+                });
 
-
-
-
-         messageToSenderMutableLiveData.setValue(chat);
-
-        return messageToSenderMutableLiveData;
     }
 
-    public MutableLiveData<Chat> addMessageToRecipient(String message, String chatPartenerId, User currentUser){
-        MutableLiveData<Chat> messageToRecipientMutableLiveData = new MutableLiveData<>();
-        Chat chat = new Chat();
-        chat.setAuthor(currentUser);
-        chat.setMessage(message);
-
-
-        //For save in chatPartener Collection.
-        chatDb.document(chatPartenerId).collection(currentUser.getmUid())
-                .add(chat)
-                .addOnCompleteListener(task -> Log.e("in Lambda for chat", chat.getMessage()));
-
-        messageToRecipientMutableLiveData.setValue(chat);
-
-        return messageToRecipientMutableLiveData;
-    }
 }

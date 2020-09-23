@@ -1,48 +1,29 @@
 package com.riyad.go4lunch;
 
+import android.os.Bundle;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Bundle;
-import android.util.Log;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-
 import com.bumptech.glide.Glide;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.riyad.go4lunch.adapter.ChatAdapter;
-import com.riyad.go4lunch.model.Chat;
-import com.riyad.go4lunch.model.User;
 import com.riyad.go4lunch.viewmodels.ChatViewModel;
-import com.riyad.go4lunch.viewmodels.UserViewModel;
 
-import java.util.Date;
-
-import static com.riyad.go4lunch.utils.Constants.COLLECTION_USER_NAME;
 import static com.riyad.go4lunch.utils.Constants.WORKMATE_ID;
 
 public class ChatActivity extends AppCompatActivity{
-
-    String recieverTemp;
-    User chatReceiver;
-    User currentUser;
-    CollectionReference firestoreCurrentUserChatCollection;
-    CollectionReference firestoreChatPartenerChatCollection;
-    CollectionReference userCollection;
 
     ImageView chatpartnerPhoto;
     EditText currentMessage;
     ImageButton sendMessageButton;
     Toolbar toolbar;
 
-    UserViewModel userViewModel;
     ChatViewModel chatViewModel;
 
     ChatAdapter chatAdapter;
@@ -60,36 +41,38 @@ public class ChatActivity extends AppCompatActivity{
         currentMessage = findViewById(R.id.chat_activity_et_message);
         toolbar = findViewById(R.id.chat_toolbar);
 
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        initViewModel();
 
-        currentUser = displayCurrentUser(getCurrentUser().getUid());
-        recieverTemp = getIntent().getStringExtra(WORKMATE_ID);
+        configureToolbarChatActivity();
+
 //        chatReceiver = displayOtherUser(recieverTemp);
-//        String photoUrl = displayOtherUser(recieverTemp).getmUrlPicture();
-        Glide.with(chatpartnerPhoto).load("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQilpWGZianQ41td4_sPkevbsQ8MXrEWERPUw&usqp=CAU").centerCrop().into(chatpartnerPhoto);
-
-
-
-        firestoreCurrentUserChatCollection = FirebaseFirestore.getInstance().collection(COLLECTION_USER_NAME)
-                .document(getCurrentUser().getUid())
-                .collection(recieverTemp);
-
-        firestoreChatPartenerChatCollection = FirebaseFirestore.getInstance().collection(COLLECTION_USER_NAME)
-                .document(recieverTemp)
-                .collection(getCurrentUser().getUid());
-
-        userCollection = FirebaseFirestore.getInstance().collection(COLLECTION_USER_NAME);
+//        Log.e("chatPartner Object", chatReceiver.getmUsername());
+//        String photoUrl = chatReceiver.getmUrlPicture();
+        Glide.with(chatpartnerPhoto).load("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQilpWGZianQ41td4_sPkevbsQ8MXrEWERPUw&usqp=CAU").circleCrop().into(chatpartnerPhoto);
 
         readMessage();
 
         sendMessageButton.setOnClickListener(v -> {
             String message = currentMessage.getText().toString();
-            sendMessage(message);
+            if (!message.isEmpty()){
+                chatViewModel.sendMessage(message);
+            }
             currentMessage.setText("");
         });
 
+    }
+
+    private void initViewModel() {
+        chatViewModel = ViewModelProviders.of(ChatActivity.this).get(ChatViewModel.class);
+        String receiverTemp = getIntent().getStringExtra(WORKMATE_ID);
+        chatViewModel.init(receiverTemp);
+    }
+
+    private void configureToolbarChatActivity() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     @Override
@@ -98,54 +81,9 @@ public class ChatActivity extends AppCompatActivity{
         return true;
     }
 
-    private User displayCurrentUser(String userId) {
-
-        userViewModel = ViewModelProviders.of(ChatActivity.this).get(UserViewModel.class);
-        userViewModel.init(userId);
-        userViewModel.getFirebaseCurrentUser().observe(ChatActivity.this, workmate -> {
-            currentUser = workmate;
-        });
-        return currentUser;
-    }
-
-    private User displayOtherUser(String otherUserId){
-
-        userViewModel = ViewModelProviders.of(ChatActivity.this).get(UserViewModel.class);
-        userViewModel.init(otherUserId);
-        userViewModel.getOtherFirebaseUser().observe(ChatActivity.this, otherUser -> chatReceiver = otherUser);
-        return chatReceiver;
-    }
-
-    private FirebaseUser getCurrentUser() {
-        return FirebaseAuth.getInstance().getCurrentUser();
-    }
-
-    private void sendMessage(String message) {
-
-        Chat chat = new Chat();
-        chat.setAuthor(displayCurrentUser(getCurrentUser().getUid()));
-        chat.setCreatedDate(new Date());
-        chat.setMessage(message);
-
-        if (!chat.getMessage().equals("")) {
-            chat.setIsSender(true);
-            firestoreCurrentUserChatCollection
-                    .add(chat)
-                    .addOnCompleteListener(task -> Log.e("chatSender", chat.getMessage()));
-
-            chat.setIsSender(false);
-            firestoreChatPartenerChatCollection
-                    .add(chat)
-                    .addOnCompleteListener(task -> Log.e("chatRieciever", chat.getMessage()));
-
-        }
-
-    }
 
     private void readMessage() {
 
-        chatViewModel = ViewModelProviders.of(ChatActivity.this).get(ChatViewModel.class);
-        chatViewModel.init(recieverTemp);
         chatViewModel.getChat().observe(ChatActivity.this, chats -> {
             chatAdapter = new ChatAdapter(chats, ChatActivity.this);
             configureRecyclerView(chatAdapter);

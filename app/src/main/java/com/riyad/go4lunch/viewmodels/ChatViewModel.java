@@ -12,19 +12,20 @@ import java.util.List;
 public class ChatViewModel extends ViewModel {
 
     private MutableLiveData<List<Chat>> getChatMutableLiveData;
-    private MutableLiveData<Chat> addMessageToSenderMutableLiveData;
-    private MutableLiveData<Chat> addMessageToRecipientMutableLiveData;
     private ChatRepository chatRepository;
+    String receiverId;
 
-    public void init(String recieverId){
+
+    public void init(String receiverId){
         if (getChatMutableLiveData != null){
             return;
         }
 
+        this.receiverId = receiverId;
         chatRepository = ChatRepository.getInstance();
-        getChatMutableLiveData = chatRepository.getChat(recieverId);
+        getChatMutableLiveData = chatRepository.getChat(receiverId);
         //TODO voir avec Thie comment faier pour les paramètres de la méthode (récup le message et le currentUser (Objet User))
-//        addMessageToSenderMutableLiveData = chatRepository.addMessageToRecipient()
+
 
     }
 
@@ -33,13 +34,8 @@ public class ChatViewModel extends ViewModel {
         return getChatMutableLiveData;
     }
 
-    public LiveData<Chat> addMessageToSenderCollection(){
-        return addMessageToSenderMutableLiveData;
+    public void sendMessage(String message){
+        chatRepository.sendMessage(message, receiverId);
     }
-
-    public LiveData<Chat> addMessageToReceiverCollection(){
-        return addMessageToRecipientMutableLiveData;
-    }
-
 
 }
