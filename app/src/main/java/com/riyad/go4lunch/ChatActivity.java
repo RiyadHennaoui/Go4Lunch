@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -16,16 +17,17 @@ import com.riyad.go4lunch.adapter.ChatAdapter;
 import com.riyad.go4lunch.viewmodels.ChatViewModel;
 
 import static com.riyad.go4lunch.utils.Constants.WORKMATE_ID;
+import static com.riyad.go4lunch.utils.Constants.WORKMATE_PICTURE_URL;
+import static com.riyad.go4lunch.utils.Constants.WORKMATE_USERNAME;
 
-public class ChatActivity extends AppCompatActivity{
+public class ChatActivity extends AppCompatActivity {
 
     ImageView chatpartnerPhoto;
     EditText currentMessage;
     ImageButton sendMessageButton;
     Toolbar toolbar;
-
+    TextView chatPartenerUsername;
     ChatViewModel chatViewModel;
-
     ChatAdapter chatAdapter;
     RecyclerView recyclerView;
 
@@ -34,32 +36,38 @@ public class ChatActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-
-        sendMessageButton = findViewById(R.id.chat_activity_ib_send);
-        recyclerView= findViewById(R.id.main_rv);
-        chatpartnerPhoto = findViewById(R.id.chat_activity_iv_photo_receiver);
-        currentMessage = findViewById(R.id.chat_activity_et_message);
-        toolbar = findViewById(R.id.chat_toolbar);
-
-        initViewModel();
-
+        findAllViews();
         configureToolbarChatActivity();
-
-//        chatReceiver = displayOtherUser(recieverTemp);
-//        Log.e("chatPartner Object", chatReceiver.getmUsername());
-//        String photoUrl = chatReceiver.getmUrlPicture();
-        Glide.with(chatpartnerPhoto).load("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQilpWGZianQ41td4_sPkevbsQ8MXrEWERPUw&usqp=CAU").circleCrop().into(chatpartnerPhoto);
-
+        displayChatPartenerPhotoAndName();
+        initViewModel();
         readMessage();
+        sendMessagWithSendButton();
 
+
+    }
+
+    private void sendMessagWithSendButton() {
         sendMessageButton.setOnClickListener(v -> {
             String message = currentMessage.getText().toString();
-            if (!message.isEmpty()){
+            if (!message.isEmpty()) {
                 chatViewModel.sendMessage(message);
             }
             currentMessage.setText("");
         });
+    }
 
+    private void findAllViews() {
+        chatPartenerUsername = findViewById(R.id.chat_activity_tv_chat_partner_name);
+        sendMessageButton = findViewById(R.id.chat_activity_ib_send);
+        recyclerView = findViewById(R.id.main_rv);
+        chatpartnerPhoto = findViewById(R.id.chat_activity_iv_photo_receiver);
+        currentMessage = findViewById(R.id.chat_activity_et_message);
+        toolbar = findViewById(R.id.chat_toolbar);
+    }
+
+    private void displayChatPartenerPhotoAndName() {
+        chatPartenerUsername.setText(getIntent().getStringExtra(WORKMATE_USERNAME));
+        Glide.with(chatpartnerPhoto).load(getIntent().getStringExtra(WORKMATE_PICTURE_URL)).circleCrop().into(chatpartnerPhoto);
     }
 
     private void initViewModel() {
@@ -92,7 +100,7 @@ public class ChatActivity extends AppCompatActivity{
     }
 
 
-    private void configureRecyclerView(ChatAdapter thisChatAdapter){
+    private void configureRecyclerView(ChatAdapter thisChatAdapter) {
 
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);

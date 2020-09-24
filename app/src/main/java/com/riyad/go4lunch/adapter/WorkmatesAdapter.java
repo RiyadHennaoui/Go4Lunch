@@ -26,6 +26,8 @@ import com.riyad.go4lunch.R;
 import com.riyad.go4lunch.model.User;
 
 import static com.riyad.go4lunch.utils.Constants.WORKMATE_ID;
+import static com.riyad.go4lunch.utils.Constants.WORKMATE_PICTURE_URL;
+import static com.riyad.go4lunch.utils.Constants.WORKMATE_USERNAME;
 
 public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesAdapter.UsersHolder> {
 
@@ -110,7 +112,7 @@ public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesAd
             mChat.setOnClickListener(view -> {
 
                 //TODO Crée un intent vers l'activitée CHAT.
-            toChat(user.getmUid(), view.getContext());
+            toChat(user.getmUid(), user.getmUrlPicture(), user.getmUsername(), view.getContext());
 
 
             });
@@ -118,9 +120,12 @@ public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesAd
         }
     }
 
-    private void toChat(String workmateId, Context context){
+    private void toChat(String workmateId, String workmatePhotoUrl, String workmateUsername, Context context){
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra(WORKMATE_ID, workmateId);
+        intent.putExtra(WORKMATE_PICTURE_URL, workmatePhotoUrl);
+        intent.putExtra(WORKMATE_USERNAME, workmateUsername);
+
         //TODO ajouter picture et username.
         context.startActivity(intent);
 

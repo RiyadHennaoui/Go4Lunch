@@ -71,6 +71,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         private final TextView distance;
         private final TextView restaurantAdress;
         private final TextView opening_hour;
+        private final TextView workmatesNumbreBook;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -81,6 +82,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
             distance = itemView.findViewById(R.id.item_restaurant_tv_distance);
             restaurantAdress = itemView.findViewById(R.id.item_restaurant_tv_adresse);
             opening_hour = itemView.findViewById(R.id.item_restaurant_tv_opening);
+            workmatesNumbreBook = itemView.findViewById(R.id.item_restaurant_tv_number_of_workmates);
         }
 
         public void bind(Restaurant restaurant) {
@@ -99,7 +101,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
 
             opening_hour.setText(restaurant.getRestaurantDetail().getFormattedOpeningHour());
 
-
+            workmatesNumbreBook.setText("(" + restaurant.getBookingUser().size() + ")");
             Glide.with(countryFood).load(restaurant.getRestaurantImageUrl()).circleCrop().into(countryFood);
 
             itemView.setOnClickListener(view -> {
@@ -112,6 +114,9 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
                     }
             );
 
+
         }
+
+
     }
 }

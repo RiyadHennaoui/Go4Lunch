@@ -25,10 +25,11 @@
 
     <ImageView
         android:id="@+id/chat_activity_iv_photo_receiver"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+
         android:src="@drawable/ic_logo_main"
+        app:layout_constraintBottom_toBottomOf="@+id/chat_toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.18"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,7 +75,7 @@
             android:id="@+id/chat_activity_et_message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColorHint="@color/white"
+            android:textColorHint="#bdbdbd"
             android:hint="type your message"
             android:layout_gravity="center_vertical"
             android:textColor="@color/white"
@@ -95,11 +96,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="@+id/chat_activity_iv_photo_receiver"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/chat_toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.14"
         app:layout_constraintStart_toEndOf="@+id/chat_activity_iv_photo_receiver"
-        app:layout_constraintTop_toTopOf="@+id/chat_activity_iv_photo_receiver" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

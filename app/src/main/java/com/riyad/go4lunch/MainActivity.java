@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,18 +20,16 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
+
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.common.api.ApiException;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -45,25 +44,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.PlaceLikelihood;
-import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
-import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.riyad.go4lunch.fragments.RestaurantsFragment;
 import com.riyad.go4lunch.fragments.WorkmateFragment;
 import com.riyad.go4lunch.ui.Restaurant;
 import com.riyad.go4lunch.viewmodels.RestaurantsViewModel;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -73,7 +62,6 @@ import static com.riyad.go4lunch.utils.Constants.CURRENT_DEVICE_LOCATION;
 import static com.riyad.go4lunch.utils.Constants.DEFAULT_ZOOM;
 import static com.riyad.go4lunch.utils.Constants.KEY_CAMERA_POSITION;
 import static com.riyad.go4lunch.utils.Constants.KEY_Location;
-import static com.riyad.go4lunch.utils.Constants.M_MAX_ENTRIES;
 import static com.riyad.go4lunch.utils.Constants.PERMISSION_REQUEST_ACCESS_FINE_LOCATION;
 import static com.riyad.go4lunch.utils.Constants.PLACE_ID;
 import static com.riyad.go4lunch.utils.Constants.SIGN_OUT_TASK;
@@ -92,6 +80,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private ImageView profileNavDrawer;
     private TextView usernameNavDrawer;
     private TextView userMailNavDrawer;
+    private Button toolbarSearch;
 
     // The entry point to the fused Location Provider
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -119,6 +108,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         profileNavDrawer = findViewById(R.id.nav_header_profile_picture);
         usernameNavDrawer = findViewById(R.id.nav_header_profile_name);
         userMailNavDrawer = findViewById(R.id.nav_header_profile_email);
+        toolbarSearch = findViewById(R.id.menu_search);
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -179,29 +169,26 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         //TODO gérer les problèmes de permissions
 
         Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
-        locationResult.addOnCompleteListener(this, new OnCompleteListener<Location>() {
-            @Override
-            public void onComplete(@NonNull Task<Location> task) {
-                if (task.isSuccessful()) {
-                    //Set the map's camera position to the current location of the device.
-                    mLastKnownLocation = task.getResult();
-                    AppControler.getInstance().setCurrentLocation(mLastKnownLocation);
+        locationResult.addOnCompleteListener(this, task -> {
+            if (task.isSuccessful()) {
+                //Set the map's camera position to the current location of the device.
+                mLastKnownLocation = task.getResult();
+                AppControler.getInstance().setCurrentLocation(mLastKnownLocation);
 
-                    if (mLastKnownLocation != null) {
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                new LatLng(mLastKnownLocation.getLatitude(),
-                                        mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-                        String nearbySearchLocationFormat = mLastKnownLocation.getLatitude() + "," + mLastKnownLocation.getLongitude();
+                if (mLastKnownLocation != null) {
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                            new LatLng(mLastKnownLocation.getLatitude(),
+                                    mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                    String nearbySearchLocationFormat = mLastKnownLocation.getLatitude() + "," + mLastKnownLocation.getLongitude();
 
-                        sharedPreferences.edit().putString(CURRENT_DEVICE_LOCATION, nearbySearchLocationFormat).apply();
-                        displayRestaurants(nearbySearchLocationFormat);
-                    }
-                } else {
-                    Log.d(TAG, "Current location is null. Using defaults.");
-                    Log.e(TAG, "Exception: %s", task.getException());
+                    sharedPreferences.edit().putString(CURRENT_DEVICE_LOCATION, nearbySearchLocationFormat).apply();
+                    displayRestaurants(nearbySearchLocationFormat);
                 }
-
+            } else {
+                Log.d(TAG, "Current location is null. Using defaults.");
+                Log.e(TAG, "Exception: %s", task.getException());
             }
+
         });
 
     }
@@ -213,6 +200,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private void configureBottomView() {
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> updateButtons(item.getItemId()));
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -275,6 +263,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
             case R.id.nav_logout:
                 signOutUserFromFirebase();
+                break;
+
+            case R.id.menu_search:
+                break;
                 //TODO ce deconnecter.
         }
 

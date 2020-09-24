@@ -41,6 +41,8 @@ public class Constants {
     //ids
     public static final String PLACE_ID = "PLACE_ID";
     public static final String WORKMATE_ID = "workmateId";
+    public static final String WORKMATE_PICTURE_URL = "workmatePictureUrl";
+    public static final String WORKMATE_USERNAME = "workmateUsername";
 
     //for Permission to call
     public static final int  PERMISSION_TO_CALL = 123;
