@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -81,6 +83,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private TextView usernameNavDrawer;
     private TextView userMailNavDrawer;
     private Button toolbarSearch;
+    private SearchView searchView;
 
     // The entry point to the fused Location Provider
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -105,10 +108,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         myNavView = findViewById(R.id.main_navigation_view);
         myMainToolbar = findViewById(R.id.main_toolbar);
         myDrawerLayout = findViewById(R.id.main_drawer_layout);
-        profileNavDrawer = findViewById(R.id.nav_header_profile_picture);
-        usernameNavDrawer = findViewById(R.id.nav_header_profile_name);
-        userMailNavDrawer = findViewById(R.id.nav_header_profile_email);
-        toolbarSearch = findViewById(R.id.menu_search);
+        searchView = findViewById(R.id.menu_search);
+
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -118,6 +119,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 //        usernameNavDrawer.setText(getCurrentUser().getDisplayName());
 //          Glide.with(MainActivity.this.profileNavDrawer).load(getCurrentUser().getPhotoUrl()).centerCrop().into(profileNavDrawer);
 
+
+
         getLocationPermission();
         this.configureBottomView();
         this.configureNavView();
@@ -126,12 +129,19 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         openMap();
 
         configureActionBarDrawer();
+        View headerView = myNavView.getHeaderView(0);
+        profileNavDrawer = headerView.findViewById(R.id.nav_header_profile_picture);
+        usernameNavDrawer = headerView.findViewById(R.id.nav_header_profile_name);
+        userMailNavDrawer = headerView.findViewById(R.id.nav_header_profile_email);
+        usernameNavDrawer.setText(getCurrentUser().getDisplayName());
+        userMailNavDrawer.setText(getCurrentUser().getEmail());
+        Glide.with(MainActivity.this.profileNavDrawer).load(getCurrentUser().getPhotoUrl()).centerCrop().into(profileNavDrawer);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-        getMenuInflater().inflate(R.menu.action_bar_menu, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_bar_menu, menu);
         return true;
     }
 

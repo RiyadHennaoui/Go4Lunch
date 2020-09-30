@@ -40,6 +40,14 @@
         app:layout_constraintBottom_toBottomOf="@id/profile_iv_profile"
         app:layout_constraintEnd_toEndOf="@id/profile_iv_profile" />
 
+    <ImageView
+        android:id="@+id/profile_iv_add_name"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_add_black_24dp"
+        app:layout_constraintBottom_toBottomOf="@id/profile_tv_name"
+        app:layout_constraintStart_toEndOf="@id/profile_tv_name"/>
+
     <TextView
         android:id="@+id/profile_tv_name"
         android:layout_width="wrap_content"

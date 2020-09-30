@@ -25,7 +25,7 @@ import java.util.List;
 import static com.riyad.go4lunch.utils.Constants.MSG_TYPE_LEFT;
 import static com.riyad.go4lunch.utils.Constants.MSG_TYPE_RIGHT;
 
-public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder>{
+public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
 
     private List<Chat> chatData;
     private FirebaseUser mCurrentUser;
@@ -43,9 +43,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder>{
     @NonNull
     @Override
     public ChatAdapter.ChatHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    //    View v = LayoutInflater.from(parent.getContext())
-    //            .inflate(R.layout.chat_item_right, parent, false);
-    //    return new ChatAdapter.ChatHolder(v);
+        //    View v = LayoutInflater.from(parent.getContext())
+        //            .inflate(R.layout.chat_item_right, parent, false);
+        //    return new ChatAdapter.ChatHolder(v);
 
 
         if (viewType == MSG_TYPE_RIGHT) {
@@ -86,22 +86,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder>{
     }
 
     public class ChatHolder extends RecyclerView.ViewHolder {
-        ImageView mProfilePicture;
+
         TextView mMessage;
-        TextView mUsername;
+
         ImageView receiverPhoto;
         TextView mTimestamp;
 
         public ChatHolder(@NonNull View itemView) {
             super(itemView);
-
-            mProfilePicture = itemView.findViewById(R.id.chat_item_iv_circle_picture);
             mMessage = itemView.findViewById(R.id.chat_item_tv_message);
-            mUsername = itemView.findViewById(R.id.chat_item_tv_username);
             mTimestamp = itemView.findViewById(R.id.chat_item_tv_timestamp);
-
-
-
         }
 
 
@@ -109,14 +103,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder>{
 
             Gson gson = new Gson();
             mMessage.setText(chat.getMessage());
-            Log.e("bind", mTimestamp + ", " +  gson.toJson(chat));
+            Log.e("bind", mTimestamp + ", " + gson.toJson(chat));
             mTimestamp.setText(convertDateToHour(chat.getCreatedDate()));
-            mUsername.setText(chat.getAuthor().getmUsername());
-            if (chat.getAuthor().getmUrlPicture() != null) {
-                Log.e(chat.getAuthor().getmUsername(), chat.getAuthor().getmUrlPicture());
-                 Glide.with(mProfilePicture).load(chat.getAuthor().getmUrlPicture()).circleCrop().into(mProfilePicture);
-            }
-
         }
 
         private String convertDateToHour(Date date) {

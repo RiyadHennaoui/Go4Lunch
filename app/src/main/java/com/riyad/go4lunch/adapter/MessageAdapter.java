@@ -99,18 +99,15 @@ public class MessageAdapter extends FirestoreRecyclerAdapter<Chat, MessageAdapte
 
 
     public class ChatHolder extends RecyclerView.ViewHolder {
-        ImageView mProfilePicture;
+
         TextView mMessage;
-        TextView mUsername;
         ImageView receiverPhoto;
         TextView mTimestamp;
 
         public ChatHolder(@NonNull View itemView) {
             super(itemView);
 
-            mProfilePicture = itemView.findViewById(R.id.chat_item_iv_circle_picture);
             mMessage = itemView.findViewById(R.id.chat_item_tv_message);
-//            mUsername = itemView.findViewById(R.id.chat_item_tv_username_right);
             mTimestamp = itemView.findViewById(R.id.chat_item_tv_timestamp);
             receiverPhoto = itemView.findViewById(R.id.chat_activity_iv_photo_receiver);
 
@@ -122,20 +119,7 @@ public class MessageAdapter extends FirestoreRecyclerAdapter<Chat, MessageAdapte
 
             mMessage.setText(chat.getMessage());
             mTimestamp.setText(convertDateToHour(chat.getCreatedDate()));
-            sortSenderOrReciever(chat);
-            Glide.with(receiverPhoto).load(chat.getAuthor().getmUrlPicture()).circleCrop().into(receiverPhoto);
-
         }
-
-        private void sortSenderOrReciever(Chat chat) {
-            if (chat.getIsSender()) {
-                mUsername.setText(mCurrentUser.getDisplayName());
-            } else {
-                mUsername.setText(chat.getAuthor().getmUsername());
-            }
-        }
-
-
 
 
         private String convertDateToHour(Date date) {
