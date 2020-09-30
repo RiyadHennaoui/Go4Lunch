@@ -122,6 +122,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         getLocationPermission();
+        myMainToolbar.inflateMenu(R.menu.action_bar_menu);
+        this.configureToolbar();
         this.configureBottomView();
         this.configureNavView();
         myNavView.setCheckedItem(R.id.action_map_view);
@@ -137,15 +139,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         userMailNavDrawer.setText(getCurrentUser().getEmail());
         Glide.with(MainActivity.this.profileNavDrawer).load(getCurrentUser().getPhotoUrl()).centerCrop().into(profileNavDrawer);
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.action_bar_menu, menu);
-        return true;
-    }
-
-
 
     private void configureActionBarDrawer() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
@@ -211,6 +204,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> updateButtons(item.getItemId()));
     }
 
+    private void configureToolbar(){
+        myMainToolbar.setOnMenuItemClickListener(item -> updateButtons(item.getItemId()));
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -251,6 +248,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         switch (integer) {
 
+            //TODO ajouter le case de la searchView.
             case R.id.action_map_view:
                 openMap();
                 break;
