@@ -43,6 +43,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -63,6 +64,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.riyad.go4lunch.fragments.RestaurantsFragment;
 import com.riyad.go4lunch.fragments.WorkmateFragment;
 import com.riyad.go4lunch.ui.Restaurant;
+import com.riyad.go4lunch.viewmodels.DetailRestaurantViewModel;
 import com.riyad.go4lunch.viewmodels.RestaurantsViewModel;
 
 import java.util.Arrays;
@@ -113,6 +115,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     private SharedPreferences sharedPreferences;
 
+    //List view Fragment
+    RestaurantsFragment restaurantsFragment = RestaurantsFragment.newInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,7 +138,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 //        userMailNavDrawer.setText(getCurrentUser().getEmail());
 //        usernameNavDrawer.setText(getCurrentUser().getDisplayName());
 //          Glide.with(MainActivity.this.profileNavDrawer).load(getCurrentUser().getPhotoUrl()).centerCrop().into(profileNavDrawer);
-
 
 
         getLocationPermission();
@@ -226,7 +230,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> updateButtons(item.getItemId()));
     }
 
-    private void configureToolbar(){
+    private void configureToolbar() {
         myMainToolbar.setOnMenuItemClickListener(item -> updateButtons(item.getItemId()));
     }
 
@@ -300,10 +304,34 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 Log.e("in Search", "in");
                 autocompleltePlace();
                 break;
-                //TODO ce deconnecter.
+            //TODO ce deconnecter.
         }
 
         return true;
+    }
+
+    private void displayAutocompleteRestaurant(String restaurantId) {
+
+        DetailRestaurantViewModel detailRestaurantViewModel;
+        detailRestaurantViewModel = ViewModelProviders.of(MainActivity.this).get(DetailRestaurantViewModel.class);
+        detailRestaurantViewModel.init(restaurantId);
+        detailRestaurantViewModel.getDetailRestaurant().observe(MainActivity.this, restaurant -> {
+//                mMap.clear();
+            if (restaurant == null) {
+                Toast.makeText(this, "Le restaurant n'est pas dans le rayon de recherche", Toast.LENGTH_SHORT).show();
+            } else {
+                mMap.addMarker(new MarkerOptions()
+                        .title(restaurant.getName())
+                        .snippet(restaurant.getId())
+                        .position(new LatLng(restaurant.getRestaurantLocation().getLat(),
+                                restaurant.getRestaurantLocation().getLng())));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                        new LatLng(restaurant.getRestaurantLocation().getLat(),
+                                restaurant.getRestaurantLocation().getLng()), DEFAULT_ZOOM));
+            }
+        });
+
+
     }
 
     private void displayRestaurants(String nearbySearchLocationFormat) {
@@ -315,7 +343,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             Log.e("mapList", restaurants.size() + "");
 
             int index = 0;
-            for (Restaurant restaurant: restaurants) {
+            for (Restaurant restaurant : restaurants) {
                 if (!restaurants.get(index).getBookingUser().isEmpty()) {
                     //TODO trouver comment ajouter l'info de l'id du restaurant.
                     mMap.addMarker(new MarkerOptions()
@@ -355,7 +383,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void displayRestaurantFragment() {
-        RestaurantsFragment restaurantsFragment = RestaurantsFragment.newInstance();
+
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.activity_main_frame_layout, restaurantsFragment).commit();
@@ -427,15 +455,15 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private void signOutUserFromFirebase(){
+    private void signOutUserFromFirebase() {
         AuthUI.getInstance()
                 .signOut(this)
                 .addOnSuccessListener(this, this.updateUIAfterRESTRequestsCompleted(SIGN_OUT_TASK));
     }
 
-    private OnSuccessListener<Void> updateUIAfterRESTRequestsCompleted(final int origin){
+    private OnSuccessListener<Void> updateUIAfterRESTRequestsCompleted(final int origin) {
         return aVoid -> {
-            switch (origin){
+            switch (origin) {
                 case SIGN_OUT_TASK:
                     finish();
                     break;
@@ -480,29 +508,56 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 //                .show();
 //    }
 
-    public void autocompleltePlace(){
+    public void autocompleltePlace() {
         fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
         Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
                 .setTypeFilter(TypeFilter.ESTABLISHMENT)
                 .setCountry("FR")
+                .setLocationBias(RectangularBounds.newInstance(setBounds(mLastKnownLocation, 1000)))
                 .build(this);
         startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == AUTOCOMPLETE_REQUEST_CODE){
-            if (resultCode == RESULT_OK){
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
-                Log.i("Autocomplete Main", "Place : " + place.getName() + ", " + place.getId() );
-            }else if (resultCode == AutocompleteActivity.RESULT_ERROR){
+                Log.i("Autocomplete Main", "Place : " + place.getName() + ", " + place.getId());
+
+                if (restaurantsFragment.isVisible()) {
+                    restaurantsFragment.displayAutocompleteRestaurant(place.getId());
+                } else {
+                    displayAutocompleteRestaurant(place.getId());
+                }
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 Status status = Autocomplete.getStatusFromIntent(data);
-            }else if(resultCode == RESULT_CANCELED){
+            } else if (resultCode == RESULT_CANCELED) {
 
             }
             return;
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private LatLngBounds setBounds(Location location, int mDistanceInMeters) {
+        double latRadian = Math.toRadians(location.getLatitude());
+
+        double degLatKm = 110.574235;
+        double degLongKm = 110.572833 * Math.cos(latRadian);
+        double deltaLat = mDistanceInMeters / 1000.0 / degLatKm;
+        double deltaLong = mDistanceInMeters / 1000.0 / degLongKm;
+
+        double minLat = location.getLatitude() - deltaLat;
+        double minLong = location.getLongitude() - deltaLong;
+        double maxLat = location.getLatitude() + deltaLat;
+        double maxLong = location.getLongitude() + deltaLong;
+
+        Log.d(TAG, "Min: " + Double.toString(minLat) + "," + Double.toString(minLong));
+        Log.d(TAG, "Max: " + Double.toString(maxLat) + "," + Double.toString(maxLong));
+
+
+        return new LatLngBounds(new LatLng(minLat, minLong), new LatLng(maxLat, maxLong));
     }
 }
 
