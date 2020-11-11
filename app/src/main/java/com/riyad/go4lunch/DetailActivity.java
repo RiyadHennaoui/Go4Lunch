@@ -117,20 +117,9 @@ public class DetailActivity extends AppCompatActivity {
 
     public void callPhoneNumber(String phoneNumber) {
 
-        Intent intent = new Intent(Intent.ACTION_CALL);
+        Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:" + phoneNumber));
-
-        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            this.phoneNumber = phoneNumber;
-            ActivityCompat.requestPermissions(DetailActivity.this, new String[]{Manifest.permission.CALL_PHONE},
-                    PERMISSION_TO_CALL);
-        } else {
-
-            if (intent.resolveActivity(getPackageManager()) != null) {
-                startActivity(intent);
-            }
-        }
-
+        startActivity(intent);
     }
 
     public void displayWebsite(String websiteUrl) {

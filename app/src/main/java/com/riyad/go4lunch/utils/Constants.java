@@ -50,6 +50,9 @@ public class Constants {
     //for Sign out Firebase Auth
     public static final int SIGN_OUT_TASK = 20;
 
+    //for Place Auto Complete
+    public static final int AUTOCOMPLETE_REQUEST_CODE = 300;
+
 
 
 

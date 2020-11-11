@@ -16,6 +16,7 @@ public class UserHelper {
 
     public static Task<Void> createUser(String mUid, String mUsername,  String mMail, String mUrlPicture) {
         User userToCreat = new User(mUid, mUsername, mMail, mUrlPicture);
+        //TODO vérifier que le user n'existe pas déjà dans firestore, si c'est cas ne rien faire sinon le créer.
         return UserHelper.getUsersCollection().document(mUid).set(userToCreat);
     }
 

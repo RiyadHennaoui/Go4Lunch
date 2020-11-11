@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 
@@ -32,6 +33,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
 
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -46,7 +48,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.RectangularBounds;
+import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -56,10 +65,15 @@ import com.riyad.go4lunch.fragments.WorkmateFragment;
 import com.riyad.go4lunch.ui.Restaurant;
 import com.riyad.go4lunch.viewmodels.RestaurantsViewModel;
 
+import java.util.Arrays;
+import java.util.List;
+
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static com.riyad.go4lunch.utils.Constants.API_KEY_PLACES;
+import static com.riyad.go4lunch.utils.Constants.AUTOCOMPLETE_REQUEST_CODE;
 import static com.riyad.go4lunch.utils.Constants.CURRENT_DEVICE_LOCATION;
 import static com.riyad.go4lunch.utils.Constants.DEFAULT_ZOOM;
 import static com.riyad.go4lunch.utils.Constants.KEY_CAMERA_POSITION;
@@ -84,6 +98,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private TextView userMailNavDrawer;
     private Button toolbarSearch;
     private SearchView searchView;
+    private List<Place.Field> fields;
 
     // The entry point to the fused Location Provider
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -108,7 +123,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         myNavView = findViewById(R.id.main_navigation_view);
         myMainToolbar = findViewById(R.id.main_toolbar);
         myDrawerLayout = findViewById(R.id.main_drawer_layout);
-        searchView = findViewById(R.id.menu_search);
+
 
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
@@ -128,7 +143,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         this.configureNavView();
         myNavView.setCheckedItem(R.id.action_map_view);
 //        initPlaces();
-        openMap();
+//        openMap();
 
         configureActionBarDrawer();
         View headerView = myNavView.getHeaderView(0);
@@ -138,6 +153,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         usernameNavDrawer.setText(getCurrentUser().getDisplayName());
         userMailNavDrawer.setText(getCurrentUser().getEmail());
         Glide.with(MainActivity.this.profileNavDrawer).load(getCurrentUser().getPhotoUrl()).centerCrop().into(profileNavDrawer);
+
+        //Initilaze Places
+        Places.initialize(getApplicationContext(), API_KEY_PLACES);
+
+        //Creat new places client instance
+        PlacesClient placesClient = Places.createClient(this);
+
     }
 
     private void configureActionBarDrawer() {
@@ -233,6 +255,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         if (EasyPermissions.hasPermissions(this, perms)) {
             // Already have permission, do the thing
             mLocationPermissionGranted = true;
+            openMap();
         } else {
             // Do not have permissions, request them now
             EasyPermissions.requestPermissions(this, getString(R.string.location_rationale),
@@ -274,6 +297,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 break;
 
             case R.id.menu_search:
+                Log.e("in Search", "in");
+                autocompleltePlace();
                 break;
                 //TODO ce deconnecter.
         }
@@ -454,5 +479,30 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 //                .setItems(mLikelyPlaceNames, listener)
 //                .show();
 //    }
+
+    public void autocompleltePlace(){
+        fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
+        Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
+                .setTypeFilter(TypeFilter.ESTABLISHMENT)
+                .setCountry("FR")
+                .build(this);
+        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE){
+            if (resultCode == RESULT_OK){
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                Log.i("Autocomplete Main", "Place : " + place.getName() + ", " + place.getId() );
+            }else if (resultCode == AutocompleteActivity.RESULT_ERROR){
+                Status status = Autocomplete.getStatusFromIntent(data);
+            }else if(resultCode == RESULT_CANCELED){
+
+            }
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }
 
