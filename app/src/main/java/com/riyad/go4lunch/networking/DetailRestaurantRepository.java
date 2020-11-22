@@ -129,11 +129,10 @@ public class DetailRestaurantRepository {
                         bookinfRef = restaurant.getBookingUser();
                     }
 
-                    newBookingRestaurant.setRestaurantId(restaurantId);
-                    newBookingRestaurant.setTimestamp(currentTime);
-                    newBookingRestaurant.setUserId(getCurrentUser().getUid());
-
                     if (bookinfRef.isEmpty()) {
+                        newBookingRestaurant.setRestaurantId(restaurantId);
+                        newBookingRestaurant.setTimestamp(currentTime);
+                        newBookingRestaurant.setUserId(getCurrentUser().getUid());
                         bookinfRef.add(newBookingRestaurant);
                     } else {
                         int currentCount = -1;
@@ -145,16 +144,21 @@ public class DetailRestaurantRepository {
                             }
                         }
                         if (currentCount == -1) {
+                            newBookingRestaurant.setRestaurantId(restaurantId);
+                            newBookingRestaurant.setTimestamp(currentTime);
+                            newBookingRestaurant.setUserId(getCurrentUser().getUid());
                             bookinfRef.add(newBookingRestaurant);
                         } else {
                             bookinfRef.remove(currentCount);
+
                         }
                     }
                     Log.i("bookinfRef", bookinfRef.size() + "");
                     firestoreRestaurants.update(FIELD_BOOKING_USER_FOR_RESTAURANT_DOCUMENT, bookinfRef);
+                    currentUserDocument.update(FIELD_BOOKING_USER_FOR_RESTAURANT_DOCUMENT, newBookingRestaurant);
                     bookingRestaurantMutableLiveData.setValue(bookinfRef);
                 });
-        currentUserDocument.update(FIELD_BOOKING_USER_FOR_RESTAURANT_DOCUMENT, newBookingRestaurant);
+
 
         //TODO s'abonner à l'évenement sur la detailActivity.class
         return bookingRestaurantMutableLiveData;

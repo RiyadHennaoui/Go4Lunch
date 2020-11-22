@@ -66,6 +66,7 @@ import com.riyad.go4lunch.fragments.WorkmateFragment;
 import com.riyad.go4lunch.ui.Restaurant;
 import com.riyad.go4lunch.viewmodels.DetailRestaurantViewModel;
 import com.riyad.go4lunch.viewmodels.RestaurantsViewModel;
+import com.riyad.go4lunch.worker.WorkerNotification;
 
 import java.util.Arrays;
 import java.util.List;
@@ -130,6 +131,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         myDrawerLayout = findViewById(R.id.main_drawer_layout);
 
 
+
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -163,6 +165,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         //Creat new places client instance
         PlacesClient placesClient = Places.createClient(this);
+
+
 
     }
 
@@ -372,6 +376,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.activity_main_frame_layout, mMapFragment).commit();
         mMapFragment.getMapAsync(this);
+
+
     }
 
     private void displayWorkematesFragment() {
@@ -559,5 +565,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         return new LatLngBounds(new LatLng(minLat, minLong), new LatLng(maxLat, maxLong));
     }
+
+
 }
 

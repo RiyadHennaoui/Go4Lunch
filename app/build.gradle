@@ -35,6 +35,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+
+
     // Recyclerview
     implementation "androidx.recyclerview:recyclerview:1.1.0"
 
@@ -88,6 +90,12 @@ dependencies {
 
     //Retrofit interceptor
     implementation 'com.squareup.okhttp3:logging-interceptor:4.5.0'
+
+    //Workmanager
+    implementation 'androidx.work:work-runtime:2.4.0'
+
+    //Try for fix conflict
+    implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
 
 
 

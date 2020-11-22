@@ -76,24 +76,23 @@ public class DetailActivity extends AppCompatActivity {
         restaurantID = getIntent().getStringExtra(PLACE_ID);
         // restaurantLike.setBackground(getResources().getDrawable(R.drawable.ic_baseline_star_border_24));
 
-
-        displayDetailRestaurant(restaurantID);
+        detailRestaurantViewModel = ViewModelProviders.of(DetailActivity.this).get(DetailRestaurantViewModel.class);
+        detailRestaurantViewModel.init(restaurantID);
+        displayDetailRestaurant();
         initRv();
-        displayWorkmatesBoonkingThisRestaurant(restaurantID);
+        displayWorkmatesBoonkingThisRestaurant();
     }
 
 
-    private void displayDetailRestaurant(String restaurantId) {
+    private void displayDetailRestaurant() {
 
 
-        detailRestaurantViewModel = ViewModelProviders.of(DetailActivity.this).get(DetailRestaurantViewModel.class);
-        detailRestaurantViewModel.init(restaurantId);
         detailRestaurantViewModel.getDetailRestaurant().observe(DetailActivity.this, restaurantDetail -> {
             Glide.with(restaurantPicture).load(restaurantDetail.getRestaurantImageUrl()).centerCrop().into(restaurantPicture);
             setBookingIcon(restaurantDetail.getBookingUser());
             setRatingIcon(restaurantDetail.getRatingUser());
-            fbBookingRestaurant.setOnClickListener(v -> bookRestaurant(restaurantId));
-            restaurantLike.setOnClickListener(v -> likeThisRestaurant(restaurantId));
+            fbBookingRestaurant.setOnClickListener(v -> bookRestaurant());
+            restaurantLike.setOnClickListener(v -> likeThisRestaurant());
             restaurantName.setText(restaurantDetail.getName());
             restaurantCall.setOnClickListener(v -> callPhoneNumber(restaurantDetail.getRestaurantDetail().getFormattedNumber()));
             restaurantWebsite.setOnClickListener(v -> displayWebsite(restaurantDetail.getRestaurantDetail().getWebsite()));
@@ -101,10 +100,8 @@ public class DetailActivity extends AppCompatActivity {
         });
     }
 
-    private void displayWorkmatesBoonkingThisRestaurant(String restaurantId) {
-        detailRestaurantViewModel = ViewModelProviders.of(DetailActivity.this).get(DetailRestaurantViewModel.class);
-        detailRestaurantViewModel.init(restaurantId);
-        detailRestaurantViewModel.getWorkmateBookingRestaurantMutableLiveData(restaurantId).observe(DetailActivity.this,
+    private void displayWorkmatesBoonkingThisRestaurant() {
+        detailRestaurantViewModel.getWorkmateBookingRestaurantMutableLiveData(restaurantID).observe(DetailActivity.this,
                 workmates -> {
                     workmatesBookingRestaurantAdapter = new WorkmatesBookingRestaurantAdapter(workmates);
                     rvDetailActivity.setAdapter(workmatesBookingRestaurantAdapter);
@@ -130,9 +127,13 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
-    public void bookRestaurant(String restaurantId) {
-        detailRestaurantViewModel.getBookingRestaurantMutableLiveData(restaurantId)
-                .observe(DetailActivity.this, this::setBookingIcon);
+    //TODO Reparer les valeurs sont null !!!
+    public void bookRestaurant() {
+        detailRestaurantViewModel.getBookingRestaurantMutableLiveData(restaurantID)
+                .observe(DetailActivity.this, bookingRestaurants -> {
+                    setBookingIcon(bookingRestaurants);
+                    displayWorkmatesBoonkingThisRestaurant();
+                });
 
     }
 
@@ -143,7 +144,6 @@ public class DetailActivity extends AppCompatActivity {
                 isBook = true;
             }
         }
-        //TODO le changement d'icone ne fonctionne pas lors de chaque lancement de l'activité.
         if (isBook) {
             fbBookingRestaurant.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_clear_24));
         } else {
@@ -151,8 +151,8 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
-    public void likeThisRestaurant(String restaurantId) {
-        detailRestaurantViewModel.getRestaurantLikes(restaurantId)
+    public void likeThisRestaurant() {
+        detailRestaurantViewModel.getRestaurantLikes(restaurantID)
                 .observe(DetailActivity.this, this::setRatingIcon);
     }
 
