@@ -19,7 +19,9 @@ public class Restaurant implements Parcelable {
     private Location restaurantLocation;
     private String restaurantAdress;
     private RestaurantDetail restaurantDetail;
+    //TODO modifier le BookingRestaurant en User.
     private ArrayList<BookingRestaurant> bookingUser = new ArrayList<>();
+    //TODO modifier le RatingRestaurant en User.
     private ArrayList<RatingRestaurant> ratingUser = new ArrayList<>();
 
 

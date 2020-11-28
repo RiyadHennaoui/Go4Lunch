@@ -1,11 +1,8 @@
 package com.riyad.go4lunch.worker;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -18,12 +15,38 @@ import androidx.work.WorkManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 import com.riyad.go4lunch.MainActivity;
 import com.riyad.go4lunch.R;
+import com.riyad.go4lunch.model.BookingRestaurant;
+import com.riyad.go4lunch.model.User;
+import com.riyad.go4lunch.ui.Restaurant;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import static com.riyad.go4lunch.utils.Constants.COLLECTION_RESTAURANTS_NAME;
+import static com.riyad.go4lunch.utils.Constants.COLLECTION_USER_NAME;
+
 public class WorkerNotification extends Worker {
+
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+    private CollectionReference userDb;
+    private CollectionReference restaurantDb;
+    private ArrayList<String> workmatesBookId = new ArrayList<>();
+    private User user;
+    private Restaurant restaurant;
+
+
     public WorkerNotification(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }
@@ -32,22 +55,145 @@ public class WorkerNotification extends Worker {
     @Override
     public Result doWork() {
         Log.e("DoWork", "inDo work");
+        //TODO revoir la modélisation suite au problème de BookingRestaurant et BoonkingUser;
         //TODO appel firestore pour récupérer l'utilisateur
         //TODO si le booking restaurant n'est pas null, prendre l'id du restaurant et récuperer ce restaurant dans firestore.
         //TODO récuperer la liste des users qui ont reservé sans oublier d'enlever le current user.
         //TODO appeler show notification.
-        showNotification();
+
+
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        restaurantDb = firebaseFirestore.collection(COLLECTION_RESTAURANTS_NAME);
+
+
+          getCurrentUserInFirestore();
+
+
+
         return Result.success();
+    }
+
+    private FirebaseUser getCurrentUser() {
+        return FirebaseAuth.getInstance().getCurrentUser();
+    }
+
+    //TODO appel firestore pour récupérer l'utilisateur
+    private void getCurrentUserInFirestore(){
+
+        DocumentReference userDocument = firebaseFirestore.collection(COLLECTION_USER_NAME).document(getCurrentUser().getUid());
+
+        userDocument.get()
+                .addOnCompleteListener(task -> {
+                    DocumentSnapshot userDocumentFind = task.getResult();
+                    user = userDocumentFind.toObject(User.class);
+
+                    getRestaurantBookByCurrentUser(user);
+                });
+
+    }
+    //TODO si le booking restaurant n'est pas null, prendre l'id du restaurant et récuperer ce restaurant dans firestore.
+
+    private Restaurant getRestaurantBookByCurrentUser(User currentUser){
+
+
+        restaurantDb.document(currentUser.getBookingRestaurant().get(0).getRestaurantId())
+                .get()
+                .addOnCompleteListener(task -> {
+
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    restaurant = documentSnapshot.toObject(Restaurant.class);
+
+        Log.e("le resteau", restaurant.getName());
+
+                    showNotification(restaurant.getRestaurantAdress(), restaurant.getName(), "Moi");
+                });
+
+
+
+        return restaurant;
     }
 
 
 
 
-    public static void periodRequest(){
+    private BookingRestaurant getBoonkingRestaurantForCurrentUser() {
+
+        BookingRestaurant bookingRestaurant = new BookingRestaurant();
+        userDb = firebaseFirestore.collection(COLLECTION_USER_NAME);
+        DocumentReference userDoc = userDb.document(getCurrentUser().getUid());
+
+        userDoc
+                .get()
+                .addOnCompleteListener(task -> {
+                    User currentUser;
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    currentUser = documentSnapshot.toObject(User.class);
+                    Gson gson = new Gson();
+                    Log.e("CurrentUser", gson.toJson(currentUser));
+                    bookingRestaurant.setRestaurantId(currentUser.getBookingRestaurant().get(0).getRestaurantId());
+                });
+
+        return bookingRestaurant;
+    }
+
+    //TODO récuperer la liste des users qui ont reservé sans oublier d'enlever le current user.
+    private ArrayList<User> getAllUsersBookRestaurant(String restaurantId){
+
+
+
+        ArrayList<User> bookingUserList = new ArrayList<>();
+        workmatesBookId = new ArrayList<>();
+
+
+        if (restaurantId != null){
+            restaurantDb = firebaseFirestore.collection(COLLECTION_RESTAURANTS_NAME);
+            DocumentReference userIddocumentReference = restaurantDb.document(restaurantId);
+
+
+            userIddocumentReference.get()
+                    .addOnCompleteListener(task -> {
+                        Restaurant currentRestaurantBook;
+                       DocumentSnapshot documentSnapshot = task.getResult();
+                       currentRestaurantBook = documentSnapshot.toObject(Restaurant.class);
+
+                       for (int i =0; i < currentRestaurantBook.getBookingUser().size(); i++){
+                          workmatesBookId.add(currentRestaurantBook.getBookingUser().get(i).getUserId());
+                       }
+                    });
+
+
+           userDb.get()
+                   .addOnCompleteListener(task2 -> {
+                       List<User> workmateRestaurantBook;
+                       QuerySnapshot documentSnapshot = task2.getResult();
+                       workmateRestaurantBook = documentSnapshot.toObjects(User.class);
+                       if (!workmateRestaurantBook.isEmpty()) {
+                           for (int i = 0; i < workmatesBookId.size(); i++) {
+                               for (int j = 0; j < workmateRestaurantBook.size(); j++) {
+                                   if (workmateRestaurantBook.get(j).getmUid().equals(workmatesBookId.get(i))) {
+                                       Log.i("ici", "ici " + workmateRestaurantBook.get(j).getmUid());
+                                       //TODO ajouter le if en dessous a la fin des tests.
+                                       // if (!workmateRestaurantBook.get(j).getmUid().equals(getCurrentUser().getUid())){
+                                       bookingUserList.add(workmateRestaurantBook.get(j));
+                                       //  }
+                                   }
+                               }
+                           }
+
+                       }
+                   });
+
+        }
+
+        return bookingUserList;
+    }
+
+
+    public static void periodRequest() {
 
         PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(WorkerNotification.class,
                 1, TimeUnit.SECONDS)
-                .setInitialDelay(1, TimeUnit.SECONDS)
+                .setInitialDelay(15, TimeUnit.SECONDS)
 //                .setConstraints(setConst())
                 .build();
 
@@ -56,7 +202,7 @@ public class WorkerNotification extends Worker {
     }
 
 
-    public void showNotification(){
+    public void showNotification(String restaurantAdress, String  restaurantName, String utilisitaeurs) {
 
         Log.e("Notif", "here");
 
@@ -67,8 +213,8 @@ public class WorkerNotification extends Worker {
 
         NotificationCompat.Builder notificationCompat = new NotificationCompat.Builder(getApplicationContext(), "4")
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Title")
-                .setContentText("text")
+                .setContentTitle("Votre reservation au : " + restaurantName)
+                .setContentText("avec vous : " + utilisitaeurs + "\n" + restaurantAdress)
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true);
@@ -76,6 +222,18 @@ public class WorkerNotification extends Worker {
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
         notificationManagerCompat.notify(4, notificationCompat.build());
 
+    }
+
+    private String getUsersNames(ArrayList<User> utilisitaeurs) {
+
+        String listUtilisateurs = "Moi ";
+
+//        for (int i = 0; i < utilisitaeurs.size(); i++){
+//          listUtilisateurs +=  utilisitaeurs.get(i).getmUsername() + ", \n " ;
+//
+//    }
+
+        return listUtilisateurs;
     }
 
     private static Constraints setConst() {

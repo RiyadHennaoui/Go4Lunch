@@ -17,6 +17,7 @@ public class User {
     @Nullable private String mUrlPicture;
     //TODO pas besoin de list pour le bookingRestaurant
     private ArrayList<BookingRestaurant> bookingRestaurant = new ArrayList<>();
+    //TODO ajouter une liste de Restaurant pour le rating : RatedRestaurants
 
 
     public User() { } // Needed for Firebase
