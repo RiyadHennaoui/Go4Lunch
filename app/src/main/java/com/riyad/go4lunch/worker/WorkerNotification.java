@@ -82,21 +82,39 @@ public class WorkerNotification extends Worker {
 
         DocumentReference userDocument = firebaseFirestore.collection(COLLECTION_USER_NAME).document(getCurrentUser().getUid());
 
+        Log.e("getCurrentUserInFire", "Avant Lambda");
         userDocument.get()
                 .addOnCompleteListener(task -> {
+
                     DocumentSnapshot userDocumentFind = task.getResult();
                     user = userDocumentFind.toObject(User.class);
 
                     getRestaurantBookByCurrentUser(user);
+
+                    Log.e("getCurrentUserWorker", user.getmUsername() + " / " + user.getBookingRestaurant().getRestaurantId());
                 });
 
     }
     //TODO si le booking restaurant n'est pas null, prendre l'id du restaurant et récuperer ce restaurant dans firestore.
 
-    private Restaurant getRestaurantBookByCurrentUser(User currentUser){
+    private void getRestaurantBookByCurrentUser(User currentUser){
 
+        String testFirestoreDataMapMail = currentUser.getmMail();
+        String testFirestoreDataMapId = currentUser.getmUid();
+        String testFirestoreDataMapUrlPicture = currentUser.getmUrlPicture();
+        String testFirestoreDataMapObjectBook = currentUser.getBookingRestaurant().toString();
+        String restaurantIdFound = currentUser.getBookingRestaurant().getRestaurantId();
 
-        restaurantDb.document(currentUser.getBookingRestaurant().get(0).getRestaurantId())
+        Gson gson = new Gson();
+
+        Log.e("getRestaurantBook", "avant Appel : "
+                + "Mail : " + testFirestoreDataMapMail
+                + "ID User : " + testFirestoreDataMapId
+                + "Url Picture :" + testFirestoreDataMapUrlPicture
+                + "Objet Bookrestau : " + gson.toJson(currentUser.getBookingRestaurant())
+                + "nom du restau : " + restaurantIdFound);
+
+        restaurantDb.document(restaurantIdFound)
                 .get()
                 .addOnCompleteListener(task -> {
 
@@ -105,12 +123,9 @@ public class WorkerNotification extends Worker {
 
         Log.e("le resteau", restaurant.getName());
 
-                    showNotification(restaurant.getRestaurantAdress(), restaurant.getName(), "Moi");
+                    showNotification(restaurant.getRestaurantAdress(), restaurant.getName(), currentUser.getmUsername());
                 });
 
-
-
-        return restaurant;
     }
 
 
@@ -130,7 +145,7 @@ public class WorkerNotification extends Worker {
                     currentUser = documentSnapshot.toObject(User.class);
                     Gson gson = new Gson();
                     Log.e("CurrentUser", gson.toJson(currentUser));
-                    bookingRestaurant.setRestaurantId(currentUser.getBookingRestaurant().get(0).getRestaurantId());
+                    bookingRestaurant.setRestaurantId(currentUser.getBookingRestaurant().getRestaurantId());
                 });
 
         return bookingRestaurant;

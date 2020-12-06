@@ -142,6 +142,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void setUserPhotoProfile(String photoUrl) {
 
+        //TODO Le faire via un Repo !!!!
 
 
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()

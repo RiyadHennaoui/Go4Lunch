@@ -318,8 +318,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         DetailRestaurantViewModel detailRestaurantViewModel;
         detailRestaurantViewModel = ViewModelProviders.of(MainActivity.this).get(DetailRestaurantViewModel.class);
-        detailRestaurantViewModel.init(restaurantId);
-        detailRestaurantViewModel.getDetailRestaurant().observe(MainActivity.this, restaurant -> {
+        detailRestaurantViewModel.init();
+        detailRestaurantViewModel.getDetailRestaurant(restaurantId).observe(MainActivity.this, restaurant -> {
 //                mMap.clear();
             if (restaurant == null) {
                 Toast.makeText(this, "Le restaurant n'est pas dans le rayon de recherche", Toast.LENGTH_SHORT).show();

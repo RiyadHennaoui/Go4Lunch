@@ -60,6 +60,8 @@ public class SplashScreen extends AppCompatActivity {
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.GoogleBuilder().build(),
+
+//TODO Revoir l'autenthification de FB !
 //                new AuthUI.IdpConfig.FacebookBuilder().build(),
                 new AuthUI.IdpConfig.TwitterBuilder().build());
 
@@ -79,6 +81,8 @@ public class SplashScreen extends AppCompatActivity {
 
     private void creatUserInFirestore(){
 
+
+        //TODO Crée un Repo Pour les Users, supprimer la class UserHelper, sans oublier de faire le TODO de vérification si le compte existe dèja!!!
         if (userCurrentLogged()){
 
             String mUid = this.getCurrentUser().getUid();

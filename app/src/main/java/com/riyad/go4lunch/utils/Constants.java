@@ -24,7 +24,7 @@ public class Constants {
     public static final String COLLECTION_USER_NAME = "user";
     public static final String COLLECTION_RESTAURANTS_NAME = "restaurants";
     public static final String FIELD_RATING_USER_FOR_RESTAURANT_DOCUMENT = "ratingUser";
-    public static final String FIELD_BOOKING_USER_FOR_RESTAURANT_DOCUMENT = "bookingUser";
+    public static final String FIELD_BOOKING_USER_FOR_RESTAURANT_DOCUMENT = "bookingRestaurant";
     public static final String COLLECTION_CHAT = "chat";
 
     //for message type

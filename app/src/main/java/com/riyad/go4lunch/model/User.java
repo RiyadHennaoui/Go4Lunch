@@ -16,7 +16,7 @@ public class User {
     private String mMail;
     @Nullable private String mUrlPicture;
     //TODO pas besoin de list pour le bookingRestaurant
-    private ArrayList<BookingRestaurant> bookingRestaurant = new ArrayList<>();
+    private BookingRestaurant bookingRestaurant = new BookingRestaurant();
     //TODO ajouter une liste de Restaurant pour le rating : RatedRestaurants
 
 
@@ -38,9 +38,7 @@ public class User {
     public String getmUid() { return mUid; }
     public String getmUsername() { return mUsername; }
     public String getmMail() { return mMail; }
-    public ArrayList<BookingRestaurant> getBookingRestaurant() {
-        return bookingRestaurant;
-    }
+    public BookingRestaurant getBookingRestaurant() { return bookingRestaurant; }
 
 
     // --- SETTERS ---
@@ -49,5 +47,5 @@ public class User {
     public void setmUsername(String mUsername) { this.mUsername = mUsername; }
     public void setmUrlPicture(@Nullable String mUrlPicture) { this.mUrlPicture = mUrlPicture; }
     public void setmMail(String mMail) { this.mMail = mMail; }
-    public void setBookingRestaurant(ArrayList<BookingRestaurant> bookingRestaurant) { this.bookingRestaurant = bookingRestaurant; }
+    public void setBookingRestaurant(BookingRestaurant bookingRestaurant) { this.bookingRestaurant = bookingRestaurant; }
 }

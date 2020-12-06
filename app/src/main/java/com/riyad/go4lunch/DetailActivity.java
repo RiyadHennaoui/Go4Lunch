@@ -77,7 +77,7 @@ public class DetailActivity extends AppCompatActivity {
         // restaurantLike.setBackground(getResources().getDrawable(R.drawable.ic_baseline_star_border_24));
 
         detailRestaurantViewModel = ViewModelProviders.of(DetailActivity.this).get(DetailRestaurantViewModel.class);
-        detailRestaurantViewModel.init(restaurantID);
+        detailRestaurantViewModel.init();
         displayDetailRestaurant();
         initRv();
         displayWorkmatesBoonkingThisRestaurant();
@@ -87,7 +87,7 @@ public class DetailActivity extends AppCompatActivity {
     private void displayDetailRestaurant() {
 
 
-        detailRestaurantViewModel.getDetailRestaurant().observe(DetailActivity.this, restaurantDetail -> {
+        detailRestaurantViewModel.getDetailRestaurant(restaurantID).observe(DetailActivity.this, restaurantDetail -> {
             Glide.with(restaurantPicture).load(restaurantDetail.getRestaurantImageUrl()).centerCrop().into(restaurantPicture);
             setBookingIcon(restaurantDetail.getBookingUser());
             setRatingIcon(restaurantDetail.getRatingUser());

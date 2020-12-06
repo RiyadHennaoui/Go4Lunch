@@ -55,6 +55,7 @@ public class DetailRestaurantRepository {
                     Restaurant restaurant;
                     DocumentSnapshot currentDocument = task.getResult();
                     restaurant = currentDocument.toObject(Restaurant.class);
+                    Log.e("RepoDetail", id + " ; " + restaurant.getId());
                     restaurantMutableLiveData.setValue(restaurant);
                 });
         return restaurantMutableLiveData;

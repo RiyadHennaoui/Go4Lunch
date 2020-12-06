@@ -1,5 +1,7 @@
 package com.riyad.go4lunch.viewmodels;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -19,25 +21,16 @@ public class DetailRestaurantViewModel extends ViewModel {
     private MutableLiveData<ArrayList<BookingRestaurant>> bookingRestaurantMutableLiveData;
     private MutableLiveData<ArrayList<RatingRestaurant>> restaurantLikes;
     private MutableLiveData<ArrayList<User>> workmateBookingRestaurantMutableLiveData;
-    public void init(String restaurantId){
-
-        if(restaurantDetailMutableLiveData != null){
-            return;
-        }
-
-
-        detailRestaurantRepository = DetailRestaurantRepository.getInstance();
-        restaurantDetailMutableLiveData = detailRestaurantRepository.getRestaurantDetailNew(restaurantId);
-
+    public void init(){
+                detailRestaurantRepository = DetailRestaurantRepository.getInstance();
     }
 
-    public LiveData<Restaurant> getDetailRestaurant(){
+    public LiveData<Restaurant> getDetailRestaurant(String restaurantId){
+        restaurantDetailMutableLiveData = detailRestaurantRepository.getRestaurantDetailNew(restaurantId);
         return restaurantDetailMutableLiveData;
     }
 
-
-
-    //TODO sur un click de l'utilisateur appeler le repo pour faire le booking.
+    
     public MutableLiveData<ArrayList<BookingRestaurant>> getBookingRestaurantMutableLiveData (String restaurantId){
         bookingRestaurantMutableLiveData = detailRestaurantRepository.bookingRestaurantRepo(restaurantId);
         return  bookingRestaurantMutableLiveData;

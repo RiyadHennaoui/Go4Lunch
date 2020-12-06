@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,8 +101,9 @@ public class RestaurantsFragment extends Fragment {
 
         DetailRestaurantViewModel detailRestaurantViewModel;
         detailRestaurantViewModel = ViewModelProviders.of(this.getActivity()).get(DetailRestaurantViewModel.class);
-        detailRestaurantViewModel.init(restaurantId);
-        detailRestaurantViewModel.getDetailRestaurant().observe(this.getActivity(), restaurant -> {
+        Log.e("Autocomplete : ", restaurantId);
+        detailRestaurantViewModel.init();
+        detailRestaurantViewModel.getDetailRestaurant(restaurantId).observe(this.getActivity(), restaurant -> {
 
             if (restaurant == null) {
                 Toast.makeText(this.getActivity(), "Le restaurant n'est pas dans le rayon de recherche", Toast.LENGTH_SHORT).show();
