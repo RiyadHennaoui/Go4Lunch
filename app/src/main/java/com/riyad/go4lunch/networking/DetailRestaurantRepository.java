@@ -126,8 +126,8 @@ public class DetailRestaurantRepository {
                     Restaurant restaurant;
                     DocumentSnapshot documentSnapshot = task.getResult();
                     restaurant = documentSnapshot.toObject(Restaurant.class);
-                    if (restaurant.getBookingUser() != null) {
-                        bookinfRef = restaurant.getBookingUser();
+                    if (restaurant.getBookingRestaurant() != null) {
+                        bookinfRef = restaurant.getBookingRestaurant();
                     }
 
                     if (bookinfRef.isEmpty()) {
@@ -137,9 +137,9 @@ public class DetailRestaurantRepository {
                         bookinfRef.add(newBookingRestaurant);
                     } else {
                         int currentCount = -1;
-                        for (int i = 0; i < restaurant.getBookingUser().size(); i++) {
+                        for (int i = 0; i < restaurant.getBookingRestaurant().size(); i++) {
 
-                            if (restaurant.getBookingUser().get(i).getUserId().equals(getCurrentUser().getUid())) {
+                            if (restaurant.getBookingRestaurant().get(i).getUserId().equals(getCurrentUser().getUid())) {
                                 currentCount = i;
                                 break;
                             }
@@ -181,9 +181,9 @@ public class DetailRestaurantRepository {
                     Restaurant currentRestaurant;
                     DocumentSnapshot currentDocument = task.getResult();
                     currentRestaurant = currentDocument.toObject(Restaurant.class);
-                    if (currentRestaurant.getBookingUser() != null) {
-                        for (int i = 0; i < currentRestaurant.getBookingUser().size(); i++) {
-                            workmatesBookId.add(currentRestaurant.getBookingUser().get(i).getUserId());
+                    if (currentRestaurant.getBookingRestaurant() != null) {
+                        for (int i = 0; i < currentRestaurant.getBookingRestaurant().size(); i++) {
+                            workmatesBookId.add(currentRestaurant.getBookingRestaurant().get(i).getUserId());
                             Log.i("workmatesBookId", workmatesBookId.get(i));
                         }
 

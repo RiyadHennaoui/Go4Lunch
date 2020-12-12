@@ -1,19 +1,13 @@
 package com.riyad.go4lunch;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -46,7 +40,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
@@ -66,7 +59,6 @@ import com.riyad.go4lunch.fragments.WorkmateFragment;
 import com.riyad.go4lunch.ui.Restaurant;
 import com.riyad.go4lunch.viewmodels.DetailRestaurantViewModel;
 import com.riyad.go4lunch.viewmodels.RestaurantsViewModel;
-import com.riyad.go4lunch.worker.WorkerNotification;
 
 import java.util.Arrays;
 import java.util.List;
@@ -346,7 +338,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             Log.e("mapList", restaurants.size() + "");
             int index = 0;
             for (Restaurant restaurant : restaurants) {
-                if (!restaurants.get(index).getBookingUser().isEmpty()) {
+                if (!restaurants.get(index).getBookingRestaurant().isEmpty()) {
                     mMap.addMarker(new MarkerOptions()
                             .title(restaurant.getName())
                             .snippet(restaurant.getId())

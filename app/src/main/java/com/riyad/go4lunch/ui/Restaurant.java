@@ -20,14 +20,10 @@ public class Restaurant implements Parcelable {
     private String restaurantAdress;
     private RestaurantDetail restaurantDetail;
     //TODO modifier le BookingRestaurant en User.
-    private ArrayList<BookingRestaurant> bookingUser = new ArrayList<>();
+    private ArrayList<BookingRestaurant> bookingRestaurant = new ArrayList<>();
     //TODO modifier le RatingRestaurant en User.
     private ArrayList<RatingRestaurant> ratingUser = new ArrayList<>();
 
-
-    public void setRatingUser(ArrayList<RatingRestaurant> ratingUser) {
-        this.ratingUser = ratingUser;
-    }
 
     public Restaurant() {
     }
@@ -43,10 +39,10 @@ public class Restaurant implements Parcelable {
     }
 
     //GETTERS
+
     public String getId() {
         return id;
     }
-
     public String getName() {
         return name;
     }
@@ -63,8 +59,8 @@ public class Restaurant implements Parcelable {
         return restaurantLocation;
     }
 
-    public ArrayList<BookingRestaurant> getBookingUser() {
-        return bookingUser;
+    public ArrayList<BookingRestaurant> getBookingRestaurant() {
+        return bookingRestaurant;
     }
 
     public ArrayList<RatingRestaurant> getRatingUser() {
@@ -80,10 +76,10 @@ public class Restaurant implements Parcelable {
     }
 
     //SETTERS
+
     public void setId(String id) {
         this.id = id;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -104,8 +100,12 @@ public class Restaurant implements Parcelable {
         this.restaurantDetail = restaurantDetail;
     }
 
-    public void setBookingUser(ArrayList<BookingRestaurant> bookingUser) {
-        this.bookingUser = bookingUser;
+    public void setBookingRestaurant(ArrayList<BookingRestaurant> bookingRestaurant) {
+        this.bookingRestaurant = bookingRestaurant;
+    }
+
+    public void setRatingUser(ArrayList<RatingRestaurant> ratingUser) {
+        this.ratingUser = ratingUser;
     }
 
     @Override

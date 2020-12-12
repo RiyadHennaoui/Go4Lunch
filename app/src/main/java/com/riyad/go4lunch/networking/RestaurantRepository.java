@@ -128,7 +128,10 @@ public class RestaurantRepository {
         for (int i = 0; i < restaurants.size(); i++) {
 
             int finalI = i;
-            googlePlacesAPI.getRestaurantDetail(restaurants.get(i).getId(), "name,formatted_phone_number,opening_hours,photos,website,vicinity,formatted_address", API_KEY_PLACES)
+            googlePlacesAPI
+                    .getRestaurantDetail(restaurants.get(i).getId(),
+                            "name,formatted_phone_number,opening_hours,photos,website,vicinity,formatted_address",
+                            API_KEY_PLACES)
                     .enqueue(new Callback<DetailRestaurant>() {
                         @Override
                         public void onResponse(Call<DetailRestaurant> call, Response<DetailRestaurant> response) {
@@ -185,9 +188,7 @@ public class RestaurantRepository {
 
         String photoReference = restaurantDetail.getResult().getPhotos().get(0).getPhotoReference();
         String photoUrlFormated = BASE_PHOTO_URL + photoReference + "&key=" + API_KEY_PLACES;
-        Gson gson = new Gson();
 
-        Log.e("restaurant detail", gson.toJson(restaurantDetail));
         return new RestaurantDetail(restaurantDetail.getResult().getName(),
                 restaurantDetail.getResult().getVicinity(),
                 restaurantDetail.getResult().getWebsite(),

@@ -2,41 +2,30 @@ package com.riyad.go4lunch;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.riyad.go4lunch.adapter.WorkmatesBookingRestaurantAdapter;
 import com.riyad.go4lunch.model.BookingRestaurant;
 import com.riyad.go4lunch.model.RatingRestaurant;
-import com.riyad.go4lunch.model.User;
 import com.riyad.go4lunch.viewmodels.DetailRestaurantViewModel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.riyad.go4lunch.utils.Constants.PERMISSION_TO_CALL;
 import static com.riyad.go4lunch.utils.Constants.PLACE_ID;
@@ -85,7 +74,7 @@ public class DetailActivity extends AppCompatActivity {
 
         detailRestaurantViewModel.getDetailRestaurant(restaurantID).observe(DetailActivity.this, restaurantDetail -> {
             Glide.with(restaurantPicture).load(restaurantDetail.getRestaurantImageUrl()).centerCrop().into(restaurantPicture);
-            setBookingIcon(restaurantDetail.getBookingUser());
+            setBookingIcon(restaurantDetail.getBookingRestaurant());
             setRatingIcon(restaurantDetail.getRatingUser());
             fbBookingRestaurant.setOnClickListener(v -> bookRestaurant());
             restaurantLike.setOnClickListener(v -> likeThisRestaurant());
@@ -97,6 +86,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void displayWorkmatesBoonkingThisRestaurant() {
+        //TODO n'affiche pas la liste mais seulement le premier user qui book! a voir
         detailRestaurantViewModel.getWorkmateBookingRestaurantMutableLiveData(restaurantID).observe(DetailActivity.this,
                 workmates -> {
                     workmatesBookingRestaurantAdapter = new WorkmatesBookingRestaurantAdapter(workmates);
@@ -139,7 +129,6 @@ public class DetailActivity extends AppCompatActivity {
                 isBook = true;
             }
         }
-        //TODO Ne fonctionne plus corectement lorsque je quitte l'activitée et que je revien le restaurant n'est plus booké.
         if (isBook) {
             fbBookingRestaurant.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_clear_24));
         } else {

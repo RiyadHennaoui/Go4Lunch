@@ -2,7 +2,6 @@ package com.riyad.go4lunch.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,17 +11,13 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.riyad.go4lunch.DetailActivity;
 import com.riyad.go4lunch.R;
 import com.riyad.go4lunch.ui.Restaurant;
-import com.riyad.go4lunch.data.Result;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.riyad.go4lunch.utils.Constants.PLACE_ID;
@@ -99,7 +94,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
 
             opening_hour.setText(restaurant.getRestaurantDetail().getFormattedOpeningHour());
 
-            workmatesNumbreBook.setText("(" + restaurant.getBookingUser().size() + ")");
+            workmatesNumbreBook.setText("(" + restaurant.getBookingRestaurant().size() + ")");
             Glide.with(countryFood).load(restaurant.getRestaurantImageUrl()).circleCrop().into(countryFood);
 
             itemView.setOnClickListener(view -> {

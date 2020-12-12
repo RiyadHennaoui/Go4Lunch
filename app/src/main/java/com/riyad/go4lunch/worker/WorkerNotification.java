@@ -8,7 +8,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
@@ -122,7 +121,7 @@ public class WorkerNotification extends Worker {
 
                     Log.e("le resteau", restaurant.getName());
 
-                    showNotification(restaurant.getRestaurantAdress(), restaurant.getName(), getUsersNames(getAllUsersBookRestaurant(restaurant.getId())));
+                    showNotification(restaurant.getRestaurantAdress(), restaurant.getName(), getCurrentUser().getDisplayName());
                 });
 
     }
@@ -168,8 +167,8 @@ public class WorkerNotification extends Worker {
                         DocumentSnapshot documentSnapshot = task.getResult();
                         currentRestaurantBook = documentSnapshot.toObject(Restaurant.class);
 
-                        for (int i = 0; i < currentRestaurantBook.getBookingUser().size(); i++) {
-                            workmatesBookId.add(currentRestaurantBook.getBookingUser().get(i).getUserId());
+                        for (int i = 0; i < currentRestaurantBook.getBookingRestaurant().size(); i++) {
+                            workmatesBookId.add(currentRestaurantBook.getBookingRestaurant().get(i).getUserId());
                         }
                     });
 
