@@ -94,10 +94,8 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
             ratingBar.setRating(ratingFloat);
 
             distance.setText(restaurant.getDistanceAsString() + "m");
-            //TODO trouver comment implemanter les etoiles et une image pour le type de cuisine.
-            restaurantAdress.setText(restaurant.getRestaurantAdress());
 
-            //TODO afficher l'ouverture ou fermeture du restaurant
+            restaurantAdress.setText(restaurant.getRestaurantAdress());
 
             opening_hour.setText(restaurant.getRestaurantDetail().getFormattedOpeningHour());
 
@@ -105,7 +103,6 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
             Glide.with(countryFood).load(restaurant.getRestaurantImageUrl()).circleCrop().into(countryFood);
 
             itemView.setOnClickListener(view -> {
-                        //TODO INTENT vers l'acitivtée détail Restaurant.
 
                         Intent intent = new Intent(context, DetailActivity.class);
                         intent.putExtra(PLACE_ID, restaurant.getId());

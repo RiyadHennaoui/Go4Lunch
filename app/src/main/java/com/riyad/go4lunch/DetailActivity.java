@@ -53,11 +53,9 @@ public class DetailActivity extends AppCompatActivity {
     private String restaurantID;
     private String phoneNumber;
     private DetailRestaurantViewModel detailRestaurantViewModel;
-    private Boolean isBook = false;
     private RecyclerView rvDetailActivity;
     private WorkmatesBookingRestaurantAdapter workmatesBookingRestaurantAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    private User usersBook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +72,6 @@ public class DetailActivity extends AppCompatActivity {
         rvDetailActivity = findViewById(R.id.main_rv);
 
         restaurantID = getIntent().getStringExtra(PLACE_ID);
-        // restaurantLike.setBackground(getResources().getDrawable(R.drawable.ic_baseline_star_border_24));
 
         detailRestaurantViewModel = ViewModelProviders.of(DetailActivity.this).get(DetailRestaurantViewModel.class);
         detailRestaurantViewModel.init();
@@ -85,7 +82,6 @@ public class DetailActivity extends AppCompatActivity {
 
 
     private void displayDetailRestaurant() {
-
 
         detailRestaurantViewModel.getDetailRestaurant(restaurantID).observe(DetailActivity.this, restaurantDetail -> {
             Glide.with(restaurantPicture).load(restaurantDetail.getRestaurantImageUrl()).centerCrop().into(restaurantPicture);
@@ -127,7 +123,6 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
-    //TODO Reparer les valeurs sont null !!!
     public void bookRestaurant() {
         detailRestaurantViewModel.getBookingRestaurantMutableLiveData(restaurantID)
                 .observe(DetailActivity.this, bookingRestaurants -> {
@@ -144,6 +139,7 @@ public class DetailActivity extends AppCompatActivity {
                 isBook = true;
             }
         }
+        //TODO Ne fonctionne plus corectement lorsque je quitte l'activitée et que je revien le restaurant n'est plus booké.
         if (isBook) {
             fbBookingRestaurant.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_clear_24));
         } else {
@@ -159,11 +155,10 @@ public class DetailActivity extends AppCompatActivity {
     private void setRatingIcon(ArrayList<RatingRestaurant> like) {
         boolean isLike = false;
         Log.e("rating", "click");
-//                    if (like != null || like.isEmpty()) {
+
         for (int i = 0; i < like.size(); i++) {
             if (like.get(i).getUserId().equals(getCurrentUser().getUid())) {
                     isLike = true;
-//                            }
             }
         }
         if (isLike) {

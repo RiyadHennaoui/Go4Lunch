@@ -343,13 +343,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         restaurantsViewModel = ViewModelProviders.of(MainActivity.this).get(RestaurantsViewModel.class);
         restaurantsViewModel.init(nearbySearchLocationFormat);
         restaurantsViewModel.getRestaurantRepository().observe(MainActivity.this, restaurants -> {
-//                            restaurantAdapter.setData(restaurants);
             Log.e("mapList", restaurants.size() + "");
-
             int index = 0;
             for (Restaurant restaurant : restaurants) {
                 if (!restaurants.get(index).getBookingUser().isEmpty()) {
-                    //TODO trouver comment ajouter l'info de l'id du restaurant.
                     mMap.addMarker(new MarkerOptions()
                             .title(restaurant.getName())
                             .snippet(restaurant.getId())
@@ -411,15 +408,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
             @Override
             public View getInfoContents(Marker marker) {
-                // Inflate the layouts for the info window, title and snippet.
                 View infoWindow = getLayoutInflater().inflate(R.layout.custom_info_contents,
-                        (FrameLayout) findViewById(R.id.map), false);
+                       findViewById(R.id.map), false);
 
                 TextView title = infoWindow.findViewById(R.id.custom_info_title);
                 title.setText(marker.getTitle());
-
-//                TextView snippet = infoWindow.findViewById(R.id.custom_info_snippet);
-//                snippet.setText(marker.getSnippet());
 
                 return infoWindow;
             }
@@ -428,12 +421,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.setMyLocationEnabled(true);
         mMap.setOnInfoWindowClickListener(marker -> {
-            Log.e("intent marker", marker.getId());
             Intent intent = new Intent(this, DetailActivity.class);
             intent.putExtra(PLACE_ID, marker.getSnippet());
             startActivity(intent);
-            //TODO intent vers detail restaurant
-            Log.e("test", "test");
         });
         getDeviceLocation();
     }

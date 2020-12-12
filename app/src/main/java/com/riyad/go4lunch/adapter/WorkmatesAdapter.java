@@ -110,11 +110,7 @@ public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesAd
             });
 
             mChat.setOnClickListener(view -> {
-
-                //TODO Crée un intent vers l'activitée CHAT.
             toChat(user.getmUid(), user.getmUrlPicture(), user.getmUsername(), view.getContext());
-
-
             });
 
         }
@@ -125,8 +121,6 @@ public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesAd
         intent.putExtra(WORKMATE_ID, workmateId);
         intent.putExtra(WORKMATE_PICTURE_URL, workmatePhotoUrl);
         intent.putExtra(WORKMATE_USERNAME, workmateUsername);
-
-        //TODO ajouter picture et username.
         context.startActivity(intent);
 
     }

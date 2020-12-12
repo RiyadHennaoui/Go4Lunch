@@ -66,8 +66,7 @@ public class WorkerNotification extends Worker {
         restaurantDb = firebaseFirestore.collection(COLLECTION_RESTAURANTS_NAME);
 
 
-          getCurrentUserInFirestore();
-
+        getCurrentUserInFirestore();
 
 
         return Result.success();
@@ -78,7 +77,7 @@ public class WorkerNotification extends Worker {
     }
 
     //TODO appel firestore pour récupérer l'utilisateur
-    private void getCurrentUserInFirestore(){
+    private void getCurrentUserInFirestore() {
 
         DocumentReference userDocument = firebaseFirestore.collection(COLLECTION_USER_NAME).document(getCurrentUser().getUid());
 
@@ -97,7 +96,7 @@ public class WorkerNotification extends Worker {
     }
     //TODO si le booking restaurant n'est pas null, prendre l'id du restaurant et récuperer ce restaurant dans firestore.
 
-    private void getRestaurantBookByCurrentUser(User currentUser){
+    private void getRestaurantBookByCurrentUser(User currentUser) {
 
         String testFirestoreDataMapMail = currentUser.getmMail();
         String testFirestoreDataMapId = currentUser.getmUid();
@@ -121,14 +120,12 @@ public class WorkerNotification extends Worker {
                     DocumentSnapshot documentSnapshot = task.getResult();
                     restaurant = documentSnapshot.toObject(Restaurant.class);
 
-        Log.e("le resteau", restaurant.getName());
+                    Log.e("le resteau", restaurant.getName());
 
-                    showNotification(restaurant.getRestaurantAdress(), restaurant.getName(), currentUser.getmUsername());
+                    showNotification(restaurant.getRestaurantAdress(), restaurant.getName(), getUsersNames(getAllUsersBookRestaurant(restaurant.getId())));
                 });
 
     }
-
-
 
 
     private BookingRestaurant getBoonkingRestaurantForCurrentUser() {
@@ -152,15 +149,15 @@ public class WorkerNotification extends Worker {
     }
 
     //TODO récuperer la liste des users qui ont reservé sans oublier d'enlever le current user.
-    private ArrayList<User> getAllUsersBookRestaurant(String restaurantId){
+    private ArrayList<User> getAllUsersBookRestaurant(String restaurantId) {
 
 
-
+        ArrayList<String> usersNamesBookFormated = new ArrayList<>();
         ArrayList<User> bookingUserList = new ArrayList<>();
         workmatesBookId = new ArrayList<>();
 
 
-        if (restaurantId != null){
+        if (restaurantId != null) {
             restaurantDb = firebaseFirestore.collection(COLLECTION_RESTAURANTS_NAME);
             DocumentReference userIddocumentReference = restaurantDb.document(restaurantId);
 
@@ -168,35 +165,37 @@ public class WorkerNotification extends Worker {
             userIddocumentReference.get()
                     .addOnCompleteListener(task -> {
                         Restaurant currentRestaurantBook;
-                       DocumentSnapshot documentSnapshot = task.getResult();
-                       currentRestaurantBook = documentSnapshot.toObject(Restaurant.class);
+                        DocumentSnapshot documentSnapshot = task.getResult();
+                        currentRestaurantBook = documentSnapshot.toObject(Restaurant.class);
 
-                       for (int i =0; i < currentRestaurantBook.getBookingUser().size(); i++){
-                          workmatesBookId.add(currentRestaurantBook.getBookingUser().get(i).getUserId());
-                       }
+                        for (int i = 0; i < currentRestaurantBook.getBookingUser().size(); i++) {
+                            workmatesBookId.add(currentRestaurantBook.getBookingUser().get(i).getUserId());
+                        }
                     });
 
 
-           userDb.get()
-                   .addOnCompleteListener(task2 -> {
-                       List<User> workmateRestaurantBook;
-                       QuerySnapshot documentSnapshot = task2.getResult();
-                       workmateRestaurantBook = documentSnapshot.toObjects(User.class);
-                       if (!workmateRestaurantBook.isEmpty()) {
-                           for (int i = 0; i < workmatesBookId.size(); i++) {
-                               for (int j = 0; j < workmateRestaurantBook.size(); j++) {
-                                   if (workmateRestaurantBook.get(j).getmUid().equals(workmatesBookId.get(i))) {
-                                       Log.i("ici", "ici " + workmateRestaurantBook.get(j).getmUid());
-                                       //TODO ajouter le if en dessous a la fin des tests.
-                                       // if (!workmateRestaurantBook.get(j).getmUid().equals(getCurrentUser().getUid())){
-                                       bookingUserList.add(workmateRestaurantBook.get(j));
-                                       //  }
-                                   }
-                               }
-                           }
+            userDb.get()
+                    .addOnCompleteListener(task2 -> {
+                        List<User> workmateRestaurantBook;
+                        QuerySnapshot documentSnapshot = task2.getResult();
+                        workmateRestaurantBook = documentSnapshot.toObjects(User.class);
+                        if (!workmateRestaurantBook.isEmpty()) {
+                            for (int i = 0; i < workmatesBookId.size(); i++) {
+                                for (int j = 0; j < workmateRestaurantBook.size(); j++) {
+                                    if (workmateRestaurantBook.get(j).getmUid().equals(workmatesBookId.get(i))) {
+                                        Log.i("ici", "ici " + workmateRestaurantBook.get(j).getmUid());
+                                        //TODO ajouter le if en dessous a la fin des tests.
+                                        // if (!workmateRestaurantBook.get(j).getmUid().equals(getCurrentUser().getUid())){
+                                        bookingUserList.add(workmateRestaurantBook.get(j));
+                                        usersNamesBookFormated.add(workmateRestaurantBook.get(j).getmUsername());
+                                        //  }
+                                    }
+                                }
+                            }
 
-                       }
-                   });
+                        }
+                    });
+
 
         }
 
@@ -217,7 +216,7 @@ public class WorkerNotification extends Worker {
     }
 
 
-    public void showNotification(String restaurantAdress, String  restaurantName, String utilisitaeurs) {
+    public void showNotification(String restaurantAdress, String restaurantName, String utilisateurs) {
 
         Log.e("Notif", "here");
 
@@ -228,8 +227,11 @@ public class WorkerNotification extends Worker {
 
         NotificationCompat.Builder notificationCompat = new NotificationCompat.Builder(getApplicationContext(), "4")
                 .setSmallIcon(R.mipmap.ic_launcher)
+                .setShowWhen(true)
                 .setContentTitle("Votre reservation au : " + restaurantName)
-                .setContentText("avec vous : " + utilisitaeurs + "\n" + restaurantAdress)
+                .setContentText("avec vous : " + utilisateurs + "\n")
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(restaurantAdress))
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true);
@@ -243,17 +245,12 @@ public class WorkerNotification extends Worker {
 
         String listUtilisateurs = "Moi ";
 
-//        for (int i = 0; i < utilisitaeurs.size(); i++){
-//          listUtilisateurs +=  utilisitaeurs.get(i).getmUsername() + ", \n " ;
-//
-//    }
+        for (int i = 0; i < utilisitaeurs.size(); i++) {
+            listUtilisateurs += utilisitaeurs.get(i).getmUsername() + ", \n ";
+
+        }
 
         return listUtilisateurs;
     }
 
-    private static Constraints setConst() {
-        Constraints constraints = new Constraints.Builder()
-                .build();
-        return constraints;
-    }
 }
