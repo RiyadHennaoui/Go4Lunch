@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.riyad.go4lunch.adapter.WorkmatesBookingRestaurantAdapter;
 import com.riyad.go4lunch.model.BookingRestaurant;
 import com.riyad.go4lunch.model.RatingRestaurant;
+import com.riyad.go4lunch.model.User;
 import com.riyad.go4lunch.viewmodels.DetailRestaurantViewModel;
 
 import java.util.ArrayList;
@@ -119,20 +120,26 @@ public class DetailActivity extends AppCompatActivity {
                     setBookingIcon(bookingRestaurants);
                     displayWorkmatesBoonkingThisRestaurant();
                 });
-
     }
 
-    private void setBookingIcon(ArrayList<BookingRestaurant> bookingRestaurants) {
+    private void setBookingIcon(ArrayList<User> bookingRestaurants) {
         boolean isBook = false;
         for (int i = 0; i < bookingRestaurants.size(); i++) {
-            if (bookingRestaurants.get(i).getUserId().equals(getCurrentUser().getUid())) {
+            if (bookingRestaurants.get(i).getmUid().equals(getCurrentUser().getUid())) {
                 isBook = true;
             }
         }
         if (isBook) {
             fbBookingRestaurant.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_clear_24));
+            detailRestaurantViewModel.getUserBookingRestaurant(restaurantID)
+                    .observe(DetailActivity.this, bookingRestaurantForUser ->{
+                        Log.e("userBook", "c'est Fait ");
+                    } );
         } else {
             fbBookingRestaurant.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_check_24));
+            //TODO demander a Thie comment faire plus propore.
+            detailRestaurantViewModel.clearUserBook()
+                    .observe(DetailActivity.this, bookingRestaurant -> {});
         }
     }
 
@@ -143,7 +150,6 @@ public class DetailActivity extends AppCompatActivity {
 
     private void setRatingIcon(ArrayList<RatingRestaurant> like) {
         boolean isLike = false;
-        Log.e("rating", "click");
 
         for (int i = 0; i < like.size(); i++) {
             if (like.get(i).getUserId().equals(getCurrentUser().getUid())) {

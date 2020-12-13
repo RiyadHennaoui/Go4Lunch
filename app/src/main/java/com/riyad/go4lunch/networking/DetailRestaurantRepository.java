@@ -29,7 +29,7 @@ import static com.riyad.go4lunch.utils.Constants.FIELD_RATING_USER_FOR_RESTAURAN
 public class DetailRestaurantRepository {
     private static DetailRestaurantRepository detailRestaurant;
     private FirebaseFirestore restaurantDb = FirebaseFirestore.getInstance();
-    private ArrayList<BookingRestaurant> bookinfRef = new ArrayList<>();
+    private ArrayList<User> bookinfRef = new ArrayList<>();
     private ArrayList<RatingRestaurant> ratingRestaurants = new ArrayList<>();
     private ArrayList<String> workmatesBookId = new ArrayList<>();
 
@@ -109,15 +109,16 @@ public class DetailRestaurantRepository {
     }
 
     //for book restaurant
-    public MutableLiveData<ArrayList<BookingRestaurant>> bookingRestaurantRepo(String restaurantId) {
+    public MutableLiveData<ArrayList<User>> bookingRestaurantRepo(String restaurantId) {
 
         DocumentReference firestoreRestaurants = restaurantDb.collection(COLLECTION_RESTAURANTS_NAME).document(restaurantId);
         DocumentReference currentUserDocument = restaurantDb.collection(COLLECTION_USER_NAME).document(getCurrentUser().getUid());
 
-        MutableLiveData<ArrayList<BookingRestaurant>> bookingRestaurantMutableLiveData = new MutableLiveData<>();
+        MutableLiveData<ArrayList<User>> bookingRestaurantMutableLiveData = new MutableLiveData<>();
 
-        BookingRestaurant newBookingRestaurant = new BookingRestaurant();
-        Timestamp currentTime = new Timestamp(new Date());
+        User newBookingRestaurant = new User();
+
+
         bookinfRef = new ArrayList<>();
 
         firestoreRestaurants
@@ -131,23 +132,24 @@ public class DetailRestaurantRepository {
                     }
 
                     if (bookinfRef.isEmpty()) {
-                        newBookingRestaurant.setRestaurantId(restaurantId);
-                        newBookingRestaurant.setTimestamp(currentTime);
-                        newBookingRestaurant.setUserId(getCurrentUser().getUid());
+                        newBookingRestaurant.setmUid(getCurrentUser().getUid());
+                        newBookingRestaurant.setmUsername(getCurrentUser().getDisplayName());
+                        newBookingRestaurant.setmUrlPicture(getCurrentUser().getPhotoUrl().toString());
                         bookinfRef.add(newBookingRestaurant);
                     } else {
                         int currentCount = -1;
                         for (int i = 0; i < restaurant.getBookingRestaurant().size(); i++) {
 
-                            if (restaurant.getBookingRestaurant().get(i).getUserId().equals(getCurrentUser().getUid())) {
+                            if (restaurant.getBookingRestaurant().get(i).getmUid().equals(getCurrentUser().getUid())) {
                                 currentCount = i;
                                 break;
                             }
                         }
                         if (currentCount == -1) {
-                            newBookingRestaurant.setRestaurantId(restaurantId);
-                            newBookingRestaurant.setTimestamp(currentTime);
-                            newBookingRestaurant.setUserId(getCurrentUser().getUid());
+                            newBookingRestaurant.setmUid(getCurrentUser().getUid());
+                            newBookingRestaurant.setmUsername(getCurrentUser().getDisplayName());
+                            newBookingRestaurant.setmUrlPicture(getCurrentUser().getPhotoUrl().toString());
+
                             bookinfRef.add(newBookingRestaurant);
                         } else {
                             bookinfRef.remove(currentCount);
@@ -156,7 +158,6 @@ public class DetailRestaurantRepository {
                     }
                     Log.i("bookinfRef", bookinfRef.size() + "");
                     firestoreRestaurants.update(FIELD_BOOKING_USER_FOR_RESTAURANT_DOCUMENT, bookinfRef);
-                    currentUserDocument.update(FIELD_BOOKING_USER_FOR_RESTAURANT_DOCUMENT, newBookingRestaurant);
                     bookingRestaurantMutableLiveData.setValue(bookinfRef);
                 });
 
@@ -165,6 +166,41 @@ public class DetailRestaurantRepository {
         return bookingRestaurantMutableLiveData;
     }
 
+    public MutableLiveData<BookingRestaurant> userBookingRestaurant(String restaurantId){
+
+        MutableLiveData<BookingRestaurant> bookingRestaurantMutableLiveData = new MutableLiveData<>();
+        DocumentReference currentUserDocument = restaurantDb.collection(COLLECTION_USER_NAME).document(getCurrentUser().getUid());
+        BookingRestaurant userBoonkingRestaurant = new BookingRestaurant();
+        Timestamp currentTime = new Timestamp(new Date());
+
+        userBoonkingRestaurant.setTimestamp(currentTime);
+        userBoonkingRestaurant.setRestaurantId(restaurantId);
+
+        currentUserDocument.update(FIELD_BOOKING_USER_FOR_RESTAURANT_DOCUMENT, userBoonkingRestaurant);
+
+        bookingRestaurantMutableLiveData.setValue(userBoonkingRestaurant);
+
+        return bookingRestaurantMutableLiveData;
+
+    }
+
+    public MutableLiveData<BookingRestaurant> clearUserBookingRestaurant(){
+
+        MutableLiveData<BookingRestaurant> bookingRestaurantMutableLiveData = new MutableLiveData<>();
+        DocumentReference currentUserDocument = restaurantDb.collection(COLLECTION_USER_NAME).document(getCurrentUser().getUid());
+        BookingRestaurant userBoonkingRestaurant = new BookingRestaurant();
+
+
+        userBoonkingRestaurant.setTimestamp(null);
+        userBoonkingRestaurant.setRestaurantId(null);
+
+        currentUserDocument.update(FIELD_BOOKING_USER_FOR_RESTAURANT_DOCUMENT, userBoonkingRestaurant);
+
+        bookingRestaurantMutableLiveData.setValue(userBoonkingRestaurant);
+
+        return bookingRestaurantMutableLiveData;
+
+    }
     //get list of workmates book current restaurant.
     public MutableLiveData<ArrayList<User>> workmatesBookingRestaurantRepo(String restaurantId) {
         DocumentReference firestoreRestaurant = restaurantDb.collection(COLLECTION_RESTAURANTS_NAME).document(restaurantId);
@@ -183,7 +219,7 @@ public class DetailRestaurantRepository {
                     currentRestaurant = currentDocument.toObject(Restaurant.class);
                     if (currentRestaurant.getBookingRestaurant() != null) {
                         for (int i = 0; i < currentRestaurant.getBookingRestaurant().size(); i++) {
-                            workmatesBookId.add(currentRestaurant.getBookingRestaurant().get(i).getUserId());
+                            workmatesBookId.add(currentRestaurant.getBookingRestaurant().get(i).getmUid());
                             Log.i("workmatesBookId", workmatesBookId.get(i));
                         }
 

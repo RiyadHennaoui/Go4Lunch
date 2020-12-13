@@ -103,15 +103,6 @@ public class WorkerNotification extends Worker {
         String testFirestoreDataMapObjectBook = currentUser.getBookingRestaurant().toString();
         String restaurantIdFound = currentUser.getBookingRestaurant().getRestaurantId();
 
-        Gson gson = new Gson();
-
-        Log.e("getRestaurantBook", "avant Appel : "
-                + "Mail : " + testFirestoreDataMapMail
-                + "ID User : " + testFirestoreDataMapId
-                + "Url Picture :" + testFirestoreDataMapUrlPicture
-                + "Objet Bookrestau : " + gson.toJson(currentUser.getBookingRestaurant())
-                + "nom du restau : " + restaurantIdFound);
-
         restaurantDb.document(restaurantIdFound)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -127,25 +118,25 @@ public class WorkerNotification extends Worker {
     }
 
 
-    private BookingRestaurant getBoonkingRestaurantForCurrentUser() {
-
-        BookingRestaurant bookingRestaurant = new BookingRestaurant();
-        userDb = firebaseFirestore.collection(COLLECTION_USER_NAME);
-        DocumentReference userDoc = userDb.document(getCurrentUser().getUid());
-
-        userDoc
-                .get()
-                .addOnCompleteListener(task -> {
-                    User currentUser;
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    currentUser = documentSnapshot.toObject(User.class);
-                    Gson gson = new Gson();
-                    Log.e("CurrentUser", gson.toJson(currentUser));
-                    bookingRestaurant.setRestaurantId(currentUser.getBookingRestaurant().getRestaurantId());
-                });
-
-        return bookingRestaurant;
-    }
+//    private BookingRestaurant getBoonkingRestaurantForCurrentUser() {
+//
+//        BookingRestaurant bookingRestaurant = new BookingRestaurant();
+//        userDb = firebaseFirestore.collection(COLLECTION_USER_NAME);
+//        DocumentReference userDoc = userDb.document(getCurrentUser().getUid());
+//
+//        userDoc
+//                .get()
+//                .addOnCompleteListener(task -> {
+//                    User currentUser;
+//                    DocumentSnapshot documentSnapshot = task.getResult();
+//                    currentUser = documentSnapshot.toObject(User.class);
+//                    Gson gson = new Gson();
+//                    Log.e("CurrentUser", gson.toJson(currentUser));
+//                    bookingRestaurant.setRestaurantId(currentUser.getBookingRestaurant().getRestaurantId());
+//                });
+//
+//        return bookingRestaurant;
+//    }
 
     //TODO récuperer la liste des users qui ont reservé sans oublier d'enlever le current user.
     private ArrayList<User> getAllUsersBookRestaurant(String restaurantId) {
@@ -168,7 +159,7 @@ public class WorkerNotification extends Worker {
                         currentRestaurantBook = documentSnapshot.toObject(Restaurant.class);
 
                         for (int i = 0; i < currentRestaurantBook.getBookingRestaurant().size(); i++) {
-                            workmatesBookId.add(currentRestaurantBook.getBookingRestaurant().get(i).getUserId());
+                            workmatesBookId.add(currentRestaurantBook.getBookingRestaurant().get(i).getmUid());
                         }
                     });
 
@@ -228,9 +219,11 @@ public class WorkerNotification extends Worker {
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setShowWhen(true)
                 .setContentTitle("Votre reservation au : " + restaurantName)
-                .setContentText("avec vous : " + utilisateurs + "\n")
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(restaurantAdress))
+                .setContentText("avec vous : ")
+                .setStyle(new NotificationCompat.InboxStyle()
+                        .addLine("avec vous : \n le restaurant est : " + restaurantAdress)
+                        .addLine("2 eme ligne")
+                )
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true);

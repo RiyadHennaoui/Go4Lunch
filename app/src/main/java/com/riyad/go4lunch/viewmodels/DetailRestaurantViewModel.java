@@ -18,7 +18,8 @@ public class DetailRestaurantViewModel extends ViewModel {
 
     private MutableLiveData<Restaurant> restaurantDetailMutableLiveData;
     private DetailRestaurantRepository detailRestaurantRepository;
-    private MutableLiveData<ArrayList<BookingRestaurant>> bookingRestaurantMutableLiveData;
+    private MutableLiveData<BookingRestaurant> bookRestaurantForUser;
+    private MutableLiveData<ArrayList<User>> bookingRestaurantMutableLiveData;
     private MutableLiveData<ArrayList<RatingRestaurant>> restaurantLikes;
     private MutableLiveData<ArrayList<User>> workmateBookingRestaurantMutableLiveData;
     public void init(){
@@ -30,8 +31,21 @@ public class DetailRestaurantViewModel extends ViewModel {
         return restaurantDetailMutableLiveData;
     }
 
+    public LiveData<BookingRestaurant> getUserBookingRestaurant(String restaurantId){
+
+        bookRestaurantForUser = detailRestaurantRepository.userBookingRestaurant(restaurantId);
+
+        return bookRestaurantForUser;
+    }
+
+    public LiveData<BookingRestaurant> clearUserBook(){
+        bookRestaurantForUser = detailRestaurantRepository.clearUserBookingRestaurant();
+
+        return  bookRestaurantForUser;
+    }
+
     
-    public MutableLiveData<ArrayList<BookingRestaurant>> getBookingRestaurantMutableLiveData (String restaurantId){
+    public MutableLiveData<ArrayList<User>> getBookingRestaurantMutableLiveData (String restaurantId){
         bookingRestaurantMutableLiveData = detailRestaurantRepository.bookingRestaurantRepo(restaurantId);
         return  bookingRestaurantMutableLiveData;
     }
