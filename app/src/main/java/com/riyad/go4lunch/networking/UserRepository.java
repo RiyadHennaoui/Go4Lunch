@@ -3,8 +3,10 @@ package com.riyad.go4lunch.networking;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.riyad.go4lunch.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.riyad.go4lunch.utils.Constants.COLLECTION_USER_NAME;
@@ -28,20 +30,24 @@ public class UserRepository {
         googlePlacesAPI = RetrofitService.createService(GooglePlacesAPI.class);
     }
 
- //   public MutableLiveData<List<User>> getFirestoreUsers (){
+    public MutableLiveData<User> creatUserInFirebase (User currentUser){
 
+        MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
 
-//        userDb.collection(COLLECTION_USER_NAME)
-//                .get()
-//                .addOnCompleteListener(task -> {
-//                   if (task.isSuccessful()){
+        userDb.collection(COLLECTION_USER_NAME)
+                .document(currentUser.getmUid())
+                .get()
+                .addOnCompleteListener(task -> {
 
-//                   }
+                    User userToSave = new User();
+                    userToSave.setmUsername(currentUser.getmUsername());
+                    userToSave.setmUid(currentUser.getmUid());
+                    userToSave.setmMail(currentUser.getmMail());
 
-
-//                });
-//        return
-//    }
+                userMutableLiveData.setValue(userToSave);
+                });
+        return userMutableLiveData;
+    }
 
 
 }
