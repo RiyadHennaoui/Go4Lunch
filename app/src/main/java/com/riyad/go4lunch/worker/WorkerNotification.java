@@ -103,17 +103,20 @@ public class WorkerNotification extends Worker {
         String testFirestoreDataMapObjectBook = currentUser.getBookingRestaurant().toString();
         String restaurantIdFound = currentUser.getBookingRestaurant().getRestaurantId();
 
-        restaurantDb.document(restaurantIdFound)
-                .get()
-                .addOnCompleteListener(task -> {
+        if (restaurantIdFound != null){
+            restaurantDb.document(restaurantIdFound)
+                    .get()
+                    .addOnCompleteListener(task -> {
 
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    restaurant = documentSnapshot.toObject(Restaurant.class);
+                        DocumentSnapshot documentSnapshot = task.getResult();
+                        restaurant = documentSnapshot.toObject(Restaurant.class);
 
-                    Log.e("le resteau", restaurant.getName());
+                        Log.e("le resteau", restaurant.getName());
 
-                    showNotification(restaurant.getRestaurantAdress(), restaurant.getName(), getCurrentUser().getDisplayName());
-                });
+                        showNotification(restaurant.getRestaurantAdress(), restaurant.getName(), getCurrentUser().getDisplayName());
+                    });
+        }
+
 
     }
 

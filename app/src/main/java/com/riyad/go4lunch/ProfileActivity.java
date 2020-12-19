@@ -64,7 +64,7 @@ public class ProfileActivity extends AppCompatActivity {
         }else{
             addProfileUsername.setOnClickListener(v -> {
                 AlertDialog.Builder alerteDiag = new AlertDialog.Builder(ProfileActivity.this);
-                alerteDiag.setTitle("Enter your name");
+                alerteDiag.setTitle(R.string.profileactivity_adiag_title_enter_your_name);
                 final EditText editText = new EditText(this);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
@@ -134,10 +134,13 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void displayPhotoProfile() {
         addProfilePicture.setVisibility(View.GONE);
-        Glide.with(this)
-                .load(this.getCurrentUser().getPhotoUrl())
-                .apply(RequestOptions.circleCropTransform())
-                .into(imageViewProfile);
+        if (getCurrentUser().getPhotoUrl() != null){
+            Glide.with(this)
+                    .load(this.getCurrentUser().getPhotoUrl())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(imageViewProfile);
+        }
+
     }
 
     private void setUserPhotoProfile(String photoUrl) {
@@ -154,7 +157,6 @@ public class ProfileActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Log.e("in Firebase", "User profile updated.");
                             Toast.makeText(ProfileActivity.this, "your profile is update ", Toast.LENGTH_SHORT).show();
                             displayPhotoProfile();
 

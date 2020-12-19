@@ -69,5 +69,6 @@
     <string name="title_activity_maps">Map</string>
     <string name="location_rationale">Permission for location needed</string>
     <string name="pick_place">Choose a place</string>
+    <string name="profileactivity_adiag_title_enter_your_name">Enter your name</string>
 
 </resources>
