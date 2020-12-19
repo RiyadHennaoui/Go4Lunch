@@ -70,5 +70,11 @@
     <string name="location_rationale">Permission for location needed</string>
     <string name="pick_place">Choose a place</string>
     <string name="profileactivity_adiag_title_enter_your_name">Enter your name</string>
+    <string name="profileactivity_toast_update_profile_success">\"your profile is update \"</string>
+    <string name="profileactivity_toast_update_error">\"error please retry \"</string>
+    <string name="profileactivity_adiag_btn_cancel">Cancel</string>
+    <string name="profileactivity_adiag_btn_yes">Yes</string>
+    <string name="profileactivity_adiag_title_picture_add">Your Photo URL</string>
+    <string name="profileactivity_adiag_message_picture_add">here</string>
 
 </resources>

@@ -72,12 +72,12 @@ public class ProfileActivity extends AppCompatActivity {
                 editText.setLayoutParams(lp);
                 alerteDiag.setView(editText);
 
-                alerteDiag.setPositiveButton("Yes", (dialog, which) -> {
+                alerteDiag.setPositiveButton(R.string.profileactivity_adiag_btn_yes, (dialog, which) -> {
                    input = editText.getText().toString();
                     setUsernameProfile(input);
                 });
 
-                alerteDiag.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+                alerteDiag.setNegativeButton(R.string.profileactivity_adiag_btn_cancel, (dialog, which) -> dialog.cancel());
                 alerteDiag.show();
                 addProfileUsername.setVisibility(View.GONE);
                 displayUsernameProfile();
@@ -90,10 +90,10 @@ public class ProfileActivity extends AppCompatActivity {
 
             addProfilePicture.setOnClickListener((View v)-> {
                //TODO charger une photo.
-            
+
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(ProfileActivity.this);
-                alertDialog.setTitle("Your Photo URL");
-                alertDialog.setMessage("here");
+                alertDialog.setTitle(R.string.profileactivity_adiag_title_picture_add);
+                alertDialog.setMessage(R.string.profileactivity_adiag_message_picture_add);
                 final EditText editText = new EditText(this);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
@@ -102,11 +102,11 @@ public class ProfileActivity extends AppCompatActivity {
                 alertDialog.setView(editText);
 
 
-                alertDialog.setPositiveButton("Yes", (dialog, which) -> {
+                alertDialog.setPositiveButton(R.string.profileactivity_adiag_btn_yes, (dialog, which) -> {
                     input = editText.getText().toString();
                     setUserPhotoProfile(input);
                 });
-                alertDialog.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+                alertDialog.setNegativeButton(R.string.profileactivity_adiag_btn_cancel, (dialog, which) -> dialog.cancel());
 
                 alertDialog.show();
             });
@@ -157,11 +157,11 @@ public class ProfileActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(ProfileActivity.this, "your profile is update ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProfileActivity.this, R.string.profileactivity_toast_update_profile_success, Toast.LENGTH_SHORT).show();
                             displayPhotoProfile();
 
                         }else{
-                            Toast.makeText(ProfileActivity.this, "error please retry ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProfileActivity.this, R.string.profileactivity_toast_update_error, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
