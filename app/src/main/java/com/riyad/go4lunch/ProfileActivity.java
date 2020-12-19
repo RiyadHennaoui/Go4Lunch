@@ -3,6 +3,7 @@ package com.riyad.go4lunch;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,6 +24,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.riyad.go4lunch.model.User;
+import com.riyad.go4lunch.viewmodels.UserViewModel;
+
+import static com.riyad.go4lunch.utils.Constants.COLLECTION_USER_NAME;
 
 public class ProfileActivity extends AppCompatActivity {
     private TextView textInputEditTextUsername;
@@ -33,6 +39,8 @@ public class ProfileActivity extends AppCompatActivity {
     private Button logoutProfile;
     FirebaseUser user;
     String input;
+    private UserViewModel userViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,10 +155,22 @@ public class ProfileActivity extends AppCompatActivity {
 
         //TODO Le faire via un Repo !!!!
 
-
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setPhotoUri(Uri.parse(photoUrl))
                 .build();
+
+        User userForm = new User();
+        userForm.setmUid(getCurrentUser().getUid());
+        userForm.setmUsername(getCurrentUser().getDisplayName());
+        userForm.setmMail(getCurrentUser().getEmail());
+        userViewModel = ViewModelProviders.of(ProfileActivity.this).get(UserViewModel.class);
+        userViewModel.init(userForm);
+        userViewModel.getUserInFirestore()
+                .observe(ProfileActivity.this, user1 -> {
+                    user1.setmUrlPicture(photoUrl);
+
+                });
+
 
         user.updateProfile(profileUpdates)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {

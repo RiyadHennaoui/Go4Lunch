@@ -54,5 +54,65 @@ public class UserRepository {
         return userMutableLiveData;
     }
 
+    public MutableLiveData<User> getUserinfirestore (String userId){
+
+        MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
+
+        userDb.collection(COLLECTION_USER_NAME)
+                .document(userId)
+                .get()
+        .addOnCompleteListener(task -> {
+            DocumentSnapshot documentSnapshot = task.getResult();
+            User getUser = new User();
+            getUser = documentSnapshot.toObject(User.class);
+            userMutableLiveData.setValue(getUser);
+        });
+
+        return userMutableLiveData;
+
+
+    }
+
+    public MutableLiveData<User> setPhotoProfileUserInFirestore (String userId, String userPhotoUrl){
+
+        MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
+
+        userDb.collection(COLLECTION_USER_NAME)
+                .document(userId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    User getUser;
+                    getUser = documentSnapshot.toObject(User.class);
+                    getUser.setmUrlPicture(userPhotoUrl);
+                    userMutableLiveData.setValue(getUser);
+                });
+
+        return userMutableLiveData;
+
+
+    }
+
+    public MutableLiveData<User> setNameProfileUserInFirestore (String userId, String userName){
+
+        MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
+
+        userDb.collection(COLLECTION_USER_NAME)
+                .document(userId)
+
+                .get()
+                .addOnCompleteListener(task -> {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    User getUser;
+                    getUser = documentSnapshot.toObject(User.class);
+                    getUser.setmUsername(userName);
+                    userMutableLiveData.setValue(getUser);
+                });
+
+        return userMutableLiveData;
+
+
+    }
+
 
 }
