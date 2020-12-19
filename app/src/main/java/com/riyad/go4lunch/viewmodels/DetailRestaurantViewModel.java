@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.riyad.go4lunch.model.BookingRestaurant;
-import com.riyad.go4lunch.model.RatingRestaurant;
+
 import com.riyad.go4lunch.model.User;
 import com.riyad.go4lunch.networking.DetailRestaurantRepository;
 import com.riyad.go4lunch.ui.Restaurant;
@@ -20,7 +20,7 @@ public class DetailRestaurantViewModel extends ViewModel {
     private DetailRestaurantRepository detailRestaurantRepository;
     private MutableLiveData<BookingRestaurant> bookRestaurantForUser;
     private MutableLiveData<ArrayList<User>> bookingRestaurantMutableLiveData;
-    private MutableLiveData<ArrayList<RatingRestaurant>> restaurantLikes;
+    private MutableLiveData<ArrayList<User>> restaurantLikes;
     private MutableLiveData<ArrayList<User>> workmateBookingRestaurantMutableLiveData;
     public void init(){
                 detailRestaurantRepository = DetailRestaurantRepository.getInstance();
@@ -50,7 +50,7 @@ public class DetailRestaurantViewModel extends ViewModel {
         return  bookingRestaurantMutableLiveData;
     }
 
-    public MutableLiveData<ArrayList<RatingRestaurant>> getRestaurantLikes (String restaurantId){
+    public MutableLiveData<ArrayList<User>> getRestaurantLikes (String restaurantId){
         restaurantLikes = detailRestaurantRepository.restaurantLike(restaurantId);
         return restaurantLikes;
     }

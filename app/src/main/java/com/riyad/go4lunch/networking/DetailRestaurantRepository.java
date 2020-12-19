@@ -13,7 +13,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.riyad.go4lunch.model.BookingRestaurant;
-import com.riyad.go4lunch.model.RatingRestaurant;
 import com.riyad.go4lunch.model.User;
 import com.riyad.go4lunch.ui.Restaurant;
 
@@ -30,7 +29,7 @@ public class DetailRestaurantRepository {
     private static DetailRestaurantRepository detailRestaurant;
     private FirebaseFirestore restaurantDb = FirebaseFirestore.getInstance();
     private ArrayList<User> bookinfRef = new ArrayList<>();
-    private ArrayList<RatingRestaurant> ratingRestaurants = new ArrayList<>();
+    private ArrayList<User> ratingRestaurants = new ArrayList<>();
     private ArrayList<String> workmatesBookId = new ArrayList<>();
 
 
@@ -61,11 +60,11 @@ public class DetailRestaurantRepository {
         return restaurantMutableLiveData;
     }
 
-    public MutableLiveData<ArrayList<RatingRestaurant>> restaurantLike(String restaurantId) {
+    public MutableLiveData<ArrayList<User>> restaurantLike(String restaurantId) {
 
         DocumentReference firestoreRestaurants = restaurantDb.collection(COLLECTION_RESTAURANTS_NAME).document(restaurantId);
-        MutableLiveData<ArrayList<RatingRestaurant>> isLiked = new MutableLiveData<>();
-        RatingRestaurant newRatingRestaurant = new RatingRestaurant();
+        MutableLiveData<ArrayList<User>> isLiked = new MutableLiveData<>();
+        User newRatingRestaurant = new User();
         ratingRestaurants = new ArrayList<>();
 
         firestoreRestaurants
@@ -80,8 +79,9 @@ public class DetailRestaurantRepository {
                         //                       Log.e("Maybe null", ratingRestaurants.size() + "" + ratingRestaurants.get(0).getUserId());
                     }
 
-                    newRatingRestaurant.setRestaurantId(restaurantId);
-                    newRatingRestaurant.setUserId(getCurrentUser().getUid());
+                    newRatingRestaurant.setmUid(getCurrentUser().getUid());
+                    newRatingRestaurant.setmUsername(getCurrentUser().getDisplayName());
+                    newRatingRestaurant.setmMail(getCurrentUser().getEmail());
 
                     if (ratingRestaurants.isEmpty()) {
                         Log.i("repo",  "test");
@@ -89,7 +89,7 @@ public class DetailRestaurantRepository {
                     } else {
                         int currentCount = -1;
                         for (int i = 0; i < restaurant.getRatingUser().size(); i++) {
-                            if (restaurant.getRatingUser().get(i).getUserId().equals(getCurrentUser().getUid())) {
+                            if (restaurant.getRatingUser().get(i).getmUid().equals(getCurrentUser().getUid())) {
                                 currentCount = i;
                                 break;
                             }
@@ -148,8 +148,10 @@ public class DetailRestaurantRepository {
                         if (currentCount == -1) {
                             newBookingRestaurant.setmUid(getCurrentUser().getUid());
                             newBookingRestaurant.setmUsername(getCurrentUser().getDisplayName());
-                            newBookingRestaurant.setmUrlPicture(getCurrentUser().getPhotoUrl().toString());
-
+                            //TODO gérer le cas où il manque l'url de la photo.
+                            if (getCurrentUser().getPhotoUrl() != null) {
+                                newBookingRestaurant.setmUrlPicture(getCurrentUser().getPhotoUrl().toString());
+                            }
                             bookinfRef.add(newBookingRestaurant);
                         } else {
                             bookinfRef.remove(currentCount);

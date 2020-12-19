@@ -5,11 +5,11 @@ import android.os.Parcelable;
 
 import com.riyad.go4lunch.AppControler;
 import com.riyad.go4lunch.data.Location;
-import com.riyad.go4lunch.model.BookingRestaurant;
-import com.riyad.go4lunch.model.RatingRestaurant;
+
 import com.riyad.go4lunch.model.User;
 
 import java.util.ArrayList;
+
 
 public class Restaurant implements Parcelable {
 
@@ -20,10 +20,9 @@ public class Restaurant implements Parcelable {
     private Location restaurantLocation;
     private String restaurantAdress;
     private RestaurantDetail restaurantDetail;
-    //TODO modifier le BookingRestaurant en User.
     private ArrayList<User> bookingRestaurant = new ArrayList<>();
     //TODO modifier le RatingRestaurant en User.
-    private ArrayList<RatingRestaurant> ratingUser = new ArrayList<>();
+    private ArrayList<User> ratingUser = new ArrayList<>();
 
 
     public Restaurant() {
@@ -64,7 +63,7 @@ public class Restaurant implements Parcelable {
         return bookingRestaurant;
     }
 
-    public ArrayList<RatingRestaurant> getRatingUser() {
+    public ArrayList<User> getRatingUser() {
         return ratingUser;
     }
 
@@ -105,7 +104,7 @@ public class Restaurant implements Parcelable {
         this.bookingRestaurant = bookingRestaurant;
     }
 
-    public void setRatingUser(ArrayList<RatingRestaurant> ratingUser) {
+    public void setRatingUser(ArrayList<User> ratingUser) {
         this.ratingUser = ratingUser;
     }
 

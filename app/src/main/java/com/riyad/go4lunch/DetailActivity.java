@@ -21,8 +21,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.riyad.go4lunch.adapter.WorkmatesBookingRestaurantAdapter;
-import com.riyad.go4lunch.model.BookingRestaurant;
-import com.riyad.go4lunch.model.RatingRestaurant;
 import com.riyad.go4lunch.model.User;
 import com.riyad.go4lunch.viewmodels.DetailRestaurantViewModel;
 
@@ -148,11 +146,11 @@ public class DetailActivity extends AppCompatActivity {
                 .observe(DetailActivity.this, this::setRatingIcon);
     }
 
-    private void setRatingIcon(ArrayList<RatingRestaurant> like) {
+    private void setRatingIcon(ArrayList<User> like) {
         boolean isLike = false;
 
         for (int i = 0; i < like.size(); i++) {
-            if (like.get(i).getUserId().equals(getCurrentUser().getUid())) {
+            if (like.get(i).getmUid().equals(getCurrentUser().getUid())) {
                     isLike = true;
             }
         }

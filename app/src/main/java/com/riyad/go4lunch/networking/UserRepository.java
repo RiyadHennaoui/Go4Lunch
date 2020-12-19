@@ -1,7 +1,12 @@
 package com.riyad.go4lunch.networking;
 
+import android.app.Application;
+import android.util.Log;
+import android.widget.Toast;
+
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.riyad.go4lunch.model.User;
@@ -24,28 +29,28 @@ public class UserRepository {
         return userRepository;
     }
 
-    private GooglePlacesAPI googlePlacesAPI;
 
-    public UserRepository(){
-        googlePlacesAPI = RetrofitService.createService(GooglePlacesAPI.class);
-    }
 
     public MutableLiveData<User> creatUserInFirebase (User currentUser){
 
-        MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
-
+        MutableLiveData<User>  userMutableLiveData = new MutableLiveData<>();
+        User userToSave = new User();
+        userToSave.setmUsername(currentUser.getmUsername());
+        userToSave.setmUid(currentUser.getmUid());
+        userToSave.setmMail(currentUser.getmMail());
         userDb.collection(COLLECTION_USER_NAME)
                 .document(currentUser.getmUid())
-                .get()
-                .addOnCompleteListener(task -> {
+                .set(userToSave)
+                .addOnCompleteListener(task ->{
+                    Log.e("useradd", "enfin ? ");
 
-                    User userToSave = new User();
-                    userToSave.setmUsername(currentUser.getmUsername());
-                    userToSave.setmUid(currentUser.getmUid());
-                    userToSave.setmMail(currentUser.getmMail());
+                        })
+                .addOnFailureListener(e -> Log.e("userNotAdd", e.toString()))
+        ;
 
-                userMutableLiveData.setValue(userToSave);
-                });
+
+
+
         return userMutableLiveData;
     }
 

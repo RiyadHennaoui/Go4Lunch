@@ -28,6 +28,7 @@ public class AppControler extends Application {
         super.onCreate();
         instance = this;
         createNotificationChannel();
+        //TODO a remettre après avoir finaliser la creation du user dans firestore dans splashScnreen activity
         WorkerNotification.periodRequest();
     }
 
