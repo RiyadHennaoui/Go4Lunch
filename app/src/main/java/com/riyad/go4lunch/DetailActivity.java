@@ -100,7 +100,7 @@ public class DetailActivity extends AppCompatActivity {
     public void callPhoneNumber(String phoneNumber) {
 
         Intent intent = new Intent(Intent.ACTION_DIAL);
-        intent.setData(Uri.parse("tel:" + phoneNumber));
+        intent.setData(Uri.parse(getString(R.string.detailactivity_call_formating) + phoneNumber));
         startActivity(intent);
     }
 
@@ -175,7 +175,7 @@ public class DetailActivity extends AppCompatActivity {
                     callPhoneNumber(phoneNumber);
 
                 } else {
-                    Toast.makeText(this, "Cannot make call without your permission", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.detailactivity_toast_permission_denied, Toast.LENGTH_SHORT).show();
                 }
 
                 break;

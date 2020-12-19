@@ -76,5 +76,9 @@
     <string name="profileactivity_adiag_btn_yes">Yes</string>
     <string name="profileactivity_adiag_title_picture_add">Your Photo URL</string>
     <string name="profileactivity_adiag_message_picture_add">here</string>
+    <string name="sharedpreference_name_go4lunch">go4lunch</string>
+    <string name="mainactivty_toast_restaurant_not_in_range">Le restaurant n\'est pas dans le rayon de recherche</string>
+    <string name="detailactivity_call_formating">tel:</string>
+    <string name="detailactivity_toast_permission_denied">Cannot make call without your permission</string>
 
 </resources>

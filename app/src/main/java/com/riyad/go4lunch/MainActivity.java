@@ -116,7 +116,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sharedPreferences = getSharedPreferences("go4lunch", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(getString(R.string.sharedpreference_name_go4lunch), MODE_PRIVATE);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         myNavView = findViewById(R.id.main_navigation_view);
         myMainToolbar = findViewById(R.id.main_toolbar);
@@ -126,12 +126,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
-
-//      TODO Modifier l'image profile dans le nav drawer problème de context avec Glide.with(getContext)??
-//        userMailNavDrawer.setText(getCurrentUser().getEmail());
-//        usernameNavDrawer.setText(getCurrentUser().getDisplayName());
-//          Glide.with(MainActivity.this.profileNavDrawer).load(getCurrentUser().getPhotoUrl()).centerCrop().into(profileNavDrawer);
 
 
         getLocationPermission();
@@ -289,7 +283,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 break;
 
             case R.id.nav_settings:
-                Toast.makeText(this, "serieux", Toast.LENGTH_LONG).show();
                 intentToProfileActivity();
 
             case R.id.nav_logout:
@@ -297,7 +290,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 break;
 
             case R.id.menu_search:
-                Log.e("in Search", "in");
                 autocompleltePlace();
                 break;
             //TODO ce deconnecter.
@@ -312,9 +304,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         detailRestaurantViewModel = ViewModelProviders.of(MainActivity.this).get(DetailRestaurantViewModel.class);
         detailRestaurantViewModel.init();
         detailRestaurantViewModel.getDetailRestaurant(restaurantId).observe(MainActivity.this, restaurant -> {
-//                mMap.clear();
+
             if (restaurant == null) {
-                Toast.makeText(this, "Le restaurant n'est pas dans le rayon de recherche", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.mainactivty_toast_restaurant_not_in_range, Toast.LENGTH_SHORT).show();
             } else {
                 mMap.addMarker(new MarkerOptions()
                         .title(restaurant.getName())
@@ -335,7 +327,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         restaurantsViewModel = ViewModelProviders.of(MainActivity.this).get(RestaurantsViewModel.class);
         restaurantsViewModel.init(nearbySearchLocationFormat);
         restaurantsViewModel.getRestaurantRepository().observe(MainActivity.this, restaurants -> {
-            Log.e("mapList", restaurants.size() + "");
             int index = 0;
             for (Restaurant restaurant : restaurants) {
                 if (!restaurants.get(index).getBookingRestaurant().isEmpty()) {
@@ -370,7 +361,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void displayWorkematesFragment() {
-        Log.i("MainActivity", "displayWorkerFragment");
         WorkmateFragment workmateFragment = WorkmateFragment.newInstance();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -461,41 +451,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         };
     }
 
-//    /**
-//     * Displays a form allowing the user to select a place from a list of likely places.
-//     */
-//    private void openPlacesDialog() {
-//        // Ask the user to choose the place where they are now.
-//        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                // The "which" argument contains the position of the selected item.
-//                LatLng markerLatLng = mLikelyPlaceLatLngs[which];
-//                String markerSnippet = mLikelyPlaceAddresses[which];
-//                if (mLikelyPlaceAttributions[which] != null) {
-//                    markerSnippet = markerSnippet + "\n" + mLikelyPlaceAttributions[which];
-//                }
-//
-//                // Add a marker for the selected place, with an info window
-//                // showing information about that place.
-//                mMap.addMarker(new MarkerOptions()
-//                        .title(mLikelyPlaceNames[which])
-//                        .position(markerLatLng)
-//                        .snippet(markerSnippet));
-//
-//                // Position the map's camera at the location of the marker.
-//                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng,
-//                        DEFAULT_ZOOM));
-//            }
-//        };
-//
-//        // Display the dialog.
-//        AlertDialog dialog = new AlertDialog.Builder(this)
-//                .setTitle(R.string.pick_place)
-//                .setItems(mLikelyPlaceNames, listener)
-//                .show();
-//    }
-
     public void autocompleltePlace() {
         fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
         Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
@@ -511,7 +466,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
-                Log.i("Autocomplete Main", "Place : " + place.getName() + ", " + place.getId());
 
                 if (restaurantsFragment.isVisible()) {
                     restaurantsFragment.displayAutocompleteRestaurant(place.getId());
@@ -541,8 +495,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         double maxLat = location.getLatitude() + deltaLat;
         double maxLong = location.getLongitude() + deltaLong;
 
-        Log.d(TAG, "Min: " + Double.toString(minLat) + "," + Double.toString(minLong));
-        Log.d(TAG, "Max: " + Double.toString(maxLat) + "," + Double.toString(maxLong));
 
 
         return new LatLngBounds(new LatLng(minLat, minLong), new LatLng(maxLat, maxLong));
