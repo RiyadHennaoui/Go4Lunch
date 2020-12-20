@@ -284,6 +284,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
             case R.id.nav_settings:
                 intentToProfileActivity();
+                break;
 
             case R.id.nav_logout:
                 signOutUserFromFirebase();

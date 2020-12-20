@@ -32,9 +32,6 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen_layout);
 
-
-
-
         if (!userCurrentLogged()) {
 
             createSignInIntent();
@@ -88,21 +85,18 @@ public class SplashScreen extends AppCompatActivity {
     }
 
     private void creatUserInFirestore(){
-
-
-
-
         //TODO Crée un Repo Pour les Users, supprimer la class UserHelper, sans oublier de faire le TODO de vérification si le compte existe dèja!!!
         if (userCurrentLogged()){
 
-            User userForm = new User();
-            userForm.setmUid(getCurrentUser().getUid());
-            userForm.setmUsername(getCurrentUser().getDisplayName());
-            userForm.setmMail(getCurrentUser().getEmail());
+//            User userForm = new User();
+//            userForm.setmUid(getCurrentUser().getUid());
+//            userForm.setmUsername(getCurrentUser().getDisplayName());
+//            userForm.setmMail(getCurrentUser().getEmail());
+
 
             userViewModel = ViewModelProviders.of(SplashScreen.this).get(UserViewModel.class);
-            userViewModel.init(userForm);
-            userViewModel.getUserRepository()
+            userViewModel.init();
+            userViewModel.createUserinFirestoreRepository()
                     .observe(SplashScreen.this, user -> {
                         Log.e("UserCreated ?", "Vérifie dans Firestore");
 

@@ -110,10 +110,20 @@ public class WorkerNotification extends Worker {
 
                         DocumentSnapshot documentSnapshot = task.getResult();
                         restaurant = documentSnapshot.toObject(Restaurant.class);
-
+                        String usersbooktest = "";
                         Log.e("le resteau", restaurant.getName());
+                        for (int i = 0; i < restaurant.getBookingRestaurant().size(); i++){
+                            if (i == restaurant.getBookingRestaurant().size()- 1) {
+                                usersbooktest += " et " + restaurant.getBookingRestaurant().get(i).getmUsername() + ".";
+                            }else if (i == 0){
+                                usersbooktest += restaurant.getBookingRestaurant().get(i).getmUsername();
+                            }else{
+                                usersbooktest += " ," + restaurant.getBookingRestaurant().get(i).getmUsername();
+                            }
 
-                        showNotification(restaurant.getRestaurantAdress(), restaurant.getName(), getCurrentUser().getDisplayName());
+                        }
+
+                        showNotification(restaurant.getRestaurantAdress(), restaurant.getName(), usersbooktest);
                     });
         }
 
@@ -189,6 +199,9 @@ public class WorkerNotification extends Worker {
                         }
                     });
 
+            getUsersNames(bookingUserList);
+
+            Log.e("Les bookers", getUsersNames(bookingUserList));
 
         }
 
@@ -221,11 +234,11 @@ public class WorkerNotification extends Worker {
         NotificationCompat.Builder notificationCompat = new NotificationCompat.Builder(getApplicationContext(), "4")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setShowWhen(true)
-                .setContentTitle("Votre reservation au : " + restaurantName)
-                .setContentText("avec vous : ")
+                .setContentTitle("Votre reservation au  " + restaurantName)
                 .setStyle(new NotificationCompat.InboxStyle()
-                        .addLine("avec vous : \n le restaurant est : " + restaurantAdress)
-                        .addLine("2 eme ligne")
+                        .addLine("avec vous : " + utilisateurs)
+                        .addLine("adresse du restaurant : ")
+                        .addLine(restaurantAdress)
                 )
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -236,15 +249,16 @@ public class WorkerNotification extends Worker {
 
     }
 
-    private String getUsersNames(ArrayList<User> utilisitaeurs) {
+    private String getUsersNames(ArrayList<User> utilisateurs) {
 
         String listUtilisateurs = "Moi ";
 
-        for (int i = 0; i < utilisitaeurs.size(); i++) {
-            listUtilisateurs += utilisitaeurs.get(i).getmUsername() + ", \n ";
+        for (int i = 0; i < utilisateurs.size(); i++) {
+            listUtilisateurs += utilisateurs.get(i).getmUsername() + ", \n ";
 
         }
 
+        Log.e("list Utilisateurs", listUtilisateurs);
         return listUtilisateurs;
     }
 

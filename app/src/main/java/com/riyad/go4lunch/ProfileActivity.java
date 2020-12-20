@@ -1,11 +1,9 @@
 package com.riyad.go4lunch;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,20 +13,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.riyad.go4lunch.model.User;
 import com.riyad.go4lunch.viewmodels.UserViewModel;
-
-import static com.riyad.go4lunch.utils.Constants.COLLECTION_USER_NAME;
 
 public class ProfileActivity extends AppCompatActivity {
     private TextView textInputEditTextUsername;
@@ -37,7 +28,7 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView addProfilePicture;
     private ImageView addProfileUsername;
     private Button logoutProfile;
-    FirebaseUser user;
+    FirebaseUser firebaseUser;
     String input;
     private UserViewModel userViewModel;
 
@@ -54,8 +45,15 @@ public class ProfileActivity extends AppCompatActivity {
         logoutProfile = findViewById(R.id.profile_btn_logout);
         addProfileUsername = findViewById(R.id.profile_iv_add_name);
 
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        User user = new User();
+        user.setmUsername(firebaseUser.getDisplayName());
+        user.setmUid(firebaseUser.getUid());
+        user.setmMail(firebaseUser.getEmail());
 
-        user = FirebaseAuth.getInstance().getCurrentUser();
+        userViewModel = ViewModelProviders.of(ProfileActivity.this).get(UserViewModel.class);
+        userViewModel.init();
+
         this.isCurrentUserLogged();
         this.updateUIWhenCreating();
     }
@@ -82,13 +80,14 @@ public class ProfileActivity extends AppCompatActivity {
 
                 alerteDiag.setPositiveButton(R.string.profileactivity_adiag_btn_yes, (dialog, which) -> {
                    input = editText.getText().toString();
+                   Log.e("Changement de nom", firebaseUser.getDisplayName() + " ," + input);
                     setUsernameProfile(input);
+
                 });
 
                 alerteDiag.setNegativeButton(R.string.profileactivity_adiag_btn_cancel, (dialog, which) -> dialog.cancel());
                 alerteDiag.show();
-                addProfileUsername.setVisibility(View.GONE);
-                displayUsernameProfile();
+
             });
         }
 
@@ -135,7 +134,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void displayUsernameProfile() {
-        String username = TextUtils.isEmpty(user.getDisplayName()) ?
+        String username = TextUtils.isEmpty(firebaseUser.getDisplayName()) ?
                 getString(R.string.info_no_username_found) : this.getCurrentUser().getDisplayName();
         this.textInputEditTextUsername.setText(username);
     }
@@ -155,49 +154,60 @@ public class ProfileActivity extends AppCompatActivity {
 
         //TODO Le faire via un Repo !!!!
 
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setPhotoUri(Uri.parse(photoUrl))
-                .build();
+//        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+//                .setPhotoUri(Uri.parse(photoUrl))
+//                .build();
 
-        User userForm = new User();
-        userForm.setmUid(getCurrentUser().getUid());
-        userForm.setmUsername(getCurrentUser().getDisplayName());
-        userForm.setmMail(getCurrentUser().getEmail());
-        userViewModel = ViewModelProviders.of(ProfileActivity.this).get(UserViewModel.class);
-        userViewModel.init(userForm);
-        userViewModel.getUserInFirestore()
-                .observe(ProfileActivity.this, user1 -> {
-                    user1.setmUrlPicture(photoUrl);
+//        User userForm = new User();
+//        userForm.setmUid(getCurrentUser().getUid());
+//        userForm.setmUsername(getCurrentUser().getDisplayName());
+//        userForm.setmMail(getCurrentUser().getEmail());
 
-                });
+        userViewModel.setUserPhotoUrl(getCurrentUser().getUid(),photoUrl);
 
 
-        user.updateProfile(profileUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(ProfileActivity.this, R.string.profileactivity_toast_update_profile_success, Toast.LENGTH_SHORT).show();
-                            displayPhotoProfile();
+//        userViewModel.getUserInFirestore()
+//                .observe(ProfileActivity.this, user1 -> {
+//                    user1.setmUrlPicture(photoUrl);
+//                    user.updateProfile(profileUpdates)
+////                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+////                                @Override
+////                                public void onComplete(@NonNull Task<Void> task) {
+////                                    if (task.isSuccessful()) {
+////                                        Toast.makeText(ProfileActivity.this, R.string.profileactivity_toast_update_profile_success, Toast.LENGTH_SHORT).show();
+////                                        displayPhotoProfile();
+////
+////                                    }else{
+////                                        Toast.makeText(ProfileActivity.this, R.string.profileactivity_toast_update_error, Toast.LENGTH_SHORT).show();
+////                                    }
+////                                }
+////                            });
 
-                        }else{
-                            Toast.makeText(ProfileActivity.this, R.string.profileactivity_toast_update_error, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+//                });
+
+
+
     }
 
+    //TODO faire la même chose avec le changement de photoUrl
     private void setUsernameProfile(String usernameProfile){
 
-        UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder()
-                .setDisplayName(usernameProfile)
-                .build();
 
-        user.updateProfile(profileChangeRequest)
-                .addOnCompleteListener(task -> {
-                    displayUsernameProfile();
-                    addProfileUsername.setVisibility(View.GONE);
-                });
+            userViewModel.setUserName(firebaseUser.getUid(), usernameProfile)
+            .observe(this, user -> {
+                displayUsernameProfile();
+                addProfileUsername.setVisibility(View.GONE);
+            });
+
+//        UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder()
+//                .setDisplayName(usernameProfile)
+//                .build();
+//
+//        user.updateProfile(profileChangeRequest)
+//                .addOnCompleteListener(task -> {
+//                    displayUsernameProfile();
+//                    addProfileUsername.setVisibility(View.GONE);
+//                });
 
     }
 
