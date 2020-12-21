@@ -33,7 +33,7 @@ public class UserViewModel extends ViewModel {
     public LiveData<User> createUserinFirestoreRepository(){
         return createUserMutableLiveData;
     }
-    public void getUserInFirestore(String userId){userRepository.getUserinfirestore(userId);}
+    public LiveData<User> getUserInFirestore(String userId){return userRepository.getUserinfirestore(userId);}
     public LiveData<User> setUserPhotoUrl(String userId, String photoUrl){return userRepository.setPhotoProfileUserInFirestore(userId, photoUrl);}
     public LiveData<User> setUserName(String userId, String name){return userRepository.setNameProfileUserInFirestore(userId, name);}
 

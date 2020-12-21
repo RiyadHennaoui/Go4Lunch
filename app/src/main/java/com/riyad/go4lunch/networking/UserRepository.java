@@ -49,15 +49,19 @@ public class UserRepository {
         userToSave.setmUid(getCurrentUser().getUid());
         userToSave.setmUsername(getCurrentUser().getDisplayName());
         userToSave.setmMail(getCurrentUser().getEmail());
-        userDb.collection(COLLECTION_USER_NAME)
+        if (getCurrentUser().getPhotoUrl() != null){
+            userToSave.setmUrlPicture(getCurrentUser().getPhotoUrl().toString());
+        }
+
+            userDb.collection(COLLECTION_USER_NAME)
                 .document(userToSave.getmUid())
                 .set(userToSave)
                 .addOnCompleteListener(task ->{
-                    Log.e("useradd", "enfin ? ");
+                    Log.e("useradd UserRepo", "enfin ? ");
 
                         })
-                .addOnFailureListener(e -> Log.e("userNotAdd", e.toString()))
-        ;
+                .addOnFailureListener(e -> Log.e("userNotAdd UserRepo", e.toString())
+                );
 
 
 
@@ -68,8 +72,6 @@ public class UserRepository {
     public MutableLiveData<User> getUserinfirestore (String userId){
 
         MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
-
-
 
         userDb.collection(COLLECTION_USER_NAME)
                 .document(userId)
@@ -89,11 +91,13 @@ public class UserRepository {
 
     public MutableLiveData<User> setPhotoProfileUserInFirestore (String userId, String userPhotoUrl){
 
-        MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
+        MutableLiveData<User> userPhotoMutableLiveData = new MutableLiveData<>();
 
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setPhotoUri(Uri.parse(userPhotoUrl))
                 .build();
+
+
 
         userDb.collection(COLLECTION_USER_NAME)
                 .document(userId)
@@ -103,44 +107,38 @@ public class UserRepository {
                     User getUser;
                     getUser = documentSnapshot.toObject(User.class);
                     getUser.setmUrlPicture(userPhotoUrl);
-                    currentUserFirebaseAuth.updateProfile(profileUpdates)
-                            .addOnCompleteListener(task1 -> {
-                               if(task1.isSuccessful()){
-                                Log.e("update Photoprofile", "ajouter au firebase auth avec success");
-                               }
-                            });
-                    userMutableLiveData.setValue(getUser);
+                    currentUserFirebaseAuth.updateProfile(profileUpdates);
+
+                    userPhotoMutableLiveData.setValue(getUser);
                 });
 
-        return userMutableLiveData;
-
-
+        return userPhotoMutableLiveData;
     }
 
     public MutableLiveData<User> setNameProfileUserInFirestore (String userId, String userName){
 
-        MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
+        MutableLiveData<User> userNameMutableLiveData = new MutableLiveData<>();
 
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(userName)
                 .build();
 
+
+
         userDb.collection(COLLECTION_USER_NAME)
                 .document(userId)
-
                 .get()
                 .addOnCompleteListener(task -> {
-                    Log.e("userRepo", "lambda");
                     DocumentSnapshot documentSnapshot = task.getResult();
                     User getUser;
                     getUser = documentSnapshot.toObject(User.class);
                     getUser.setmUsername(userName);
                     currentUserFirebaseAuth.updateProfile(profileUpdates);
 
-                    userMutableLiveData.setValue(getUser);
+                    userNameMutableLiveData.setValue(getUser);
                 });
 
-        return userMutableLiveData;
+        return userNameMutableLiveData;
 
 
     }

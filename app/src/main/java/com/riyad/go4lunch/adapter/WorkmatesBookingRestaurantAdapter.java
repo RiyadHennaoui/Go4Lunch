@@ -22,6 +22,7 @@ import java.util.List;
 public class WorkmatesBookingRestaurantAdapter extends RecyclerView.Adapter<WorkmatesBookingRestaurantAdapter.WorkmatesBookingHolder> {
 
     private ArrayList<User> usersBooking;
+    private String name;
 
 
     public WorkmatesBookingRestaurantAdapter(ArrayList<User> usersBooking) {
@@ -31,6 +32,7 @@ public class WorkmatesBookingRestaurantAdapter extends RecyclerView.Adapter<Work
     @NonNull
     @Override
     public WorkmatesBookingHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        name = parent.getResources().getString(R.string.rv_adapter_workmat_book);
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_worker_booking, parent, false);
         return new WorkmatesBookingHolder(v);
     }
@@ -62,7 +64,8 @@ public class WorkmatesBookingRestaurantAdapter extends RecyclerView.Adapter<Work
 
         public void bind(final User user){
 
-            workmateName.setText(user.getmUsername() + " is joining!");
+
+            workmateName.setText(user.getmUsername() + name);
             Glide.with(photoProfile).load(user.getmUrlPicture()).circleCrop().into(photoProfile);
         }
 

@@ -6,20 +6,24 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.riyad.go4lunch.model.User;
 import com.riyad.go4lunch.viewmodels.UserViewModel;
+
+import static com.riyad.go4lunch.utils.Constants.SIGN_OUT_TASK;
 
 public class ProfileActivity extends AppCompatActivity {
     private TextView textInputEditTextUsername;
@@ -46,16 +50,21 @@ public class ProfileActivity extends AppCompatActivity {
         addProfileUsername = findViewById(R.id.profile_iv_add_name);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        User user = new User();
-        user.setmUsername(firebaseUser.getDisplayName());
-        user.setmUid(firebaseUser.getUid());
-        user.setmMail(firebaseUser.getEmail());
+//        User user = new User();
+//        user.setmUsername(firebaseUser.getDisplayName());
+//        user.setmUid(firebaseUser.getUid());
+//        user.setmMail(firebaseUser.getEmail());
 
-        userViewModel = ViewModelProviders.of(ProfileActivity.this).get(UserViewModel.class);
-        userViewModel.init();
+        initUserViewModel();
 
         this.isCurrentUserLogged();
         this.updateUIWhenCreating();
+        this.logoutProfile();
+    }
+
+    private void initUserViewModel() {
+        userViewModel = ViewModelProviders.of(ProfileActivity.this).get(UserViewModel.class);
+        userViewModel.init();
     }
 
     private FirebaseUser getCurrentUser(){ return FirebaseAuth.getInstance().getCurrentUser(); }
@@ -80,8 +89,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                 alerteDiag.setPositiveButton(R.string.profileactivity_adiag_btn_yes, (dialog, which) -> {
                    input = editText.getText().toString();
-                    setUsernameProfile(input);
-
+                    setUserNameProfile(input);
                 });
 
                 alerteDiag.setNegativeButton(R.string.profileactivity_adiag_btn_cancel, (dialog, which) -> dialog.cancel());
@@ -115,9 +123,6 @@ public class ProfileActivity extends AppCompatActivity {
                 alertDialog.setNegativeButton(R.string.profileactivity_adiag_btn_cancel, (dialog, which) -> dialog.cancel());
                 alertDialog.show();
             });
-
-
-
 
         }
         displayUsernameProfile();
@@ -158,8 +163,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    //TODO faire la même chose avec le changement de photoUrl
-    private void setUsernameProfile(String usernameProfile){
+
+    private void setUserNameProfile(String usernameProfile){
 
             userViewModel.setUserName(firebaseUser.getUid(), usernameProfile)
             .observe(this, user -> {
@@ -168,6 +173,35 @@ public class ProfileActivity extends AppCompatActivity {
             });
 
     }
+
+    private void logoutProfile(){
+
+        logoutProfile.setOnClickListener(v -> {
+            signOutUserFromFirebase();
+        });
+
+
+    }
+
+    private void signOutUserFromFirebase() {
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnSuccessListener(this, this.updateUIAfterRESTRequestsCompleted(SIGN_OUT_TASK));
+    }
+
+    private OnSuccessListener<Void> updateUIAfterRESTRequestsCompleted(final int origin) {
+        return aVoid -> {
+            switch (origin) {
+                case SIGN_OUT_TASK:
+                    finish();
+                    break;
+                default:
+                    break;
+            }
+        };
+    }
+
+
 
 
 }

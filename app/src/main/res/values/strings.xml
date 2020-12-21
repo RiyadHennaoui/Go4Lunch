@@ -80,5 +80,6 @@
     <string name="mainactivty_toast_restaurant_not_in_range">Le restaurant n\'est pas dans le rayon de recherche</string>
     <string name="detailactivity_call_formating">tel:</string>
     <string name="detailactivity_toast_permission_denied">Cannot make call without your permission</string>
+    <string name="rv_adapter_workmat_book">\ is joining!\</string>
 
 </resources>
