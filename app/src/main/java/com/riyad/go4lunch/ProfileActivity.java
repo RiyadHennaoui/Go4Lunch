@@ -80,7 +80,6 @@ public class ProfileActivity extends AppCompatActivity {
 
                 alerteDiag.setPositiveButton(R.string.profileactivity_adiag_btn_yes, (dialog, which) -> {
                    input = editText.getText().toString();
-                   Log.e("Changement de nom", firebaseUser.getDisplayName() + " ," + input);
                     setUsernameProfile(input);
 
                 });
@@ -114,7 +113,6 @@ public class ProfileActivity extends AppCompatActivity {
                     setUserPhotoProfile(input);
                 });
                 alertDialog.setNegativeButton(R.string.profileactivity_adiag_btn_cancel, (dialog, which) -> dialog.cancel());
-
                 alertDialog.show();
             });
 
@@ -152,62 +150,22 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void setUserPhotoProfile(String photoUrl) {
 
-        //TODO Le faire via un Repo !!!!
-
-//        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-//                .setPhotoUri(Uri.parse(photoUrl))
-//                .build();
-
-//        User userForm = new User();
-//        userForm.setmUid(getCurrentUser().getUid());
-//        userForm.setmUsername(getCurrentUser().getDisplayName());
-//        userForm.setmMail(getCurrentUser().getEmail());
-
-        userViewModel.setUserPhotoUrl(getCurrentUser().getUid(),photoUrl);
-
-
-//        userViewModel.getUserInFirestore()
-//                .observe(ProfileActivity.this, user1 -> {
-//                    user1.setmUrlPicture(photoUrl);
-//                    user.updateProfile(profileUpdates)
-////                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-////                                @Override
-////                                public void onComplete(@NonNull Task<Void> task) {
-////                                    if (task.isSuccessful()) {
-////                                        Toast.makeText(ProfileActivity.this, R.string.profileactivity_toast_update_profile_success, Toast.LENGTH_SHORT).show();
-////                                        displayPhotoProfile();
-////
-////                                    }else{
-////                                        Toast.makeText(ProfileActivity.this, R.string.profileactivity_toast_update_error, Toast.LENGTH_SHORT).show();
-////                                    }
-////                                }
-////                            });
-
-//                });
-
-
+        userViewModel.setUserPhotoUrl(firebaseUser.getUid(), photoUrl)
+                .observe(this, user -> {
+                    displayPhotoProfile();
+                    addProfilePicture.setVisibility(View.GONE);
+                });
 
     }
 
     //TODO faire la même chose avec le changement de photoUrl
     private void setUsernameProfile(String usernameProfile){
 
-
             userViewModel.setUserName(firebaseUser.getUid(), usernameProfile)
             .observe(this, user -> {
                 displayUsernameProfile();
                 addProfileUsername.setVisibility(View.GONE);
             });
-
-//        UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder()
-//                .setDisplayName(usernameProfile)
-//                .build();
-//
-//        user.updateProfile(profileChangeRequest)
-//                .addOnCompleteListener(task -> {
-//                    displayUsernameProfile();
-//                    addProfileUsername.setVisibility(View.GONE);
-//                });
 
     }
 
