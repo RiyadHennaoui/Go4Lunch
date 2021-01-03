@@ -1,9 +1,7 @@
 package com.riyad.go4lunch.networking;
 
-import android.app.Application;
 import android.net.Uri;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -12,13 +10,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.riyad.go4lunch.ProfileActivity;
-import com.riyad.go4lunch.R;
 import com.riyad.go4lunch.model.User;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.riyad.go4lunch.utils.Constants.COLLECTION_USER_NAME;
 

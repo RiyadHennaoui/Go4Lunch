@@ -1,5 +1,6 @@
 package com.riyad.go4lunch.worker;
 
+import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -20,17 +21,17 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.gson.Gson;
 import com.riyad.go4lunch.MainActivity;
 import com.riyad.go4lunch.R;
-import com.riyad.go4lunch.model.BookingRestaurant;
 import com.riyad.go4lunch.model.User;
 import com.riyad.go4lunch.ui.Restaurant;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import static com.riyad.go4lunch.utils.Constants.COLLECTION_RESTAURANTS_NAME;
@@ -61,7 +62,7 @@ public class WorkerNotification extends Worker {
         //TODO appeler show notification.
 
 
-        CountDownLatch countDownLatch = new CountDownLatch(1);
+
         restaurantDb = firebaseFirestore.collection(COLLECTION_RESTAURANTS_NAME);
 
 
@@ -80,7 +81,6 @@ public class WorkerNotification extends Worker {
 
         DocumentReference userDocument = firebaseFirestore.collection(COLLECTION_USER_NAME).document(getCurrentUser().getUid());
 
-        Log.e("getCurrentUserInFire", "Avant Lambda");
         userDocument.get()
                 .addOnCompleteListener(task -> {
 
@@ -89,7 +89,6 @@ public class WorkerNotification extends Worker {
 
                     getRestaurantBookByCurrentUser(user);
 
-                    Log.e("getCurrentUserWorker", user.getmUsername() + " / " + user.getBookingRestaurant().getRestaurantId());
                 });
 
     }
@@ -97,10 +96,6 @@ public class WorkerNotification extends Worker {
 
     private void getRestaurantBookByCurrentUser(User currentUser) {
 
-        String testFirestoreDataMapMail = currentUser.getmMail();
-        String testFirestoreDataMapId = currentUser.getmUid();
-        String testFirestoreDataMapUrlPicture = currentUser.getmUrlPicture();
-        String testFirestoreDataMapObjectBook = currentUser.getBookingRestaurant().toString();
         String restaurantIdFound = currentUser.getBookingRestaurant().getRestaurantId();
 
         if (restaurantIdFound != null){
@@ -110,121 +105,70 @@ public class WorkerNotification extends Worker {
 
                         DocumentSnapshot documentSnapshot = task.getResult();
                         restaurant = documentSnapshot.toObject(Restaurant.class);
-                        String usersbooktest = "";
+                        String usersNamebook = "";
                         Log.e("le resteau", restaurant.getName());
                         for (int i = 0; i < restaurant.getBookingRestaurant().size(); i++){
-                            if (i == restaurant.getBookingRestaurant().size()- 1) {
-                                usersbooktest += " et " + restaurant.getBookingRestaurant().get(i).getmUsername() + ".";
-                            }else if (i == 0){
-                                usersbooktest += restaurant.getBookingRestaurant().get(i).getmUsername();
-                            }else{
-                                usersbooktest += " ," + restaurant.getBookingRestaurant().get(i).getmUsername();
-                            }
-
+                            usersNamebook = formatingWorkmateBookingListInNotification(usersNamebook, i);
                         }
 
-                        showNotification(restaurant.getRestaurantAdress(), restaurant.getName(), usersbooktest);
+                        showNotification(restaurant.getRestaurantAdress(), restaurant.getName(), usersNamebook);
                     });
         }
 
 
     }
 
+    private String formatingWorkmateBookingListInNotification(String usersNamebook, int i) {
+        if(!restaurant.getBookingRestaurant().get(i).getmUid().equals(getCurrentUser().getUid())){
+            if (i == restaurant.getBookingRestaurant().size()- 1) {
+                usersNamebook += " et " + restaurant.getBookingRestaurant().get(i).getmUsername() + ".";
+            }else if (i == 0){
+                usersNamebook += restaurant.getBookingRestaurant().get(i).getmUsername();
+            }else{
+                usersNamebook += " ," + restaurant.getBookingRestaurant().get(i).getmUsername();
+            }
+        }
+        return usersNamebook;
+    }
 
-//    private BookingRestaurant getBoonkingRestaurantForCurrentUser() {
-//
-//        BookingRestaurant bookingRestaurant = new BookingRestaurant();
-//        userDb = firebaseFirestore.collection(COLLECTION_USER_NAME);
-//        DocumentReference userDoc = userDb.document(getCurrentUser().getUid());
-//
-//        userDoc
-//                .get()
-//                .addOnCompleteListener(task -> {
-//                    User currentUser;
-//                    DocumentSnapshot documentSnapshot = task.getResult();
-//                    currentUser = documentSnapshot.toObject(User.class);
-//                    Gson gson = new Gson();
-//                    Log.e("CurrentUser", gson.toJson(currentUser));
-//                    bookingRestaurant.setRestaurantId(currentUser.getBookingRestaurant().getRestaurantId());
-//                });
-//
-//        return bookingRestaurant;
-//    }
 
     //TODO récuperer la liste des users qui ont reservé sans oublier d'enlever le current user.
-    private ArrayList<User> getAllUsersBookRestaurant(String restaurantId) {
+    public static void periodRequest(Context context) {
 
-
-        ArrayList<String> usersNamesBookFormated = new ArrayList<>();
-        ArrayList<User> bookingUserList = new ArrayList<>();
-        workmatesBookId = new ArrayList<>();
-
-
-        if (restaurantId != null) {
-            restaurantDb = firebaseFirestore.collection(COLLECTION_RESTAURANTS_NAME);
-            DocumentReference userIddocumentReference = restaurantDb.document(restaurantId);
-
-
-            userIddocumentReference.get()
-                    .addOnCompleteListener(task -> {
-                        Restaurant currentRestaurantBook;
-                        DocumentSnapshot documentSnapshot = task.getResult();
-                        currentRestaurantBook = documentSnapshot.toObject(Restaurant.class);
-
-                        for (int i = 0; i < currentRestaurantBook.getBookingRestaurant().size(); i++) {
-                            workmatesBookId.add(currentRestaurantBook.getBookingRestaurant().get(i).getmUid());
-                        }
-                    });
-
-
-            userDb.get()
-                    .addOnCompleteListener(task2 -> {
-                        List<User> workmateRestaurantBook;
-                        QuerySnapshot documentSnapshot = task2.getResult();
-                        workmateRestaurantBook = documentSnapshot.toObjects(User.class);
-                        if (!workmateRestaurantBook.isEmpty()) {
-                            for (int i = 0; i < workmatesBookId.size(); i++) {
-                                for (int j = 0; j < workmateRestaurantBook.size(); j++) {
-                                    if (workmateRestaurantBook.get(j).getmUid().equals(workmatesBookId.get(i))) {
-                                        Log.i("ici", "ici " + workmateRestaurantBook.get(j).getmUid());
-                                        //TODO ajouter le if en dessous a la fin des tests.
-                                        // if (!workmateRestaurantBook.get(j).getmUid().equals(getCurrentUser().getUid())){
-                                        bookingUserList.add(workmateRestaurantBook.get(j));
-                                        usersNamesBookFormated.add(workmateRestaurantBook.get(j).getmUsername());
-                                        //  }
-                                    }
-                                }
-                            }
-
-                        }
-                    });
-
-            getUsersNames(bookingUserList);
-
-            Log.e("Les bookers", getUsersNames(bookingUserList));
-
-        }
-
-        return bookingUserList;
-    }
-
-
-    public static void periodRequest() {
+        Long delay = getDelayofSendNotificationRestaurantBook();
 
         PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(WorkerNotification.class,
-                1, TimeUnit.SECONDS)
-                .setInitialDelay(15, TimeUnit.SECONDS)
-//                .setConstraints(setConst())
+                24, TimeUnit.HOURS)
+                .setInitialDelay(delay, TimeUnit.MILLISECONDS)
                 .build();
 
 
-        WorkManager.getInstance().enqueueUniquePeriodicWork("periodic", ExistingPeriodicWorkPolicy.REPLACE, periodicWorkRequest);
+        WorkManager.getInstance(context).enqueue(periodicWorkRequest);
+//        WorkManager.getInstance().enqueueUniquePeriodicWork("periodic", ExistingPeriodicWorkPolicy.REPLACE, periodicWorkRequest);
+    }
+
+    @NotNull
+    private static Long getDelayofSendNotificationRestaurantBook() {
+        Calendar noonDate = Calendar.getInstance();
+        noonDate.set(Calendar.HOUR_OF_DAY, 12);
+        noonDate.set(Calendar.MINUTE, 0);
+        noonDate.set(Calendar.SECOND, 0);
+        Calendar actualDate = Calendar.getInstance();
+
+
+        Long delay = noonDate.getTimeInMillis() - actualDate.getTimeInMillis();
+        Log.e("delay", (delay / 60000) + "");
+        if (delay < 0){
+            Calendar tomorrowDate = Calendar.getInstance();
+            tomorrowDate.add(Calendar.HOUR_OF_DAY, 24);
+            delay = tomorrowDate.getTimeInMillis() - actualDate.getTimeInMillis() - Math.abs(delay);
+            Log.e("delayIf", (delay / 60000) + "");
+        }
+        return delay;
     }
 
 
     public void showNotification(String restaurantAdress, String restaurantName, String utilisateurs) {
-
-        Log.e("Notif", "here");
 
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -249,17 +193,6 @@ public class WorkerNotification extends Worker {
 
     }
 
-    private String getUsersNames(ArrayList<User> utilisateurs) {
 
-        String listUtilisateurs = "Moi ";
-
-        for (int i = 0; i < utilisateurs.size(); i++) {
-            listUtilisateurs += utilisateurs.get(i).getmUsername() + ", \n ";
-
-        }
-
-        Log.e("list Utilisateurs", listUtilisateurs);
-        return listUtilisateurs;
-    }
 
 }

@@ -84,15 +84,9 @@ public class SplashScreen extends AppCompatActivity {
 
     }
 
-    private void creatUserInFirestore(){
+    private void creatUserInFirestore() {
         //TODO Crée un Repo Pour les Users, supprimer la class UserHelper, sans oublier de faire le TODO de vérification si le compte existe dèja!!!
-        if (userCurrentLogged()){
-
-//            User userForm = new User();
-//            userForm.setmUid(getCurrentUser().getUid());
-//            userForm.setmUsername(getCurrentUser().getDisplayName());
-//            userForm.setmMail(getCurrentUser().getEmail());
-
+        if (userCurrentLogged()) {
 
             userViewModel = ViewModelProviders.of(SplashScreen.this).get(UserViewModel.class);
             userViewModel.init();
@@ -109,7 +103,7 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        Log.e("result", "dans le result");
         if (requestCode == RC_SIGN_IN) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
             if (resultCode == RESULT_OK) {
