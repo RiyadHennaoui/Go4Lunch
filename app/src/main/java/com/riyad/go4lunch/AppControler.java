@@ -9,6 +9,7 @@ import android.os.Build;
 
 import androidx.multidex.MultiDex;
 
+import com.riyad.go4lunch.worker.WorkerCleaListOfRestaurant;
 import com.riyad.go4lunch.worker.WorkerNotification;
 
 public class AppControler extends Application {
@@ -30,6 +31,7 @@ public class AppControler extends Application {
         createNotificationChannel();
         //TODO a remettre après avoir finaliser la creation du user dans firestore dans splashScnreen activity
         WorkerNotification.periodRequest(getApplicationContext());
+        WorkerCleaListOfRestaurant.deleteRestaurantsPeriodRequest(getApplicationContext());
     }
 
     @Override

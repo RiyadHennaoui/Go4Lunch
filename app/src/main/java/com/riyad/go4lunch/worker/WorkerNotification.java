@@ -139,6 +139,7 @@ public class WorkerNotification extends Worker {
 
         PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(WorkerNotification.class,
                 24, TimeUnit.HOURS)
+                //TODO remettre le delait
                 .setInitialDelay(delay, TimeUnit.MILLISECONDS)
                 .build();
 
