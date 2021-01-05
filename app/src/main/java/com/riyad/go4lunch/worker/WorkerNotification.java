@@ -21,6 +21,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.riyad.go4lunch.MainActivity;
 import com.riyad.go4lunch.R;
 import com.riyad.go4lunch.model.User;
@@ -67,7 +68,7 @@ public class WorkerNotification extends Worker {
 
 
         getCurrentUserInFirestore();
-
+        setRestaurantsListInFirestore();
 
         return Result.success();
     }
@@ -141,6 +142,7 @@ public class WorkerNotification extends Worker {
                 24, TimeUnit.HOURS)
                 //TODO remettre le delait
                 .setInitialDelay(delay, TimeUnit.MILLISECONDS)
+                .addTag("periodRequest")
                 .build();
 
 
@@ -192,6 +194,68 @@ public class WorkerNotification extends Worker {
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
         notificationManagerCompat.notify(4, notificationCompat.build());
 
+    }
+
+    private void setRestaurantsListInFirestore(){
+
+        ArrayList<Restaurant> restaurantsList = new ArrayList<>();
+        restaurantDb
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        if (!task.getResult().isEmpty()){
+                            for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()){
+                                Restaurant restaurant = queryDocumentSnapshot.toObject(Restaurant.class);
+                                restaurantsList.add(restaurant);
+                            }
+                        }
+                    }
+                });
+
+        for (int i= 0;i < restaurantsList.size() ; i++ ){
+            restaurantDb
+                    .document(restaurantsList.get(i).getId())
+                    .delete()
+                    .addOnCompleteListener(task -> {
+                        Log.e("dans la suppresion", "delate");
+                    });
+        }
+
+    }
+
+    public static void deleteRestaurantsPeriodRequest(Context context) {
+
+        Long delay = getDelayofremoveRestaurants();
+
+        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(WorkerNotification.class,
+                24, TimeUnit.HOURS)
+                .setInitialDelay(delay, TimeUnit.MILLISECONDS)
+                .addTag("delete, worker")
+                .build();
+
+
+        WorkManager.getInstance(context).enqueue(periodicWorkRequest);
+
+    }
+
+    @NotNull
+    private static Long getDelayofremoveRestaurants() {
+        Calendar noonDate = Calendar.getInstance();
+        noonDate.set(Calendar.HOUR_OF_DAY, 23);
+        noonDate.set(Calendar.MINUTE, 59);
+        noonDate.set(Calendar.SECOND, 59);
+        Calendar actualDate = Calendar.getInstance();
+
+
+        Long delay = noonDate.getTimeInMillis() - actualDate.getTimeInMillis();
+        Log.e("delayde", (delay / 60000) + "");
+        if (delay < 0){
+            Calendar tomorrowDate = Calendar.getInstance();
+            tomorrowDate.add(Calendar.HOUR_OF_DAY, 24);
+            delay = tomorrowDate.getTimeInMillis() - actualDate.getTimeInMillis() - Math.abs(delay);
+            Log.e("delayIf", (delay / 60000) + "");
+        }
+        return delay;
     }
 
 
