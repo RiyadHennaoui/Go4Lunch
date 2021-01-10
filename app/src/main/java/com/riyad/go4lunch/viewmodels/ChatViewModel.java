@@ -24,8 +24,6 @@ public class ChatViewModel extends ViewModel {
         this.receiverId = receiverId;
         chatRepository = ChatRepository.getInstance();
         getChatMutableLiveData = chatRepository.getChat(receiverId);
-        //TODO voir avec Thie comment faier pour les paramètres de la méthode (récup le message et le currentUser (Objet User))
-
 
     }
 
