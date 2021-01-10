@@ -73,11 +73,32 @@ public class WorkerDelateRestaurant extends Worker {
                                 Restaurant restaurant = queryDocumentSnapshot.toObject(Restaurant.class);
                                 Log.e("restauget", restaurant.getName());
                                 restaurantsList.add(restaurant);
+                                restaurantDb
+                                        .document(restaurant.getId())
+                                        .delete()
+                                        .addOnCompleteListener(task1 -> {
+                                            Log.e("dans la suppresion3", "delate");
+                                            if(task1.isCanceled()){
+                                                Log.e("dans la suppression3", "erreur");
+                                            }
+                                        });
                             }
                         }
                     }
                 });
 
+        for (int i= 0;i < restaurantsList.size() ; i++ ){
+            Log.e("dans le supp2", restaurantsList.get(i).getName());
+            restaurantDb
+                    .document(restaurantsList.get(i).getId())
+                    .delete()
+                    .addOnCompleteListener(task -> {
+                        Log.e("dans la suppresion2", "delate");
+                        if(task.isCanceled()){
+                            Log.e("dans la suppression2", "erreur");
+                        }
+                    });
+        }
 
 
         return restaurantsList;
@@ -85,6 +106,7 @@ public class WorkerDelateRestaurant extends Worker {
     }
 
     private void suppressAllRestaurant(List<Restaurant> getRestaurant){
+        Log.e("dans le supp", getRestaurant.size() + " !");
         for (int i= 0;i < getRestaurant.size() ; i++ ){
             Log.e("dans le supp", getRestaurant.get(i).getName());
             restaurantDb
@@ -92,7 +114,12 @@ public class WorkerDelateRestaurant extends Worker {
                     .delete()
                     .addOnCompleteListener(task -> {
                         Log.e("dans la suppresion", "delate");
-                    });
+                        if(task.isCanceled()){
+                            Log.e("dans la suppression", "erreur");
+                        }
+                    })
+            .addOnFailureListener(e -> Log.e("Failure", e.toString()));
+
         }
 
 
@@ -103,7 +130,7 @@ public class WorkerDelateRestaurant extends Worker {
         Long delay = getDelayofremoveRestaurants();
 
         OneTimeWorkRequest periodicWorkRequest = new OneTimeWorkRequest.Builder(WorkerDelateRestaurant.class)
-//                .setInitialDelay(delay, TimeUnit.MILLISECONDS)
+                .setInitialDelay(delay, TimeUnit.MILLISECONDS)
                 .addTag("delete, worker")
                 .build();
 
@@ -115,19 +142,19 @@ public class WorkerDelateRestaurant extends Worker {
     @NotNull
     private static Long getDelayofremoveRestaurants() {
         Calendar noonDate = Calendar.getInstance();
-        noonDate.set(Calendar.HOUR_OF_DAY, 8);
-        noonDate.set(Calendar.MINUTE, 38);
+        noonDate.set(Calendar.HOUR_OF_DAY, 9);
+        noonDate.set(Calendar.MINUTE, 58);
         noonDate.set(Calendar.SECOND, 30);
         Calendar actualDate = Calendar.getInstance();
 
 
         Long delay = noonDate.getTimeInMillis() - actualDate.getTimeInMillis();
-        Log.e("delayde", (delay / 60000) + "");
+        Log.e("delayDelete", (delay / 60000) + "");
         if (delay < 0){
             Calendar tomorrowDate = Calendar.getInstance();
             tomorrowDate.add(Calendar.HOUR_OF_DAY, 24);
             delay = tomorrowDate.getTimeInMillis() - actualDate.getTimeInMillis() - Math.abs(delay);
-            Log.e("delayIf", (delay / 60000) + "");
+            Log.e("delayIfDelete", (delay / 60000) + "");
         }
         return delay;
     }
