@@ -21,7 +21,6 @@ public class Restaurant implements Parcelable {
     private String restaurantAdress;
     private RestaurantDetail restaurantDetail;
     private ArrayList<User> bookingRestaurant = new ArrayList<>();
-    //TODO modifier le RatingRestaurant en User.
     private ArrayList<User> ratingUser = new ArrayList<>();
 
 
@@ -43,6 +42,7 @@ public class Restaurant implements Parcelable {
     public String getId() {
         return id;
     }
+
     public String getName() {
         return name;
     }
@@ -80,6 +80,7 @@ public class Restaurant implements Parcelable {
     public void setId(String id) {
         this.id = id;
     }
+
     public void setName(String name) {
         this.name = name;
     }
