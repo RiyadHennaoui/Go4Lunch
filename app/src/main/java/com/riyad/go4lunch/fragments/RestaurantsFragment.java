@@ -42,6 +42,7 @@ import retrofit2.Call;
 import static android.content.Context.MODE_PRIVATE;
 import static com.riyad.go4lunch.utils.Constants.CURRENT_DEVICE_LOCATION;
 import static com.riyad.go4lunch.utils.Constants.DEFAULT_ZOOM;
+import static com.riyad.go4lunch.utils.Constants.SHARED_NAME;
 
 public class RestaurantsFragment extends Fragment {
 
@@ -52,11 +53,12 @@ public class RestaurantsFragment extends Fragment {
     private SharedPreferences.Editor editor;
 
 
+    public RestaurantsFragment() {
+    }
 
-
-    public RestaurantsFragment() { }
-
-    public static RestaurantsFragment newInstance(){ return new RestaurantsFragment(); }
+    public static RestaurantsFragment newInstance() {
+        return new RestaurantsFragment();
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,18 +80,18 @@ public class RestaurantsFragment extends Fragment {
         myRecyclerView.setLayoutManager(layoutManager);
         myRecyclerView.setAdapter(restaurantAdapter);
 
-        return myView ;
+        return myView;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        sharedPreferences = Objects.requireNonNull(this.getActivity()).getSharedPreferences("go4lunch",MODE_PRIVATE);
+        sharedPreferences = Objects.requireNonNull(this.getActivity()).getSharedPreferences(SHARED_NAME, MODE_PRIVATE);
 
-        String currentLocation = sharedPreferences.getString(CURRENT_DEVICE_LOCATION,"");
+        String currentLocation = sharedPreferences.getString(CURRENT_DEVICE_LOCATION, "");
         restaurantsViewModel.init(currentLocation);
-        restaurantsViewModel.getRestaurantRepository().observe(this, restaurants ->  {
+        restaurantsViewModel.getRestaurantRepository().observe(this, restaurants -> {
             restaurantAdapter.setData(restaurants);
 
         });
@@ -97,16 +99,15 @@ public class RestaurantsFragment extends Fragment {
 
     }
 
-    public void displayAutocompleteRestaurant(String restaurantId){
+    public void displayAutocompleteRestaurant(String restaurantId) {
 
         DetailRestaurantViewModel detailRestaurantViewModel;
         detailRestaurantViewModel = ViewModelProviders.of(this.getActivity()).get(DetailRestaurantViewModel.class);
-        Log.e("Autocomplete : ", restaurantId);
         detailRestaurantViewModel.init();
         detailRestaurantViewModel.getDetailRestaurant(restaurantId).observe(this.getActivity(), restaurant -> {
 
             if (restaurant == null) {
-                Toast.makeText(this.getActivity(), "Le restaurant n'est pas dans le rayon de recherche", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this.getActivity(), R.string.restaurant_fragment_restaurant_is_not_in_bounds, Toast.LENGTH_SHORT).show();
             } else {
                 restaurantAdapter.setData(Arrays.asList(restaurant));
             }

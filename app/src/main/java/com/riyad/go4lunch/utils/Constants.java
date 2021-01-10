@@ -38,6 +38,7 @@ public class Constants {
 
     //Shared Preferences Key
     public static final String CURRENT_DEVICE_LOCATION = "CURRENT_DEVICE_LOCATION";
+    public static final String SHARED_NAME = "go4lunch";
 
     //ids
     public static final String PLACE_ID = "PLACE_ID";
