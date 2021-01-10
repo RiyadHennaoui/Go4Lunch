@@ -10,7 +10,7 @@ import android.util.Log;
 
 import androidx.multidex.MultiDex;
 
-import com.riyad.go4lunch.worker.WorkerNotification;
+import com.riyad.go4lunch.worker.WorkerDelateRestaurant;
 import com.riyad.go4lunch.worker.WorkerRestaurantNotification;
 
 public class AppControler extends Application {
@@ -33,8 +33,7 @@ public class AppControler extends Application {
         //TODO a remettre après avoir finaliser la creation du user dans firestore dans splashScnreen activity
         Log.e("dans app", "pourquoi pas de dowork");
         WorkerRestaurantNotification.periodRequest(getApplicationContext());
-//        WorkerCleaListOfRestaurant.deleteRestaurantsPeriodRequest(getApplicationContext());
-//        WorkerNotification.deleteRestaurantsPeriodRequest(getApplicationContext());
+        WorkerDelateRestaurant.deleteRestaurantsPeriodRequest(getApplicationContext());
     }
 
     @Override
