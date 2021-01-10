@@ -153,13 +153,13 @@ public class RestaurantRepository {
         }
     }
 
-    public MutableLiveData<List<Restaurant>> deleteAllRestaurants(){
+    public MutableLiveData<List<Restaurant>> deleteAllRestaurants() {
         MutableLiveData<List<Restaurant>> restaurantData = new MutableLiveData<>();
         restaurantDb.collection(COLLECTION_RESTAURANTS_NAME)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                   ArrayList<Restaurant> emptyRestaurantList = new ArrayList<>();
-                   restaurantData.setValue(emptyRestaurantList);
+                    ArrayList<Restaurant> emptyRestaurantList = new ArrayList<>();
+                    restaurantData.setValue(emptyRestaurantList);
                 });
         return restaurantData;
     }
@@ -198,7 +198,6 @@ public class RestaurantRepository {
     }
 
 
-
     @NotNull
     public static String getImageUrlFormat(Result photoReference) {
         String imageReference = photoReference.getPhotos().get(0).getPhotoReference();
@@ -208,9 +207,9 @@ public class RestaurantRepository {
 
     public void saveRestaurants(List<Restaurant> restaurants) {
 
-        CollectionReference firestoreRestaurants = restaurantDb.collection("restaurants");
+        CollectionReference firestoreRestaurants = restaurantDb.collection(COLLECTION_RESTAURANTS_NAME);
 
-        restaurantDb.collection("restaurants")
+        restaurantDb.collection(COLLECTION_RESTAURANTS_NAME)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
