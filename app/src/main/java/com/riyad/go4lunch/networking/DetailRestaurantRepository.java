@@ -1,6 +1,7 @@
 package com.riyad.go4lunch.networking;
 
 import androidx.lifecycle.MutableLiveData;
+
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,7 +41,7 @@ public class DetailRestaurantRepository {
         }
         return detailRestaurant;
     }
-    
+
 
     public MutableLiveData<Restaurant> getRestaurantDetailNew(String id) {
 
@@ -156,7 +157,7 @@ public class DetailRestaurantRepository {
         return bookingRestaurantMutableLiveData;
     }
 
-    public MutableLiveData<BookingRestaurant> userBookingRestaurant(String restaurantId){
+    public MutableLiveData<BookingRestaurant> userBookingRestaurant(String restaurantId) {
 
         MutableLiveData<BookingRestaurant> bookingRestaurantMutableLiveData = new MutableLiveData<>();
         DocumentReference currentUserDocument = restaurantDb.collection(COLLECTION_USER_NAME).document(getCurrentUser().getUid());
@@ -174,7 +175,7 @@ public class DetailRestaurantRepository {
 
     }
 
-    public MutableLiveData<BookingRestaurant> clearUserBookingRestaurant(){
+    public MutableLiveData<BookingRestaurant> clearUserBookingRestaurant() {
 
         MutableLiveData<BookingRestaurant> bookingRestaurantMutableLiveData = new MutableLiveData<>();
         DocumentReference currentUserDocument = restaurantDb.collection(COLLECTION_USER_NAME).document(getCurrentUser().getUid());
@@ -191,6 +192,7 @@ public class DetailRestaurantRepository {
         return bookingRestaurantMutableLiveData;
 
     }
+
     //get list of workmates book current restaurant.
     public MutableLiveData<ArrayList<User>> workmatesBookingRestaurantRepo(String restaurantId) {
         DocumentReference firestoreRestaurant = restaurantDb.collection(COLLECTION_RESTAURANTS_NAME).document(restaurantId);
@@ -222,9 +224,9 @@ public class DetailRestaurantRepository {
                                         for (int i = 0; i < workmatesBookId.size(); i++) {
                                             for (int j = 0; j < workmateRestaurantBook.size(); j++) {
                                                 if (workmateRestaurantBook.get(j).getmUid().equals(workmatesBookId.get(i))) {
-                                                     if (!workmateRestaurantBook.get(j).getmUid().equals(getCurrentUser().getUid())){
-                                                    userBooks.add(workmateRestaurantBook.get(j));
-                                                      }
+                                                    if (!workmateRestaurantBook.get(j).getmUid().equals(getCurrentUser().getUid())) {
+                                                        userBooks.add(workmateRestaurantBook.get(j));
+                                                    }
                                                 }
                                             }
                                         }

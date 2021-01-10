@@ -27,6 +27,7 @@ public class ChatRepository {
     private FirebaseUser getCurrentUser() {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
+
     private static ChatRepository chatRepository;
 
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
@@ -42,14 +43,14 @@ public class ChatRepository {
         chatDb = firebaseFirestore.collection(COLLECTION_USER_NAME);
     }
 
-    public static ChatRepository getInstance(){
-        if (chatRepository == null){
+    public static ChatRepository getInstance() {
+        if (chatRepository == null) {
             chatRepository = new ChatRepository();
         }
         return chatRepository;
     }
 
-    public MutableLiveData<List<Chat>> getChat(String chatPartnerId){
+    public MutableLiveData<List<Chat>> getChat(String chatPartnerId) {
 
         MutableLiveData<List<Chat>> chatMutableLiveData = new MutableLiveData<>();
 
@@ -70,18 +71,17 @@ public class ChatRepository {
                         if (doc != null) {
                             Chat currentChat;
                             currentChat = doc.toObject(Chat.class);
-                            Log.e("repo Chat", currentChat.getMessage() + getCurrentUser().getUid() + ";" + chatPartnerId);
                             mchat.add(currentChat);
                         }
                     }
-                   chatMutableLiveData.setValue(mchat);
+                    chatMutableLiveData.setValue(mchat);
                 });
 
         return chatMutableLiveData;
     }
 
-//TODO demander a Thie la meilleur manère de faire.
-    public void sendMessage(String message, String chatPartenerId){
+
+    public void sendMessage(String message, String chatPartenerId) {
 
         chatDb.document(getCurrentUser().getUid())
                 .get()
@@ -105,6 +105,7 @@ public class ChatRepository {
                         chat.setIsSender(false);
                         chatDb.document(chatPartenerId).collection(currentUser.getmUid())
                                 .add(chat)
+                                //TODO demander à Thié s'il a besoin de garder les Logs dans les addOnCompleteListner
                                 .addOnCompleteListener(task2 -> Log.e("in Lambda for chat", chat.getMessage()));
                     }
                 });
