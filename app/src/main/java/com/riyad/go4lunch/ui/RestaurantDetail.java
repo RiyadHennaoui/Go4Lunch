@@ -93,9 +93,7 @@ public class RestaurantDetail {
     public String getFormattedOpeningHour() {
         String result = "";
 
-        //TODO récupérer l'heure actuelle. utiliser Calendar.
         Calendar rightNow = Calendar.getInstance();
-        //TODO récupérer le jour de la semaine du user.
         int dayOfWeek = rightNow.get(Calendar.DAY_OF_WEEK);
         int hour = rightNow.get(Calendar.HOUR_OF_DAY);
         int minute = rightNow.get(Calendar.MINUTE);
@@ -104,33 +102,21 @@ public class RestaurantDetail {
         dayOfWeek = switchSunday(dayOfWeek);
         //TODO vérifier si Opening Hour n'est pas null.
         if (getOpeningHours() != null) {
-            //TODO parcourir la liste des périods
-
-            Log.e("dayOfWeek", String.valueOf(switchSunday(dayOfWeek)) + " : " + dayOfWeek);
             for (int i = 0; i < getOpeningHours().getPeriods().size(); i++) {
 
-                Gson gson = new Gson();
-
-                Log.e("for period  before if", gson.toJson(getName()) + " " + gson.toJson(getOpeningHours().getPeriods().get(i)) + " " + dayOfWeek + " " + formatedCurrentHour);
                 if (dayOfWeek == getOpeningHours().getPeriods().get(i).getOpen().getDay()
                         && dayOfWeek == getOpeningHours().getPeriods().get(i).getClose().getDay()) {
-                    //TODO chercher l'interval actuel, si l'interval est trouvé affiché l'heure de fermeture sinon c'est fermé.
                     String openHour = getOpeningHours().getPeriods().get(i).getOpen().getTime();
                     String closeHour = getOpeningHours().getPeriods().get(i).getClose().getTime();
                     String closeHourFormatted = closeHour.substring(0, 2) + ":" + closeHour.substring(2);
                     String openHourFormatted = openHour.substring(0, 2) + ":" + openHour.substring(2);
-                    Log.e("name : " + getName(), "dayOfWeek : " + dayOfWeek);
-
-                    Log.e("for period", gson.toJson(getName()) + " " + gson.toJson(getOpeningHours().getPeriods().get(i)) + " " + dayOfWeek + " " + formatedCurrentHour);
 
                     if (formatedCurrentHour > Integer.parseInt(openHour)
                             && formatedCurrentHour < Integer.parseInt(closeHour)) {
-                        Log.e("forattedHour", getOpeningHours().getPeriods().get(i).getClose().getTime() + ": " + getName());
                         result = "Open until : " + closeHourFormatted;
                         isOpen = true;
 
                     } else {
-                        Log.i("heure", String.valueOf(formatedCurrentHour));
                         if (!isOpen) {
                             result = "Close, Open at : " + openHourFormatted;
                         } else {
@@ -138,12 +124,10 @@ public class RestaurantDetail {
                         }
                     }
                 } else if (result == "") {
-                    Log.e(" else if " + getName(), "dayOfWeek : " + dayOfWeek + " Real Hour " + getOpeningHours().getPeriods().get(i).getOpen().getDay());
                     result = "Closed Today";
                 }
             }
         } else {
-            //TODO si l'opening hour est null alors afficher indisponible.
             result = "Unavailable";
         }
         return result;
