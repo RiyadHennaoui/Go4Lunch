@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.Worker;
@@ -21,13 +22,11 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.gson.Gson;
 import com.riyad.go4lunch.MainActivity;
 import com.riyad.go4lunch.R;
 import com.riyad.go4lunch.model.User;
 import com.riyad.go4lunch.ui.Restaurant;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -38,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 import static com.riyad.go4lunch.utils.Constants.COLLECTION_RESTAURANTS_NAME;
 import static com.riyad.go4lunch.utils.Constants.COLLECTION_USER_NAME;
 
-public class WorkerNotification extends Worker {
+public class WorkerRestaurantNotification extends Worker {
 
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private CollectionReference userDb;
@@ -48,7 +47,7 @@ public class WorkerNotification extends Worker {
     private Restaurant restaurant;
 
 
-    public WorkerNotification(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+    public WorkerRestaurantNotification(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }
 
@@ -68,7 +67,7 @@ public class WorkerNotification extends Worker {
 
 
         getCurrentUserInFirestore();
-        setRestaurantsListInFirestore();
+
 
         return Result.success();
     }
@@ -98,6 +97,8 @@ public class WorkerNotification extends Worker {
     private void getRestaurantBookByCurrentUser(User currentUser) {
 
         String restaurantIdFound = currentUser.getBookingRestaurant().getRestaurantId();
+        Gson gson = new Gson();
+        Log.e("le restau ?", restaurantIdFound + "" + gson.toJson(user));
 
         if (restaurantIdFound != null){
             restaurantDb.document(restaurantIdFound)
@@ -136,25 +137,11 @@ public class WorkerNotification extends Worker {
     //TODO récuperer la liste des users qui ont reservé sans oublier d'enlever le current user.
     public static void periodRequest(Context context) {
 
-        Long delay = getDelayofSendNotificationRestaurantBook();
 
-        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(WorkerNotification.class,
-                24, TimeUnit.HOURS)
-                .setInitialDelay(delay, TimeUnit.MILLISECONDS)
-                .addTag("periodRequest")
-                .build();
-
-
-        WorkManager.getInstance(context).enqueue(periodicWorkRequest);
-//        WorkManager.getInstance().enqueueUniquePeriodicWork("periodic", ExistingPeriodicWorkPolicy.REPLACE, periodicWorkRequest);
-    }
-
-    @NotNull
-    private static Long getDelayofSendNotificationRestaurantBook() {
         Calendar noonDate = Calendar.getInstance();
         noonDate.set(Calendar.HOUR_OF_DAY, 12);
-        noonDate.set(Calendar.MINUTE, 0);
-        noonDate.set(Calendar.SECOND, 0);
+        noonDate.set(Calendar.MINUTE, 21);
+        noonDate.set(Calendar.SECOND, 10);
         Calendar actualDate = Calendar.getInstance();
 
 
@@ -166,8 +153,17 @@ public class WorkerNotification extends Worker {
             delay = tomorrowDate.getTimeInMillis() - actualDate.getTimeInMillis() - Math.abs(delay);
             Log.e("delayIf", (delay / 60000) + "");
         }
-        return delay;
+        //TODO trouver comment faire pour avoir la notification tous les jours à 12h.
+
+        OneTimeWorkRequest periodicWorkRequest = new OneTimeWorkRequest.Builder(WorkerRestaurantNotification.class)
+                .build();
+
+
+        WorkManager.getInstance(context).enqueue(periodicWorkRequest);
+//        WorkManager.getInstance().enqueueUniquePeriodicWork("periodic", ExistingPeriodicWorkPolicy.REPLACE, periodicWorkRequest);
     }
+
+
 
 
     public void showNotification(String restaurantAdress, String restaurantName, String utilisateurs) {
@@ -193,68 +189,6 @@ public class WorkerNotification extends Worker {
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
         notificationManagerCompat.notify(4, notificationCompat.build());
 
-    }
-
-    private void setRestaurantsListInFirestore(){
-
-        ArrayList<Restaurant> restaurantsList = new ArrayList<>();
-        restaurantDb
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()){
-                        if (!task.getResult().isEmpty()){
-                            for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()){
-                                Restaurant restaurant = queryDocumentSnapshot.toObject(Restaurant.class);
-                                restaurantsList.add(restaurant);
-                            }
-                        }
-                    }
-                });
-
-        for (int i= 0;i < restaurantsList.size() ; i++ ){
-            restaurantDb
-                    .document(restaurantsList.get(i).getId())
-                    .delete()
-                    .addOnCompleteListener(task -> {
-                        Log.e("dans la suppresion", "delate");
-                    });
-        }
-
-    }
-
-    public static void deleteRestaurantsPeriodRequest(Context context) {
-
-        Long delay = getDelayofremoveRestaurants();
-
-        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(WorkerNotification.class,
-                24, TimeUnit.HOURS)
-                .setInitialDelay(delay, TimeUnit.MILLISECONDS)
-                .addTag("delete, worker")
-                .build();
-
-
-        WorkManager.getInstance(context).enqueue(periodicWorkRequest);
-
-    }
-
-    @NotNull
-    private static Long getDelayofremoveRestaurants() {
-        Calendar noonDate = Calendar.getInstance();
-        noonDate.set(Calendar.HOUR_OF_DAY, 23);
-        noonDate.set(Calendar.MINUTE, 59);
-        noonDate.set(Calendar.SECOND, 59);
-        Calendar actualDate = Calendar.getInstance();
-
-
-        Long delay = noonDate.getTimeInMillis() - actualDate.getTimeInMillis();
-        Log.e("delayde", (delay / 60000) + "");
-        if (delay < 0){
-            Calendar tomorrowDate = Calendar.getInstance();
-            tomorrowDate.add(Calendar.HOUR_OF_DAY, 24);
-            delay = tomorrowDate.getTimeInMillis() - actualDate.getTimeInMillis() - Math.abs(delay);
-            Log.e("delayIf", (delay / 60000) + "");
-        }
-        return delay;
     }
 
 

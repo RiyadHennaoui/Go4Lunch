@@ -40,7 +40,7 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_v2);
+        setContentView(R.layout.activity_profile);
 
         textViewEmail = findViewById(R.id.profile_tv_mail);
         textInputEditTextUsername = findViewById(R.id.profile_tv_name);
@@ -50,11 +50,6 @@ public class ProfileActivity extends AppCompatActivity {
         addProfileUsername = findViewById(R.id.profile_iv_add_name);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-//        User user = new User();
-//        user.setmUsername(firebaseUser.getDisplayName());
-//        user.setmUid(firebaseUser.getUid());
-//        user.setmMail(firebaseUser.getEmail());
-
         initUserViewModel();
 
         this.isCurrentUserLogged();
