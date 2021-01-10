@@ -15,9 +15,8 @@ public class User {
     private String mUsername;
     private String mMail;
     @Nullable private String mUrlPicture;
-    //TODO pas besoin de list pour le bookingRestaurant
     private BookingRestaurant bookingRestaurant = new BookingRestaurant();
-    //TODO ajouter une liste de Restaurant pour le rating : RatedRestaurants
+
 
 
     public User() { } // Needed for Firebase
