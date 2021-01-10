@@ -1,9 +1,6 @@
 package com.riyad.go4lunch.networking;
 
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
-
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -54,7 +51,6 @@ public class DetailRestaurantRepository {
                     Restaurant restaurant;
                     DocumentSnapshot currentDocument = task.getResult();
                     restaurant = currentDocument.toObject(Restaurant.class);
-                    Log.e("RepoDetail", id + " ; " + restaurant.getId());
                     restaurantMutableLiveData.setValue(restaurant);
                 });
         return restaurantMutableLiveData;
@@ -73,10 +69,8 @@ public class DetailRestaurantRepository {
                     Restaurant restaurant;
                     DocumentSnapshot documentSnapshot = task.getResult();
                     restaurant = documentSnapshot.toObject(Restaurant.class);
-//                   Log.e("restaurant rateUser", restaurant.getRatedUser().get(0).getUserId());
                     if (restaurant.getRatingUser() != null) {
                         ratingRestaurants = restaurant.getRatingUser();
-                        //                       Log.e("Maybe null", ratingRestaurants.size() + "" + ratingRestaurants.get(0).getUserId());
                     }
 
                     newRatingRestaurant.setmUid(getCurrentUser().getUid());
@@ -84,7 +78,6 @@ public class DetailRestaurantRepository {
                     newRatingRestaurant.setmMail(getCurrentUser().getEmail());
 
                     if (ratingRestaurants.isEmpty()) {
-                        Log.i("repo",  "test");
                         ratingRestaurants.add(newRatingRestaurant);
                     } else {
                         int currentCount = -1;
@@ -95,10 +88,8 @@ public class DetailRestaurantRepository {
                             }
                         }
                         if (currentCount == -1) {
-                            Log.i("repo current -1", currentCount + "");
                             ratingRestaurants.add(newRatingRestaurant);
                         } else {
-                            Log.i("repo", currentCount + "");
                             ratingRestaurants.remove(currentCount);
                         }
                     }
@@ -148,7 +139,6 @@ public class DetailRestaurantRepository {
                         if (currentCount == -1) {
                             newBookingRestaurant.setmUid(getCurrentUser().getUid());
                             newBookingRestaurant.setmUsername(getCurrentUser().getDisplayName());
-                            //TODO gérer le cas où il manque l'url de la photo.
                             if (getCurrentUser().getPhotoUrl() != null) {
                                 newBookingRestaurant.setmUrlPicture(getCurrentUser().getPhotoUrl().toString());
                             }
@@ -158,13 +148,11 @@ public class DetailRestaurantRepository {
 
                         }
                     }
-                    Log.i("bookinfRef", bookinfRef.size() + "");
                     firestoreRestaurants.update(FIELD_BOOKING_USER_FOR_RESTAURANT_DOCUMENT, bookinfRef);
                     bookingRestaurantMutableLiveData.setValue(bookinfRef);
                 });
 
 
-        //TODO s'abonner à l'évenement sur la detailActivity.class
         return bookingRestaurantMutableLiveData;
     }
 
@@ -222,7 +210,6 @@ public class DetailRestaurantRepository {
                     if (currentRestaurant.getBookingRestaurant() != null) {
                         for (int i = 0; i < currentRestaurant.getBookingRestaurant().size(); i++) {
                             workmatesBookId.add(currentRestaurant.getBookingRestaurant().get(i).getmUid());
-                            Log.i("workmatesBookId", workmatesBookId.get(i));
                         }
 
                         workamatesCollection
@@ -235,11 +222,9 @@ public class DetailRestaurantRepository {
                                         for (int i = 0; i < workmatesBookId.size(); i++) {
                                             for (int j = 0; j < workmateRestaurantBook.size(); j++) {
                                                 if (workmateRestaurantBook.get(j).getmUid().equals(workmatesBookId.get(i))) {
-                                                    Log.i("ici", "ici " + workmateRestaurantBook.get(j).getmUid());
-                                                    //TODO ajouter le if en dessous a la fin des tests.
-                                                    // if (!workmateRestaurantBook.get(j).getmUid().equals(getCurrentUser().getUid())){
+                                                     if (!workmateRestaurantBook.get(j).getmUid().equals(getCurrentUser().getUid())){
                                                     userBooks.add(workmateRestaurantBook.get(j));
-                                                    //  }
+                                                      }
                                                 }
                                             }
                                         }
