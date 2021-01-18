@@ -142,9 +142,9 @@ public class WorkerDelateRestaurant extends Worker {
     @NotNull
     private static Long getDelayofremoveRestaurants() {
         Calendar noonDate = Calendar.getInstance();
-        noonDate.set(Calendar.HOUR_OF_DAY, 9);
-        noonDate.set(Calendar.MINUTE, 58);
-        noonDate.set(Calendar.SECOND, 30);
+        noonDate.set(Calendar.HOUR_OF_DAY, 23);
+        noonDate.set(Calendar.MINUTE, 59);
+        noonDate.set(Calendar.SECOND, 59);
         Calendar actualDate = Calendar.getInstance();
 
 

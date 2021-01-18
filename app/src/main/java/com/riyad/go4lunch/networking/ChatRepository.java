@@ -106,7 +106,8 @@ public class ChatRepository {
                         chatDb.document(chatPartenerId).collection(currentUser.getmUid())
                                 .add(chat)
                                 //TODO demander à Thié s'il a besoin de garder les Logs dans les addOnCompleteListner
-                                .addOnCompleteListener(task2 -> Log.e("in Lambda for chat", chat.getMessage()));
+//                                .addOnCompleteListener(task2 -> Log.e("in Lambda for chat", chat.getMessage())
+                                ;
                     }
                 });
 

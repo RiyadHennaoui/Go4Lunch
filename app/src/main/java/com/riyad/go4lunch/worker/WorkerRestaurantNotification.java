@@ -140,8 +140,8 @@ public class WorkerRestaurantNotification extends Worker {
 
         Calendar noonDate = Calendar.getInstance();
         noonDate.set(Calendar.HOUR_OF_DAY, 12);
-        noonDate.set(Calendar.MINUTE, 21);
-        noonDate.set(Calendar.SECOND, 10);
+        noonDate.set(Calendar.MINUTE, 00);
+        noonDate.set(Calendar.SECOND, 00);
         Calendar actualDate = Calendar.getInstance();
 
 
