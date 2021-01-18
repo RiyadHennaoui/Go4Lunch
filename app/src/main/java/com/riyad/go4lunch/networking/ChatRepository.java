@@ -1,6 +1,5 @@
 package com.riyad.go4lunch.networking;
 
-import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -21,6 +20,7 @@ import java.util.List;
 
 
 import static com.riyad.go4lunch.utils.Constants.COLLECTION_USER_NAME;
+import static com.riyad.go4lunch.utils.Constants.ORDERBY_CREATED_DATE;
 
 public class ChatRepository {
 
@@ -57,7 +57,7 @@ public class ChatRepository {
         List<Chat> mchat = new ArrayList<>();
         chatDb.document(getCurrentUser().getUid())
                 .collection(chatPartnerId)
-                .orderBy("createdDate", Query.Direction.ASCENDING)
+                .orderBy(ORDERBY_CREATED_DATE, Query.Direction.ASCENDING)
                 .addSnapshotListener((value, e) -> {
                     if (e != null) {
                         return;
@@ -97,17 +97,13 @@ public class ChatRepository {
                         //For save in Current User Collection.
                         chat.setIsSender(true);
                         chatDb.document(currentUser.getmUid()).collection(chatPartenerId)
-                                .add(chat)
-                                .addOnCompleteListener(task1 -> Log.e("in Lambda currentUser", chat.getMessage()));
+                                .add(chat);
 
 
                         //For save in chatPartener Collection.
                         chat.setIsSender(false);
                         chatDb.document(chatPartenerId).collection(currentUser.getmUid())
-                                .add(chat)
-                                //TODO demander à Thié s'il a besoin de garder les Logs dans les addOnCompleteListner
-//                                .addOnCompleteListener(task2 -> Log.e("in Lambda for chat", chat.getMessage())
-                                ;
+                                .add(chat);
                     }
                 });
 

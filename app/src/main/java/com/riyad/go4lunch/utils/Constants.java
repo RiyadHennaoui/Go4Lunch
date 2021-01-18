@@ -20,12 +20,14 @@ public class Constants {
     public final String SAVED_INSTANCE_STATE_KEY = "SAVED_INSTANCE_STATE_KEY";
 
     //for collections
-
     public static final String COLLECTION_USER_NAME = "user";
     public static final String COLLECTION_RESTAURANTS_NAME = "restaurants";
     public static final String FIELD_RATING_USER_FOR_RESTAURANT_DOCUMENT = "ratingUser";
     public static final String FIELD_BOOKING_USER_FOR_RESTAURANT_DOCUMENT = "bookingRestaurant";
     public static final String COLLECTION_CHAT = "chat";
+
+    //for orderBy method fields
+    public static final String ORDERBY_CREATED_DATE = "createdDate";
 
     //for message type
     public static final int MSG_TYPE_LEFT = 0;
