@@ -11,7 +11,7 @@ public class UserViewModel extends ViewModel {
 
     private MutableLiveData<User> createUserMutableLiveData;
 
-    private static UserRepository userRepository;
+    private UserRepository userRepository;
 
 
     public void init() {

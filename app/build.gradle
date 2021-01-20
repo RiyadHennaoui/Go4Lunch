@@ -36,6 +36,9 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
 
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
+
+
 
     // Recyclerview
     implementation "androidx.recyclerview:recyclerview:1.1.0"
@@ -96,6 +99,9 @@ dependencies {
 
     //Try for fix conflict
     implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
+
+    //Mokito
+    implementation 'org.mockito:mockito-core:2.+'
 
 
 
