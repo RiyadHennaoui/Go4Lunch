@@ -49,12 +49,9 @@ public class UserViewModelTest {
     @Test
     public void getUserInFirestore() {
 
-
         //Given fresh viewModel and fake user id
         String fakeUserId = "fake user id ";
-
         //When get user in database
-
         when(userRepository.getUserinfirestore(fakeUserId)).thenReturn(livedataUser);
         try {
             User user = JavaTestUtils.getOrAwaitValue(userViewModel.getUserInFirestore(fakeUserId));
@@ -62,9 +59,38 @@ public class UserViewModelTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
         //Then the user is find
+    }
 
+    @Test
+    public void creatUserInFirestore(){
+
+
+
+       when(userRepository.creatUserInFirebase()).thenReturn(livedataUser);
+
+        try {
+            User fakeUserLive = JavaTestUtils.getOrAwaitValue(userViewModel.createUserinFirestoreRepository());
+            assertEquals(fakeUserLive, user1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    @Test
+    public void setUserName(){
+        String fakeUserId = "fake user id ";
+        String fakeUserName = "moi";
+        when(userRepository.setNameProfileUserInFirestore(fakeUserId, fakeUserName)).thenReturn(livedataUser);
+
+        try{
+            User user = JavaTestUtils.getOrAwaitValue(userViewModel.setUserName(fakeUserId, fakeUserName));
+            assertEquals(user.getmUsername(), user1.getmUsername());
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
 
     }
 

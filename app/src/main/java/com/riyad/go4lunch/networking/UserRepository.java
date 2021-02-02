@@ -22,7 +22,7 @@ public class UserRepository {
     private static UserRepository userRepository;
 
     public static UserRepository getInstance() {
-        if (userRepository == null){
+        if (userRepository == null) {
             userRepository = new UserRepository();
         }
         return userRepository;
@@ -34,61 +34,57 @@ public class UserRepository {
     }
 
 
-    public MutableLiveData<User> creatUserInFirebase (){
+    public MutableLiveData<User> creatUserInFirebase() {
 
-        MutableLiveData<User>  userMutableLiveData = new MutableLiveData<>();
+        MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
         User userToSave = new User();
         userToSave.setmUid(getCurrentUser().getUid());
         userToSave.setmUsername(getCurrentUser().getDisplayName());
         userToSave.setmMail(getCurrentUser().getEmail());
-        if (getCurrentUser().getPhotoUrl() != null){
+        if (getCurrentUser().getPhotoUrl() != null) {
             userToSave.setmUrlPicture(getCurrentUser().getPhotoUrl().toString());
         }
 
-            userDb.collection(COLLECTION_USER_NAME)
+        userDb.collection(COLLECTION_USER_NAME)
                 .document(userToSave.getmUid())
                 .set(userToSave)
-                .addOnCompleteListener(task ->{
+                .addOnCompleteListener(task -> {
                     Log.e("useradd UserRepo", "enfin ? ");
-
-                        })
+                    userMutableLiveData.postValue(userToSave);
+                })
                 .addOnFailureListener(e -> Log.e("userNotAdd UserRepo", e.toString())
                 );
-
-
-
 
         return userMutableLiveData;
     }
 
-    public MutableLiveData<User> getUserinfirestore (String userId){
+    public MutableLiveData<User> getUserinfirestore(String userId) {
 
         MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
 
         userDb.collection(COLLECTION_USER_NAME)
                 .document(userId)
                 .get()
-        .addOnCompleteListener(task -> {
-            DocumentSnapshot documentSnapshot = task.getResult();
-            User getUser;
-            getUser = documentSnapshot.toObject(User.class);
-            userMutableLiveData.setValue(getUser);
+                .addOnCompleteListener(task -> {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    User getUser;
+                    getUser = documentSnapshot.toObject(User.class);
+                    userMutableLiveData.setValue(getUser);
 
-        });
+                });
 
         return userMutableLiveData;
 
 
     }
 
-    public MutableLiveData<User> setPhotoProfileUserInFirestore (String userId, String userPhotoUrl){
+    public MutableLiveData<User> setPhotoProfileUserInFirestore(String userId, String userPhotoUrl) {
 
         MutableLiveData<User> userPhotoMutableLiveData = new MutableLiveData<>();
 
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setPhotoUri(Uri.parse(userPhotoUrl))
                 .build();
-
 
 
         userDb.collection(COLLECTION_USER_NAME)
@@ -107,14 +103,13 @@ public class UserRepository {
         return userPhotoMutableLiveData;
     }
 
-    public MutableLiveData<User> setNameProfileUserInFirestore (String userId, String userName){
+    public MutableLiveData<User> setNameProfileUserInFirestore(String userId, String userName) {
 
         MutableLiveData<User> userNameMutableLiveData = new MutableLiveData<>();
 
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(userName)
                 .build();
-
 
 
         userDb.collection(COLLECTION_USER_NAME)

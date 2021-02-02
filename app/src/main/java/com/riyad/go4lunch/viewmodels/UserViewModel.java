@@ -9,24 +9,16 @@ import com.riyad.go4lunch.networking.UserRepository;
 
 public class UserViewModel extends ViewModel {
 
-    private MutableLiveData<User> createUserMutableLiveData;
 
     private UserRepository userRepository;
 
 
     public void init() {
-        if (createUserMutableLiveData != null) {
-            return;
-        }
-
         userRepository = UserRepository.getInstance();
-        createUserMutableLiveData = userRepository.creatUserInFirebase();
-
-
     }
 
     public LiveData<User> createUserinFirestoreRepository() {
-        return createUserMutableLiveData;
+        return userRepository.creatUserInFirebase();
     }
 
     public LiveData<User> getUserInFirestore(String userId) {

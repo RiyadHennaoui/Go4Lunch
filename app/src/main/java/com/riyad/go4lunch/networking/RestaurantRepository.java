@@ -94,6 +94,8 @@ public class RestaurantRepository {
     }
 
     private void getNextPageRestaurants(MutableLiveData<List<Restaurant>> restaurantData, ArrayList<Restaurant> restaurants, String nextPageToken) {
+
+        //Need to Thread sleep cause google Api only allows one request per 2 sec or it's an invalid request error.
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -106,12 +108,15 @@ public class RestaurantRepository {
 
                         if (response.isSuccessful()) {
                             ArrayList<Restaurant> restaurantsList = new ArrayList<>(mapResult(response.body()));
-
+                            Gson gson = new Gson();
+                            Log.e("onResponse", gson.toJson(response.body()));
                             restaurants.addAll(restaurantsList);
 
                             if (response.body().getNextPageToken() == null) {
+                                Log.e("Resto repo", "1");
                                 getDetailRestaurant(restaurantData, restaurants);
                             } else {
+                                Log.e("Resto repo", "2");
                                 getNextPageRestaurants(restaurantData, restaurants, response.body().getNextPageToken());
                             }
                         }

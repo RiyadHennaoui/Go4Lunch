@@ -86,16 +86,16 @@ public class SplashScreen extends AppCompatActivity {
 
     private void creatUserInFirestore() {
         //TODO Crée un Repo Pour les Users, supprimer la class UserHelper, sans oublier de faire le TODO de vérification si le compte existe dèja!!!
-        if (userCurrentLogged()) {
+
 
             userViewModel = ViewModelProviders.of(SplashScreen.this).get(UserViewModel.class);
             userViewModel.init();
             userViewModel.createUserinFirestoreRepository()
                     .observe(SplashScreen.this, user -> {
-                        Log.e("UserCreated ?", "Vérifie dans Firestore");
-
+                        intentToMainActivity();
+                        finish();
                     });
-        }
+
 
 
     }
@@ -107,10 +107,8 @@ public class SplashScreen extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
             if (resultCode == RESULT_OK) {
-
                 this.creatUserInFirestore();
-                intentToMainActivity();
-                finish();
+
             } else {
 
                 Log.e("Dans le requestSplash", resultCode + "");
