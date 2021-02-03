@@ -24,31 +24,20 @@ import static com.riyad.go4lunch.utils.Constants.RESTAURANT_TYPE;
 
 public class RestaurantsViewModel extends ViewModel {
 
-    private MutableLiveData<List<Restaurant>> restaurantsMutableLiveData;
-    private MutableLiveData<List<Restaurant>> safeDeleteWithEmptyRestaurantListLiveData;
     private RestaurantRepository restaurantRepository;
-
+    String currentLocation;
 
     public void init(String currentLocation){
-        if (restaurantsMutableLiveData != null) {
-            return;
-        }
-
-
         restaurantRepository = RestaurantRepository.getInstance();
-        restaurantsMutableLiveData = restaurantRepository.getRestaurants(currentLocation,
-                "1500",
-                RESTAURANT_TYPE,
-                API_KEY_PLACES);
-        safeDeleteWithEmptyRestaurantListLiveData = restaurantRepository.deleteAllRestaurants();
+        this.currentLocation = currentLocation;
+
     }
 
     public LiveData<List<Restaurant>> getRestaurantRepository(){
-        return restaurantsMutableLiveData;
-    }
-
-    public LiveData<List<Restaurant>> safeDeleteRestaurantRepository(){
-        return  safeDeleteWithEmptyRestaurantListLiveData;
+        return  restaurantRepository.getRestaurants(currentLocation,
+                "1500",
+                RESTAURANT_TYPE,
+                API_KEY_PLACES);
     }
 
 }

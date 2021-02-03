@@ -11,25 +11,18 @@ import java.util.List;
 
 public class ChatViewModel extends ViewModel {
 
-    private MutableLiveData<List<Chat>> getChatMutableLiveData;
     private ChatRepository chatRepository;
-    String receiverId;
+    public String receiverId;
 
 
     public void init(String receiverId){
-        if (getChatMutableLiveData != null){
-            return;
-        }
-
         this.receiverId = receiverId;
         chatRepository = ChatRepository.getInstance();
-        getChatMutableLiveData = chatRepository.getChat(receiverId);
-
     }
 
     public LiveData<List<Chat>> getChat(){
 
-        return getChatMutableLiveData;
+        return chatRepository.getChat(receiverId);
     }
 
     public void sendMessage(String message){

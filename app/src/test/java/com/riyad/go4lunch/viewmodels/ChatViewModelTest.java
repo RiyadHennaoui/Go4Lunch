@@ -32,7 +32,6 @@ public class ChatViewModelTest {
     @Mock
     ChatRepository chatRepository;
     private User author;
-    private  String chatPartnerId;
     private List<Chat> chatList;
     Chat chat;
     private MutableLiveData<List<Chat>> liveDataListOfChats;
@@ -44,8 +43,6 @@ public class ChatViewModelTest {
     @Before
     public void config(){
         MockitoAnnotations.initMocks(this);
-
-        chatPartnerId = "fakeId";
 
         author = new User();
         author.setmUid("1");
@@ -61,6 +58,7 @@ public class ChatViewModelTest {
 
         liveDataListOfChats = new MutableLiveData<>();
         liveDataListOfChats.postValue(chatList);
+        chatViewModel.receiverId = author.getmUid();
     }
 
 
@@ -75,14 +73,5 @@ public class ChatViewModelTest {
             e.printStackTrace();
         }
     }
-
-    public void sendMessage(){
-        String message = "message";
-//        when(chatRepository.sendMessage(message, chatPartnerId)).thenReturn(null);
-
-    }
-
-
-
 
 }

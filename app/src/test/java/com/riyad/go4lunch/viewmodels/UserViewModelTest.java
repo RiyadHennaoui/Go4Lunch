@@ -64,9 +64,6 @@ public class UserViewModelTest {
 
     @Test
     public void creatUserInFirestore(){
-
-
-
        when(userRepository.creatUserInFirebase()).thenReturn(livedataUser);
 
         try {
