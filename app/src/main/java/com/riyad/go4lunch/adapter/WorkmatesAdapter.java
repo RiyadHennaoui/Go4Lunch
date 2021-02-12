@@ -1,6 +1,5 @@
 package com.riyad.go4lunch.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -21,7 +20,6 @@ import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.riyad.go4lunch.ChatActivity;
-import com.riyad.go4lunch.MainActivity;
 import com.riyad.go4lunch.R;
 import com.riyad.go4lunch.model.User;
 
@@ -63,7 +61,7 @@ public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesAd
         private final ImageView mIvProfileCircle;
         private final TextView mFirstName;
         private final TextView mMailWorkmate;
-        private final Button mExtandButton;
+        private final Button mExtendButton;
         private final Button mChat;
 
 
@@ -75,7 +73,7 @@ public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesAd
             mIvProfileCircle = itemView.findViewById(R.id.item_worker_iv_circle_picture_profile);
             mFirstName = itemView.findViewById(R.id.item_worker_tv_name);
             mMailWorkmate = itemView.findViewById(R.id.item_worker_tv_mail);
-            mExtandButton = itemView.findViewById(R.id.item_worker_bt_expand);
+            mExtendButton = itemView.findViewById(R.id.item_worker_bt_expand);
             mChat = itemView.findViewById(R.id.item_worker_bt_chat);
             expandableCardView = itemView.findViewById(R.id.item_worker_expandableView);
             mMainCardView = itemView.findViewById(R.id.item_worker_main_cardview);
@@ -91,20 +89,20 @@ public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesAd
             Glide.with(mIvProfileMain).load(user.getmUrlPicture()).centerCrop().into(mIvProfileMain);
             Glide.with(mIvProfileCircle).load(user.getmUrlPicture()).circleCrop().into(mIvProfileCircle);
 
-            mExtandButton.setOnClickListener(view -> {
+            mExtendButton.setOnClickListener(view -> {
 
                 if (expandableCardView.getVisibility() == View.GONE) {
 
                     TransitionManager.beginDelayedTransition(mMainCardView, new AutoTransition());
                     expandableCardView.setVisibility(View.VISIBLE);
                     mIvProfileMain.setVisibility(View.VISIBLE);
-                    mExtandButton.setBackgroundResource(R.drawable.ic_expand_less_black_24dp);
+                    mExtendButton.setBackgroundResource(R.drawable.ic_expand_less_black_24dp);
 
                 } else {
                     TransitionManager.beginDelayedTransition(mMainCardView, new AutoTransition());
                     expandableCardView.setVisibility(View.GONE);
                     mIvProfileMain.setVisibility(View.GONE);
-                    mExtandButton.setBackgroundResource(R.drawable.ic_expand_more_black_24dp);
+                    mExtendButton.setBackgroundResource(R.drawable.ic_expand_more_black_24dp);
                 }
 
             });
