@@ -62,6 +62,9 @@ public class Constants {
     //for Place Auto Complete
     public static final int AUTOCOMPLETE_REQUEST_CODE = 300;
 
+    //for detail restaurant field
+    public static final String DETAIL_RESTAURANT_FIELD = "name,formatted_phone_number,opening_hours,photos,website,vicinity,formatted_address";
+
 
 
 

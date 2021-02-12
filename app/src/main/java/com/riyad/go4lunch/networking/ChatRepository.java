@@ -63,6 +63,7 @@ public class ChatRepository {
                         return;
                     }
                     mchat.clear();
+                    //TODO demander à Thie si j'en ai encore besoin.
                     String source = value != null && value.getMetadata().hasPendingWrites()
                             ? "Local" : "Server";
 

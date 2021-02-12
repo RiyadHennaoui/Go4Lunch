@@ -30,6 +30,7 @@ import retrofit2.Response;
 import static com.riyad.go4lunch.utils.Constants.API_KEY_PLACES;
 import static com.riyad.go4lunch.utils.Constants.BASE_PHOTO_URL;
 import static com.riyad.go4lunch.utils.Constants.COLLECTION_RESTAURANTS_NAME;
+import static com.riyad.go4lunch.utils.Constants.DETAIL_RESTAURANT_FIELD;
 import static com.riyad.go4lunch.utils.Constants.RADIUS_FOR_RESTAURANT_SEARCH;
 import static com.riyad.go4lunch.utils.Constants.RESTAURANT_TYPE;
 
@@ -138,7 +139,7 @@ public class RestaurantRepository {
             int finalI = i;
             googlePlacesAPI
                     .getRestaurantDetail(restaurants.get(i).getId(),
-                            "name,formatted_phone_number,opening_hours,photos,website,vicinity,formatted_address",
+                            DETAIL_RESTAURANT_FIELD,
                             API_KEY_PLACES)
                     .enqueue(new Callback<DetailRestaurant>() {
                         @Override
@@ -159,17 +160,6 @@ public class RestaurantRepository {
                         }
                     });
         }
-    }
-
-    public MutableLiveData<List<Restaurant>> deleteAllRestaurants() {
-        MutableLiveData<List<Restaurant>> restaurantData = new MutableLiveData<>();
-        restaurantDb.collection(COLLECTION_RESTAURANTS_NAME)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    ArrayList<Restaurant> emptyRestaurantList = new ArrayList<>();
-                    restaurantData.setValue(emptyRestaurantList);
-                });
-        return restaurantData;
     }
 
     private List<Restaurant> mapResult(Restaurants restaurant) {

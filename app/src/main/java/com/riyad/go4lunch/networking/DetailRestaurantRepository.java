@@ -104,7 +104,6 @@ public class DetailRestaurantRepository {
     public MutableLiveData<ArrayList<User>> bookingRestaurantRepo(String restaurantId) {
 
         DocumentReference firestoreRestaurants = restaurantDb.collection(COLLECTION_RESTAURANTS_NAME).document(restaurantId);
-        DocumentReference currentUserDocument = restaurantDb.collection(COLLECTION_USER_NAME).document(getCurrentUser().getUid());
 
         MutableLiveData<ArrayList<User>> bookingRestaurantMutableLiveData = new MutableLiveData<>();
 
