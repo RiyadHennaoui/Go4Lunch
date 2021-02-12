@@ -100,7 +100,6 @@ public class RestaurantDetail {
         int formatedCurrentHour = (hour * 100) + minute;
         Boolean isOpen = false;
         dayOfWeek = switchSunday(dayOfWeek);
-        //TODO vérifier si Opening Hour n'est pas null.
         if (getOpeningHours() != null) {
             for (int i = 0; i < getOpeningHours().getPeriods().size(); i++) {
 
@@ -113,6 +112,7 @@ public class RestaurantDetail {
 
                     if (formatedCurrentHour > Integer.parseInt(openHour)
                             && formatedCurrentHour < Integer.parseInt(closeHour)) {
+                        //TODO Trouver comment faire une string ressource
                         result = "Open until : " + closeHourFormatted;
                         isOpen = true;
 
