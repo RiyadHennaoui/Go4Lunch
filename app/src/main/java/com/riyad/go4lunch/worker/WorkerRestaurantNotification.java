@@ -40,9 +40,7 @@ import static com.riyad.go4lunch.utils.Constants.COLLECTION_USER_NAME;
 public class WorkerRestaurantNotification extends Worker {
 
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    private CollectionReference userDb;
     private CollectionReference restaurantDb;
-    private ArrayList<String> workmatesBookId = new ArrayList<>();
     private User user;
     private Restaurant restaurant;
 
@@ -54,21 +52,8 @@ public class WorkerRestaurantNotification extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        Log.e("DoWork", "inDo work");
-        //TODO revoir la modélisation suite au problème de BookingRestaurant et BoonkingUser;
-        //TODO appel firestore pour récupérer l'utilisateur
-        //TODO si le booking restaurant n'est pas null, prendre l'id du restaurant et récuperer ce restaurant dans firestore.
-        //TODO récuperer la liste des users qui ont reservé sans oublier d'enlever le current user.
-        //TODO appeler show notification.
-
-
-
         restaurantDb = firebaseFirestore.collection(COLLECTION_RESTAURANTS_NAME);
-
-
         getCurrentUserInFirestore();
-
-
         return Result.success();
     }
 
@@ -76,7 +61,6 @@ public class WorkerRestaurantNotification extends Worker {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
 
-    //TODO appel firestore pour récupérer l'utilisateur
     private void getCurrentUserInFirestore() {
 
         DocumentReference userDocument = firebaseFirestore.collection(COLLECTION_USER_NAME).document(getCurrentUser().getUid());
@@ -92,13 +76,10 @@ public class WorkerRestaurantNotification extends Worker {
                 });
 
     }
-    //TODO si le booking restaurant n'est pas null, prendre l'id du restaurant et récuperer ce restaurant dans firestore.
 
     private void getRestaurantBookByCurrentUser(User currentUser) {
 
         String restaurantIdFound = currentUser.getBookingRestaurant().getRestaurantId();
-        Gson gson = new Gson();
-        Log.e("le restau ?", restaurantIdFound + "" + gson.toJson(user));
 
         if (restaurantIdFound != null){
             restaurantDb.document(restaurantIdFound)
@@ -108,7 +89,6 @@ public class WorkerRestaurantNotification extends Worker {
                         DocumentSnapshot documentSnapshot = task.getResult();
                         restaurant = documentSnapshot.toObject(Restaurant.class);
                         String usersNamebook = "";
-                        Log.e("le resteau", restaurant.getName());
                         for (int i = 0; i < restaurant.getBookingRestaurant().size(); i++){
                             usersNamebook = formatingWorkmateBookingListInNotification(usersNamebook, i);
                         }
@@ -123,7 +103,7 @@ public class WorkerRestaurantNotification extends Worker {
     private String formatingWorkmateBookingListInNotification(String usersNamebook, int i) {
         if(!restaurant.getBookingRestaurant().get(i).getmUid().equals(getCurrentUser().getUid())){
             if (i == restaurant.getBookingRestaurant().size()- 1) {
-                usersNamebook += " et " + restaurant.getBookingRestaurant().get(i).getmUsername() + ".";
+                usersNamebook += " and " + restaurant.getBookingRestaurant().get(i).getmUsername() + ".";
             }else if (i == 0){
                 usersNamebook += restaurant.getBookingRestaurant().get(i).getmUsername();
             }else{
@@ -160,7 +140,6 @@ public class WorkerRestaurantNotification extends Worker {
 
 
         WorkManager.getInstance(context).enqueue(periodicWorkRequest);
-//        WorkManager.getInstance().enqueueUniquePeriodicWork("periodic", ExistingPeriodicWorkPolicy.REPLACE, periodicWorkRequest);
     }
 
 
@@ -172,14 +151,15 @@ public class WorkerRestaurantNotification extends Worker {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
+        //TODO trouver comment faire pour les extractions de ressources. 
 
         NotificationCompat.Builder notificationCompat = new NotificationCompat.Builder(getApplicationContext(), "4")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setShowWhen(true)
-                .setContentTitle("Votre reservation au  " + restaurantName)
+                .setContentTitle("Your reservation in  " + restaurantName)
                 .setStyle(new NotificationCompat.InboxStyle()
-                        .addLine("avec vous : " + utilisateurs)
-                        .addLine("adresse du restaurant : ")
+                        .addLine("with you : " + utilisateurs)
+                        .addLine("restaurant adress : ")
                         .addLine(restaurantAdress)
                 )
                 .setContentIntent(pendingIntent)
