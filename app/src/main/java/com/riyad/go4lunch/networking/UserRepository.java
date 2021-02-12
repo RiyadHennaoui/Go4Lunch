@@ -28,7 +28,6 @@ public class UserRepository {
         return userRepository;
     }
 
-
     private FirebaseUser getCurrentUser() {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
@@ -48,12 +47,7 @@ public class UserRepository {
         userDb.collection(COLLECTION_USER_NAME)
                 .document(userToSave.getmUid())
                 .set(userToSave)
-                .addOnCompleteListener(task -> {
-                    Log.e("useradd UserRepo", "enfin ? ");
-                    userMutableLiveData.postValue(userToSave);
-                })
-                .addOnFailureListener(e -> Log.e("userNotAdd UserRepo", e.toString())
-                );
+                .addOnCompleteListener(task -> userMutableLiveData.postValue(userToSave));
 
         return userMutableLiveData;
     }
@@ -70,12 +64,9 @@ public class UserRepository {
                     User getUser;
                     getUser = documentSnapshot.toObject(User.class);
                     userMutableLiveData.setValue(getUser);
-
                 });
 
         return userMutableLiveData;
-
-
     }
 
     public MutableLiveData<User> setPhotoProfileUserInFirestore(String userId, String userPhotoUrl) {
@@ -126,9 +117,5 @@ public class UserRepository {
                 });
 
         return userNameMutableLiveData;
-
-
     }
-
-
 }
