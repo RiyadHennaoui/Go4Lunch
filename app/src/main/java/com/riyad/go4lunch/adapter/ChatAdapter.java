@@ -22,18 +22,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import static com.riyad.go4lunch.utils.Constants.HOUR_FORMAT;
 import static com.riyad.go4lunch.utils.Constants.MSG_TYPE_LEFT;
 import static com.riyad.go4lunch.utils.Constants.MSG_TYPE_RIGHT;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
 
     private List<Chat> chatData;
-    private FirebaseUser mCurrentUser;
     Context context;
 
-    public FirebaseUser getmCurrentUser() {
-        return mCurrentUser;
-    }
 
     public ChatAdapter(List<Chat> chatData, Context context) {
         this.chatData = chatData;
@@ -43,10 +40,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
     @NonNull
     @Override
     public ChatAdapter.ChatHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        //    View v = LayoutInflater.from(parent.getContext())
-        //            .inflate(R.layout.chat_item_right, parent, false);
-        //    return new ChatAdapter.ChatHolder(v);
-
 
         if (viewType == MSG_TYPE_RIGHT) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_item_right, parent, false);
@@ -69,7 +62,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
 
     public void setData(@NonNull List<Chat> chat) {
         chatData = chat;
-        Log.i("taille restaurant", chatData.size() + "");
         notifyDataSetChanged();
     }
 
@@ -77,7 +69,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
     @Override
     public int getItemViewType(int position) {
 
-////        if (!mCurrentUser.getUid().equals(mChat.get(position).getSender().getmUid())) {
         if (!chatData.get(position).getIsSender()) {
             return MSG_TYPE_LEFT;
         } else {
@@ -88,8 +79,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
     public class ChatHolder extends RecyclerView.ViewHolder {
 
         TextView mMessage;
-
-        ImageView receiverPhoto;
         TextView mTimestamp;
 
         public ChatHolder(@NonNull View itemView) {
@@ -101,14 +90,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
 
         public void bind(final Chat chat) {
 
-            Gson gson = new Gson();
             mMessage.setText(chat.getMessage());
-            Log.e("bind", mTimestamp + ", " + gson.toJson(chat));
             mTimestamp.setText(convertDateToHour(chat.getCreatedDate()));
         }
 
         private String convertDateToHour(Date date) {
-            DateFormat dfTime = new SimpleDateFormat("HH:mm");
+            DateFormat dfTime = new SimpleDateFormat(HOUR_FORMAT);
             return dfTime.format(date);
         }
     }

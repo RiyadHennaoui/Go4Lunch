@@ -33,6 +33,9 @@ public class Constants {
     public static final int MSG_TYPE_LEFT = 0;
     public static final int MSG_TYPE_RIGHT = 1;
 
+    //Hour format for chats
+    public static final String HOUR_FORMAT = "HH:mm";
+
     //Places, Nearby Search requests
     public static final String API_KEY_PLACES = "AIzaSyA55BEn4vL47MvxLsWLR_Nvlcd0uawEVdQ";
     public static final String RESTAURANT_TYPE = "restaurant";
