@@ -52,7 +52,6 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
 
     public void setData(@NonNull List<Restaurant> restaurants) {
         restaurantData = restaurants;
-        Log.i("taille restaurant", restaurantData.size() + "");
         notifyDataSetChanged();
     }
 
@@ -82,7 +81,6 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
 
         public void bind(Restaurant restaurant) {
 
-            Log.i("restaurant" + getAdapterPosition(), restaurant.getName() + "");
             restaurantName.setText(restaurant.getName());
 
             float ratingFloat = Float.parseFloat(restaurant.getRating());
