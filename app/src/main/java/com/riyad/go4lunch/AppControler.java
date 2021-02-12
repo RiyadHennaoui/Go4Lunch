@@ -6,12 +6,15 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.location.Location;
 import android.os.Build;
-import android.util.Log;
 
 import androidx.multidex.MultiDex;
 
 import com.riyad.go4lunch.worker.WorkerDelateRestaurant;
 import com.riyad.go4lunch.worker.WorkerRestaurantNotification;
+
+import static com.riyad.go4lunch.utils.Constants.CHANNEL_DESCRIPTON;
+import static com.riyad.go4lunch.utils.Constants.CHANNEL_ID;
+import static com.riyad.go4lunch.utils.Constants.CHANNEL_NAME;
 
 public class AppControler extends Application {
 
@@ -31,7 +34,6 @@ public class AppControler extends Application {
         instance = this;
         createNotificationChannel();
         //TODO a remettre après avoir finaliser la creation du user dans firestore dans splashScnreen activity
-        Log.e("dans app", "pourquoi pas de dowork");
         WorkerRestaurantNotification.periodRequest(getApplicationContext());
         WorkerDelateRestaurant.deleteRestaurantsPeriodRequest(getApplicationContext());
     }
@@ -50,11 +52,9 @@ public class AppControler extends Application {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "ChannelNameGo4Lunch";
-            String description = "ChannelDesciption";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("4", name, importance);
-            channel.setDescription(description);
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance);
+            channel.setDescription(CHANNEL_DESCRIPTON);
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
             NotificationManager notificationManager = getSystemService(NotificationManager.class);

@@ -61,6 +61,11 @@ public class Constants {
     //for detail restaurant field
     public static final String DETAIL_RESTAURANT_FIELD = "name,formatted_phone_number,opening_hours,photos,website,vicinity,formatted_address";
 
+    //for notifications
+    public static final String CHANNEL_NAME = "ChannelNameGo4Lunch";
+    public static final String CHANNEL_DESCRIPTON = "ChannelDesciption";
+    public static final String CHANNEL_ID = "4";
+
 
 
 
