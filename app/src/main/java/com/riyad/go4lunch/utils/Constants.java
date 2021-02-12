@@ -2,8 +2,7 @@ package com.riyad.go4lunch.utils;
 
 public class Constants {
 
-    public static final int ERROR_DIALOG_REQUEST = 9001;
-    public static final int PERMISSION_REQUEST_ENABLE_GPS = 9002;
+
     public static final int PERMISSION_REQUEST_ACCESS_FINE_LOCATION = 9003;
 
     // Default zoom to use when location permission is not granted
@@ -13,8 +12,6 @@ public class Constants {
     public static final String KEY_CAMERA_POSITION = "camera_position";
     public static final String KEY_Location= "location";
 
-    // Used for selecting the current place.
-    public static final int M_MAX_ENTRIES = 10;
 
     // Used for saved instance state
     public final String SAVED_INSTANCE_STATE_KEY = "SAVED_INSTANCE_STATE_KEY";
@@ -24,7 +21,6 @@ public class Constants {
     public static final String COLLECTION_RESTAURANTS_NAME = "restaurants";
     public static final String FIELD_RATING_USER_FOR_RESTAURANT_DOCUMENT = "ratingUser";
     public static final String FIELD_BOOKING_USER_FOR_RESTAURANT_DOCUMENT = "bookingRestaurant";
-    public static final String COLLECTION_CHAT = "chat";
 
     //for orderBy method fields
     public static final String ORDERBY_CREATED_DATE = "createdDate";
