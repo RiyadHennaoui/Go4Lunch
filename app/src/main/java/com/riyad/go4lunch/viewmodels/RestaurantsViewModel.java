@@ -34,10 +34,7 @@ public class RestaurantsViewModel extends ViewModel {
     }
 
     public LiveData<List<Restaurant>> getRestaurantRepository(){
-        return  restaurantRepository.getRestaurants(currentLocation,
-                "1500",
-                RESTAURANT_TYPE,
-                API_KEY_PLACES);
+        return  restaurantRepository.getRestaurants(currentLocation);
     }
 
 }

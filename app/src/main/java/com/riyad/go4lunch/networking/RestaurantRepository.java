@@ -30,6 +30,8 @@ import retrofit2.Response;
 import static com.riyad.go4lunch.utils.Constants.API_KEY_PLACES;
 import static com.riyad.go4lunch.utils.Constants.BASE_PHOTO_URL;
 import static com.riyad.go4lunch.utils.Constants.COLLECTION_RESTAURANTS_NAME;
+import static com.riyad.go4lunch.utils.Constants.RADIUS_FOR_RESTAURANT_SEARCH;
+import static com.riyad.go4lunch.utils.Constants.RESTAURANT_TYPE;
 
 public class RestaurantRepository {
     private int countRestaurants;
@@ -52,7 +54,7 @@ public class RestaurantRepository {
     }
 
     //TODO éliminer les 4 derniers paramètres ne pas oublié le viewmodel.
-    public MutableLiveData<List<Restaurant>> getRestaurants(String location, String radius, String type, String key) {
+    public MutableLiveData<List<Restaurant>> getRestaurants(String location) {
         MutableLiveData<List<Restaurant>> restaurantData = new MutableLiveData<>();
 
         restaurantDb.collection(COLLECTION_RESTAURANTS_NAME)
@@ -60,7 +62,7 @@ public class RestaurantRepository {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         if (task.getResult().isEmpty()) {
-                            googlePlacesAPI.getRestaurant(location, radius, type, key)
+                            googlePlacesAPI.getRestaurant(location, RADIUS_FOR_RESTAURANT_SEARCH, RESTAURANT_TYPE, API_KEY_PLACES)
                                     .enqueue(new Callback<Restaurants>() {
                                         @Override
                                         public void onResponse(Call<Restaurants> call, Response<Restaurants> response) {

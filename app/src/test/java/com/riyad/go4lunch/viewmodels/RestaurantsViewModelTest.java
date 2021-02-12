@@ -67,7 +67,7 @@ public class RestaurantsViewModelTest {
         location.setLat(latLng.latitude);
         location.setLng(latLng.longitude);
 
-        when(restaurantRepository.getRestaurants(location.toString(), "1500", RESTAURANT_TYPE, API_KEY_PLACES)).thenReturn(liveDataRestaurantList);
+        when(restaurantRepository.getRestaurants(location.toString())).thenReturn(liveDataRestaurantList);
 
         try {
             List<Restaurant> restaurantList = JavaTestUtils.getOrAwaitValue(restaurantsViewModel.getRestaurantRepository());

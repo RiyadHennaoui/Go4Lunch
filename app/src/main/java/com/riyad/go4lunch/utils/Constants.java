@@ -37,6 +37,7 @@ public class Constants {
     public static final String API_KEY_PLACES = "AIzaSyA55BEn4vL47MvxLsWLR_Nvlcd0uawEVdQ";
     public static final String RESTAURANT_TYPE = "restaurant";
     public static final String BASE_PHOTO_URL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=";
+    public static final String RADIUS_FOR_RESTAURANT_SEARCH = "1500";
 
     //Shared Preferences Key
     public static final String CURRENT_DEVICE_LOCATION = "CURRENT_DEVICE_LOCATION";
