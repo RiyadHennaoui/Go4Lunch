@@ -48,7 +48,7 @@
     <string name="google_map_api_key">AIzaSyANygkUK5W0oWtDJQ6TV6dwYEdAe2zkONA</string>
 
     <!-- FACEBOOK PURPOSE -->
-    <string name="facebook_app_id">515956462439198</string>
+    <string name="facebook_application_id">515956462439198</string>
     <string name="fb_login_protocol_scheme">fb515956462439198</string>
 
     <!-- Twitter consumer key and secret -->

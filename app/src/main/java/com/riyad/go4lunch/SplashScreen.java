@@ -62,7 +62,7 @@ public class SplashScreen extends AppCompatActivity {
                 new AuthUI.IdpConfig.GoogleBuilder().build(),
 
 //TODO Revoir l'autenthification de FB !
-//                new AuthUI.IdpConfig.FacebookBuilder().build(),
+                new AuthUI.IdpConfig.FacebookBuilder().build(),
                 new AuthUI.IdpConfig.TwitterBuilder().build());
 
 // TODO finir l'activité SplashScreen après le lancement de l'autentification Firebase.
