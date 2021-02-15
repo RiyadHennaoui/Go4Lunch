@@ -25,6 +25,7 @@ public class Constants {
     //for orderBy method fields
     public static final String ORDERBY_CREATED_DATE = "createdDate";
     public static final String ORDERBY_USERNAME = "mUsername";
+    public static final String ORDERBY_BOOKING_RESTAURANT = "bookingRestaurant";
 
     //for message type
     public static final int MSG_TYPE_LEFT = 0;

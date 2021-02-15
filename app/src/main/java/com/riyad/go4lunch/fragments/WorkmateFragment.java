@@ -20,6 +20,7 @@ import com.riyad.go4lunch.adapter.WorkmatesAdapter;
 import com.riyad.go4lunch.model.User;
 
 import static com.riyad.go4lunch.utils.Constants.COLLECTION_USER_NAME;
+import static com.riyad.go4lunch.utils.Constants.ORDERBY_BOOKING_RESTAURANT;
 import static com.riyad.go4lunch.utils.Constants.ORDERBY_USERNAME;
 
 public class WorkmateFragment extends Fragment {
@@ -38,7 +39,8 @@ public class WorkmateFragment extends Fragment {
         View myView = inflater.inflate(R.layout.main_rv, container, false);
 
 
-        Query query = usersRef.orderBy(ORDERBY_USERNAME, Query.Direction.DESCENDING);
+        Query query = usersRef.orderBy(ORDERBY_BOOKING_RESTAURANT, Query.Direction.DESCENDING)
+                .orderBy(ORDERBY_USERNAME, Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<User> options = new FirestoreRecyclerOptions.Builder<User>()
                 .setQuery(query, User.class)
                 .build();
