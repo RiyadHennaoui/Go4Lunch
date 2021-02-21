@@ -4,6 +4,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -12,7 +14,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -20,8 +21,9 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.riyad.go4lunch.model.User;
 import com.riyad.go4lunch.viewmodels.UserViewModel;
+
+import java.util.Locale;
 
 import static com.riyad.go4lunch.utils.Constants.SIGN_OUT_TASK;
 
@@ -196,7 +198,48 @@ public class ProfileActivity extends AppCompatActivity {
         };
     }
 
+    private void showChangeLanguageDialog(){
 
+        final String[] listItem = {"English", "French"};
+
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(ProfileActivity.this);
+        alertDialog.setTitle("Choose language");
+        alertDialog.setSingleChoiceItems(listItem, -1, (dialog, which) -> {
+            if (which == 0){
+                setLocal("en");
+            }else if(which == 1){
+                setLocal("fr");
+            }
+
+
+        });
+        final EditText editText = new EditText(this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        editText.setLayoutParams(lp);
+        alertDialog.setView(editText);
+
+
+        alertDialog.setPositiveButton(R.string.profileactivity_adiag_btn_yes, (dialog, which) -> {
+            input = editText.getText().toString();
+            setUserPhotoProfile(input);
+        });
+        alertDialog.setNegativeButton(R.string.profileactivity_adiag_btn_cancel, (dialog, which) -> dialog.cancel());
+        alertDialog.show();
+
+
+    }
+
+    private void setLocal(String language) {
+
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Configuration configuration = new Configuration();
+        configuration.locale = locale;
+        getBaseContext().getResources().updateConfiguration(configuration, getBaseContext().getResources().getDisplayMetrics());
+    }
 
 
 }
