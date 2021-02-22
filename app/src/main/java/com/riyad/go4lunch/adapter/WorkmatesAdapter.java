@@ -2,6 +2,7 @@ package com.riyad.go4lunch.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,7 +85,13 @@ public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesAd
 
 
             mFirstName.setText(user.getmUsername());
-            mMailWorkmate.setText(user.getmMail());
+            if(user.getBookingRestaurant().getRestaurantName() != null){
+                Log.e("WorkmateAdapter", user.getBookingRestaurant().getRestaurantName());
+                mMailWorkmate.setText(user.getBookingRestaurant().getRestaurantName());
+            }else{
+              mMailWorkmate.setText(user.getmUsername() + " hasn't decided yet");
+            }
+
 
             Glide.with(mIvProfileMain).load(user.getmUrlPicture()).centerCrop().into(mIvProfileMain);
             Glide.with(mIvProfileCircle).load(user.getmUrlPicture()).circleCrop().into(mIvProfileCircle);

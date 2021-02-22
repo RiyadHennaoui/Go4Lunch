@@ -1,5 +1,7 @@
 package com.riyad.go4lunch.networking;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.firebase.Timestamp;
@@ -29,6 +31,7 @@ public class DetailRestaurantRepository {
     private ArrayList<User> bookinfRef = new ArrayList<>();
     private ArrayList<User> ratingRestaurants = new ArrayList<>();
     private ArrayList<String> workmatesBookId = new ArrayList<>();
+    private String restaurantName;
 
 
     private FirebaseUser getCurrentUser() {
@@ -160,11 +163,26 @@ public class DetailRestaurantRepository {
 
         MutableLiveData<BookingRestaurant> bookingRestaurantMutableLiveData = new MutableLiveData<>();
         DocumentReference currentUserDocument = restaurantDb.collection(COLLECTION_USER_NAME).document(getCurrentUser().getUid());
+        DocumentReference currentRestaurant = restaurantDb.collection(COLLECTION_RESTAURANTS_NAME).document(restaurantId);
         BookingRestaurant userBoonkingRestaurant = new BookingRestaurant();
         Timestamp currentTime = new Timestamp(new Date());
+//        restaurantName = "";
 
+        currentRestaurant.get().addOnCompleteListener(task -> {
+            Restaurant restaurant;
+            DocumentSnapshot documentSnapshot = task.getResult();
+            restaurant = documentSnapshot.toObject(Restaurant.class);
+            restaurantName = restaurant.getName();
+
+            Log.e("inDetailRepo",restaurant.getName() );
+        });
+
+        userBoonkingRestaurant.setRestaurantName(restaurantName);
         userBoonkingRestaurant.setTimestamp(currentTime);
         userBoonkingRestaurant.setRestaurantId(restaurantId);
+//        userBoonkingRestaurant.setRestaurantName(restaurantName);
+
+//        Log.e("after lambda DetailRepo", userBoonkingRestaurant.getRestaurantName());
 
         currentUserDocument.update(FIELD_BOOKING_USER_FOR_RESTAURANT_DOCUMENT, userBoonkingRestaurant);
 
