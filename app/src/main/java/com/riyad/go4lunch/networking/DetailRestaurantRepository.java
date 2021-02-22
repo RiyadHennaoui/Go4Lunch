@@ -31,7 +31,6 @@ public class DetailRestaurantRepository {
     private ArrayList<User> bookinfRef = new ArrayList<>();
     private ArrayList<User> ratingRestaurants = new ArrayList<>();
     private ArrayList<String> workmatesBookId = new ArrayList<>();
-    private String restaurantName;
 
 
     private FirebaseUser getCurrentUser() {
@@ -166,25 +165,18 @@ public class DetailRestaurantRepository {
         DocumentReference currentRestaurant = restaurantDb.collection(COLLECTION_RESTAURANTS_NAME).document(restaurantId);
         BookingRestaurant userBoonkingRestaurant = new BookingRestaurant();
         Timestamp currentTime = new Timestamp(new Date());
-//        restaurantName = "";
 
         currentRestaurant.get().addOnCompleteListener(task -> {
             Restaurant restaurant;
             DocumentSnapshot documentSnapshot = task.getResult();
             restaurant = documentSnapshot.toObject(Restaurant.class);
-            restaurantName = restaurant.getName();
+            userBoonkingRestaurant.setRestaurantName(restaurant.getName());
+            userBoonkingRestaurant.setTimestamp(currentTime);
+            userBoonkingRestaurant.setRestaurantId(restaurantId);
 
-            Log.e("inDetailRepo",restaurant.getName() );
+            currentUserDocument.update(FIELD_BOOKING_USER_FOR_RESTAURANT_DOCUMENT, userBoonkingRestaurant);
+
         });
-
-        userBoonkingRestaurant.setRestaurantName(restaurantName);
-        userBoonkingRestaurant.setTimestamp(currentTime);
-        userBoonkingRestaurant.setRestaurantId(restaurantId);
-//        userBoonkingRestaurant.setRestaurantName(restaurantName);
-
-//        Log.e("after lambda DetailRepo", userBoonkingRestaurant.getRestaurantName());
-
-        currentUserDocument.update(FIELD_BOOKING_USER_FOR_RESTAURANT_DOCUMENT, userBoonkingRestaurant);
 
         bookingRestaurantMutableLiveData.setValue(userBoonkingRestaurant);
 
