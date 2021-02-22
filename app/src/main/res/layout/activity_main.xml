@@ -23,8 +23,14 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         android:background="@color/colorPrimary"
-
         >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/toolbar_title"
+            android:textSize="25dp"
+            android:textColor="@color/white"/>
 
     </androidx.appcompat.widget.Toolbar>
 

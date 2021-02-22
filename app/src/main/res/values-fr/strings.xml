@@ -38,6 +38,7 @@
     <string name="restaurant_fragment_restaurant_is_not_in_bounds">Le restaurant n\'est pas dans le rayon de recherche</string>
     <string name="workmates_adapter_hasnt_decided_yet">n\\\'a pas encore décidé</string>
     <string name="workmates_adapter_is_eating_at">mange à %s</string>
+    <string name="toolbar_title">J\'ai Faim</string>
 
 
 </resources>
