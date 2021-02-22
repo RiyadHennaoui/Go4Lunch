@@ -144,7 +144,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         userMailNavDrawer = headerView.findViewById(R.id.nav_header_profile_email);
         usernameNavDrawer.setText(getCurrentUser().getDisplayName());
         userMailNavDrawer.setText(getCurrentUser().getEmail());
-        Glide.with(MainActivity.this.profileNavDrawer).load(getCurrentUser().getPhotoUrl()).centerCrop().into(profileNavDrawer);
+        Glide.with(MainActivity.this.profileNavDrawer).load(getCurrentUser().getPhotoUrl()).circleCrop().into(profileNavDrawer);
 
         //Initilaze Places
         Places.initialize(getApplicationContext(), API_KEY_PLACES);
