@@ -7,15 +7,9 @@
 
     <!-- GoogleMap API -->
 
-    <string name="google_map_api_key" translatable="false">AIzaSyANygkUK5W0oWtDJQ6TV6dwYEdAe2zkONA</string>
-
     <!-- FACEBOOK PURPOSE -->
-    <string name="facebook_application_id" translatable="false">515956462439198</string>
-    <string name="fb_login_protocol_scheme" translatable="false">fb515956462439198</string>
 
     <!-- Twitter consumer key and secret -->
-    <string name="twitter_consumer_key" translatable="false">uBV9ChjIQYJoBNQeZfbNad8X7</string>
-    <string name="twitter_consumer_secret" translatable="false">tS5h9p9RHsXxocdcfoq5AH1J7mIOO0UHiMHfHgGqGGmy9CUzph</string>
 
     <!-- Bottom Navigation View -->
     <string name="bottom_navigation_view_map_view">Carte</string>
@@ -38,12 +32,12 @@
     <string name="profileactivity_adiag_btn_yes">Oui</string>
     <string name="profileactivity_adiag_title_picture_add">URL de votre photo</string>
     <string name="profileactivity_adiag_message_picture_add">ici</string>
-    <string name="sharedpreference_name_go4lunch" translatable="false">go4lunch</string>
     <string name="mainactivty_toast_restaurant_not_in_range">Le restaurant n\'est pas dans le rayon de recherche</string>
-    <string name="detailactivity_call_formating" translatable="false">tel:</string>
     <string name="detailactivity_toast_permission_denied">impossible d\'appeler sans votre permission</string>
     <string name="rv_adapter_workmat_book">\ a rejoint!\</string>
     <string name="restaurant_fragment_restaurant_is_not_in_bounds">Le restaurant n\'est pas dans le rayon de recherche</string>
+    <string name="workmates_adapter_hasnt_decided_yet">n\\\'a pas encore décidé</string>
+    <string name="workmates_adapter_is_eating_at">mange à %s</string>
 
 
 </resources>

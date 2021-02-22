@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="1dp"
     >
 
     <androidx.cardview.widget.CardView
@@ -16,7 +17,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:cardCornerRadius="8dp"
         app:cardElevation="8dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,8 +27,8 @@
 
             <ImageView
                 android:id="@+id/item_worker_iv_circle_picture_profile"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
                 android:scaleType="centerCrop"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
@@ -40,9 +40,9 @@
                 android:id="@+id/item_worker_tv_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Victoria Smith"
                 style="@style/TextAppearance.AppCompat.Title"
                 android:layout_marginStart="12dp"
+                android:layout_margin="10dp"
                 app:layout_constraintStart_toEndOf="@+id/item_worker_iv_circle_picture_profile"
                 app:layout_constraintTop_toTopOf="@+id/item_worker_iv_circle_picture_profile"
                 app:layout_constraintBottom_toTopOf="@+id/item_worker_tv_where_he_lunch"/>
@@ -51,7 +51,7 @@
                 android:id="@+id/item_worker_tv_where_he_lunch"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Work contact"
+                android:layout_margin="10dp"
                 style="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="#8A000000"
                 android:layout_marginStart="12dp"

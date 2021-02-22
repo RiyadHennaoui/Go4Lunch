@@ -53,7 +53,7 @@ public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesAd
 
     public class UsersHolder extends RecyclerView.ViewHolder {
 
-                private CardView mMainCardView;
+        private CardView mMainCardView;
         private final ImageView mIvProfileCircle;
         private final TextView mFirstName;
         private final TextView mWhereLunch;
@@ -76,10 +76,9 @@ public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesAd
 
             mFirstName.setText(user.getmUsername());
             if(user.getBookingRestaurant().getRestaurantName() != null){
-                Log.e("WorkmateAdapter", user.getBookingRestaurant().getRestaurantName());
-                mWhereLunch.setText(user.getBookingRestaurant().getRestaurantName());
+               mWhereLunch.setText(itemView.getContext().getString(R.string.workmates_adapter_is_eating_at, user.getBookingRestaurant().getRestaurantName()));
             }else{
-              mWhereLunch.setText(user.getmUsername() + " hasn't decided yet");
+              mWhereLunch.setText(R.string.workmates_adapter_hasnt_decided_yet);
             }
 
 
