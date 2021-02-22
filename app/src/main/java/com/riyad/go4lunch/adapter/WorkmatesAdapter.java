@@ -12,10 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.transition.AutoTransition;
-import androidx.transition.TransitionManager;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -56,27 +53,20 @@ public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesAd
 
     public class UsersHolder extends RecyclerView.ViewHolder {
 
-        private ConstraintLayout expandableCardView;
-        private CardView mMainCardView;
-        private final ImageView mIvProfileMain;
+                private CardView mMainCardView;
         private final ImageView mIvProfileCircle;
         private final TextView mFirstName;
-        private final TextView mMailWorkmate;
-        private final Button mExtendButton;
+        private final TextView mWhereLunch;
         private final Button mChat;
 
 
         public UsersHolder(@NonNull View itemView) {
             super(itemView);
 
-
-            mIvProfileMain = itemView.findViewById(R.id.item_worker_iv_main_picture_profile);
             mIvProfileCircle = itemView.findViewById(R.id.item_worker_iv_circle_picture_profile);
             mFirstName = itemView.findViewById(R.id.item_worker_tv_name);
-            mMailWorkmate = itemView.findViewById(R.id.item_worker_tv_mail);
-            mExtendButton = itemView.findViewById(R.id.item_worker_bt_expand);
+            mWhereLunch = itemView.findViewById(R.id.item_worker_tv_where_he_lunch);
             mChat = itemView.findViewById(R.id.item_worker_bt_chat);
-            expandableCardView = itemView.findViewById(R.id.item_worker_expandableView);
             mMainCardView = itemView.findViewById(R.id.item_worker_main_cardview);
 
         }
@@ -87,37 +77,18 @@ public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesAd
             mFirstName.setText(user.getmUsername());
             if(user.getBookingRestaurant().getRestaurantName() != null){
                 Log.e("WorkmateAdapter", user.getBookingRestaurant().getRestaurantName());
-                mMailWorkmate.setText(user.getBookingRestaurant().getRestaurantName());
+                mWhereLunch.setText(user.getBookingRestaurant().getRestaurantName());
             }else{
-              mMailWorkmate.setText(user.getmUsername() + " hasn't decided yet");
+              mWhereLunch.setText(user.getmUsername() + " hasn't decided yet");
             }
 
 
-            Glide.with(mIvProfileMain).load(user.getmUrlPicture()).centerCrop().into(mIvProfileMain);
             Glide.with(mIvProfileCircle).load(user.getmUrlPicture()).circleCrop().into(mIvProfileCircle);
 
-            mExtendButton.setOnClickListener(view -> {
-
-                if (expandableCardView.getVisibility() == View.GONE) {
-
-                    TransitionManager.beginDelayedTransition(mMainCardView, new AutoTransition());
-                    expandableCardView.setVisibility(View.VISIBLE);
-                    mIvProfileMain.setVisibility(View.VISIBLE);
-                    mExtendButton.setBackgroundResource(R.drawable.ic_expand_less_black_24dp);
-
-                } else {
-                    TransitionManager.beginDelayedTransition(mMainCardView, new AutoTransition());
-                    expandableCardView.setVisibility(View.GONE);
-                    mIvProfileMain.setVisibility(View.GONE);
-                    mExtendButton.setBackgroundResource(R.drawable.ic_expand_more_black_24dp);
-                }
-
-            });
-
-            mChat.setOnClickListener(view -> {
-            toChat(user.getmUid(), user.getmUrlPicture(), user.getmUsername(), view.getContext());
-            });
-
+            mChat.setOnClickListener(view -> toChat(user.getmUid(),
+                    user.getmUrlPicture(),
+                    user.getmUsername(),
+                    view.getContext()));
         }
     }
 

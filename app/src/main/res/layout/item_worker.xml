@@ -5,10 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="8dp"
-    android:paddingEnd="8dp"
-    android:paddingStart="8dp"
-    android:paddingBottom="8dp"
     >
 
     <androidx.cardview.widget.CardView
@@ -19,6 +15,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:cardCornerRadius="8dp"
         app:cardElevation="8dp">
 
@@ -27,15 +24,6 @@
             android:layout_height="wrap_content"
             android:paddingBottom="12dp">
 
-            <ImageView
-                android:id="@+id/item_worker_iv_main_picture_profile"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:scaleType="centerCrop"
-                app:layout_constraintDimensionRatio="H,16:9"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
 
             <ImageView
                 android:id="@+id/item_worker_iv_circle_picture_profile"
@@ -45,7 +33,8 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/item_worker_iv_main_picture_profile"/>
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
             <TextView
                 android:id="@+id/item_worker_tv_name"
@@ -56,10 +45,10 @@
                 android:layout_marginStart="12dp"
                 app:layout_constraintStart_toEndOf="@+id/item_worker_iv_circle_picture_profile"
                 app:layout_constraintTop_toTopOf="@+id/item_worker_iv_circle_picture_profile"
-                app:layout_constraintBottom_toTopOf="@+id/item_worker_tv_work"/>
+                app:layout_constraintBottom_toTopOf="@+id/item_worker_tv_where_he_lunch"/>
 
             <TextView
-                android:id="@+id/item_worker_tv_work"
+                android:id="@+id/item_worker_tv_where_he_lunch"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Work contact"
@@ -70,85 +59,16 @@
                 app:layout_constraintTop_toBottomOf="@+id/item_worker_tv_name"/>
 
             <Button
-                android:id="@+id/item_worker_bt_expand"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="12dp"
-                android:background="@drawable/ic_expand_more_black_24dp"
-                app:layout_constraintBottom_toBottomOf="@+id/item_worker_iv_circle_picture_profile"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/item_worker_iv_circle_picture_profile" />
-
-            <Button
                 android:id="@+id/item_worker_bt_chat"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginEnd="12dp"
                 android:background="@drawable/ic_chat_black_24dp"
                 app:layout_constraintBottom_toBottomOf="@+id/item_worker_iv_circle_picture_profile"
-                app:layout_constraintEnd_toStartOf="@+id/item_worker_bt_expand"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/item_worker_iv_circle_picture_profile" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/item_worker_expandableView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="12dp"
-            android:visibility="gone"
 
-            app:layout_constraintTop_toBottomOf="@+id/item_worker_tv_work"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-
-            <ImageView
-                android:id="@+id/item_worker_iv_mail_icon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="22dp"
-                android:layout_marginStart="16dp"
-                android:src="@drawable/ic_contact_mail_black_24dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-            <TextView
-                android:id="@+id/item_worker_tv_mail"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="(999) 345 32 45"
-                android:layout_marginStart="40dp"
-                android:textColor="#000"
-                style="@style/TextAppearance.AppCompat.Medium"
-                app:layout_constraintTop_toTopOf="@+id/item_worker_iv_mail_icon"
-                app:layout_constraintStart_toEndOf="@id/item_worker_iv_mail_icon"
-                />
-
-            <ImageView
-                android:id="@+id/item_worker_iv_current_restaurant"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="22dp"
-                android:src="@drawable/ic_restaurant_black_24dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/item_worker_iv_mail_icon"/>
-
-            <TextView
-                android:id="@+id/item_worker_tv_current_restaurant"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
-                android:textColor="#000"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:text="Anges et Demons"
-                app:layout_constraintTop_toTopOf="@+id/item_worker_iv_current_restaurant"
-                app:layout_constraintStart_toEndOf="@id/item_worker_iv_current_restaurant"/>
-
-
-
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
