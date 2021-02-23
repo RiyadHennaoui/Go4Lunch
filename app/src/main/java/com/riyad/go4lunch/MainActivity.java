@@ -344,13 +344,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                             .title(restaurant.getName())
                             .snippet(restaurant.getId())
                             .position(new LatLng(restaurant.getRestaurantLocation().getLat(), restaurant.getRestaurantLocation().getLng())))
-                            .setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                            .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.icon_restaurant_book));
                 } else {
                     mMap.addMarker(new MarkerOptions()
                             .title(restaurant.getName())
                             .snippet(restaurant.getId())
                             .position(new LatLng(restaurant.getRestaurantLocation().getLat(), restaurant.getRestaurantLocation().getLng())))
-                            .setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+                            .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.icon_restaurant_not_book));
                 }
                 index++;
             }
