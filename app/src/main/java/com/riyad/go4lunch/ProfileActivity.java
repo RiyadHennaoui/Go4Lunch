@@ -20,6 +20,7 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.riyad.go4lunch.model.User;
 import com.riyad.go4lunch.viewmodels.UserViewModel;
 
 import java.util.Locale;
@@ -62,6 +63,7 @@ public class ProfileActivity extends AppCompatActivity {
         this.isCurrentUserLogged();
         this.updateUIWhenCreating();
         this.logoutProfile();
+        this.setEditLanguage();
     }
 
     private void initUserViewModel() {
@@ -75,7 +77,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void updateUIWhenCreating(){
 
-            displayUsernameProfile();
+
+            displayUsernameProfile(getCurrentUser().getDisplayName());
 
             addProfileUsername.setOnClickListener(v -> {
                 AlertDialog.Builder alerteDiag = new AlertDialog.Builder(ProfileActivity.this);
@@ -124,28 +127,30 @@ public class ProfileActivity extends AppCompatActivity {
             });
 
         }
-        displayUsernameProfile();
+        displayUsernameProfile(getCurrentUser().getDisplayName());
         displayUserLunch();
 
     }
 
     private void displayUserLunch() {
         //TODO afficher le lunch si pas vide
-        String email = TextUtils.isEmpty(this.getCurrentUser().getEmail()) ?
-               getString(R.string.info_no_email_found)  : this.getCurrentUser().getEmail();
-
         userViewModel.getUserInFirestore(getCurrentUser().getUid()).observe(ProfileActivity.this, user -> {
-            String    restaurantName = user.getBookingRestaurant().getRestaurantName();
-            this.YourLunch.setText(restaurantName);
+            if (user.getBookingRestaurant().getRestaurantName() != null) {
+                String restaurantName = user.getBookingRestaurant().getRestaurantName();
+                this.YourLunch.setText(restaurantName);
+            }else{
+                this.YourLunch.setText(R.string.navigation_drawer_toast_your_lunch_no_lunch);
+            }
+
         });
 
 
     }
 
-    private void displayUsernameProfile() {
-        String username = TextUtils.isEmpty(firebaseUser.getDisplayName()) ?
-                getString(R.string.info_no_username_found) : this.getCurrentUser().getDisplayName();
-        this.textInputEditTextUsername.setText(username);
+    private void displayUsernameProfile(String userName) {
+        //TODO utiliser le repo et non le firebaseUser.
+
+        this.textInputEditTextUsername.setText(userName);
     }
 
     private void displayPhotoProfile() {
@@ -168,7 +173,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void setUserNameProfile(String usernameProfile){
 
             userViewModel.setUserName(firebaseUser.getUid(), usernameProfile)
-            .observe(this, user -> displayUsernameProfile());
+            .observe(this, user -> displayUsernameProfile(user.getmUsername()));
 
     }
 
@@ -179,6 +184,10 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void setEditLanguage(){
+        editLanguage.setOnClickListener(v -> showChangeLanguageDialog());
     }
 
     private void signOutUserFromFirebase() {
@@ -208,11 +217,12 @@ public class ProfileActivity extends AppCompatActivity {
         alertDialog.setTitle("Choose language");
         alertDialog.setSingleChoiceItems(listItem, -1, (dialog, which) -> {
             if (which == 0){
-                setLocal("en");
+//                setLocal("en");
+                LocaleHelper.onAttach(this, "en");
             }else if(which == 1){
-                setLocal("fr");
+//                setLocal("fr");
+                LocaleHelper.onAttach(this, "fr");
             }
-
 
         });
         final EditText editText = new EditText(this);
@@ -225,7 +235,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         alertDialog.setPositiveButton(R.string.profileactivity_adiag_btn_yes, (dialog, which) -> {
             input = editText.getText().toString();
-            setUserPhotoProfile(input);
+            language.setText(listItem.length);
+
         });
         alertDialog.setNegativeButton(R.string.profileactivity_adiag_btn_cancel, (dialog, which) -> dialog.cancel());
         alertDialog.show();
@@ -233,14 +244,14 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    private void setLocal(String language) {
-
-        Locale locale = new Locale(language);
-        Locale.setDefault(locale);
-        Configuration configuration = new Configuration();
-        configuration.locale = locale;
-        getBaseContext().getResources().updateConfiguration(configuration, getBaseContext().getResources().getDisplayMetrics());
-    }
+//    private void setLocal(String language) {
+//
+//        Locale locale = new Locale(language);
+//        Locale.setDefault(locale);
+//        Configuration configuration = new Configuration();
+//        configuration.locale = locale;
+//        getBaseContext().getResources().updateConfiguration(configuration, getBaseContext().getResources().getDisplayMetrics());
+//    }
 
 
 }

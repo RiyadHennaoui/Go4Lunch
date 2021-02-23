@@ -2,6 +2,7 @@ package com.riyad.go4lunch.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,8 +78,11 @@ public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesAd
             mFirstName.setText(user.getmUsername());
             if(user.getBookingRestaurant().getRestaurantName() != null){
                mWhereLunch.setText(itemView.getContext().getString(R.string.workmates_adapter_is_eating_at, user.getBookingRestaurant().getRestaurantName()));
+               mWhereLunch.setTextColor(itemView.getContext().getResources().getColor(android.R.color.black));
+               mWhereLunch.setTypeface(mWhereLunch.getTypeface(), Typeface.BOLD);
             }else{
               mWhereLunch.setText(R.string.workmates_adapter_hasnt_decided_yet);
+                mWhereLunch.setTypeface(mWhereLunch.getTypeface(), Typeface.ITALIC);
             }
 
 

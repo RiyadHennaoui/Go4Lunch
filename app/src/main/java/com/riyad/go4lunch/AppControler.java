@@ -39,7 +39,7 @@ public class AppControler extends Application {
 
     @Override
     protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
+        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
         MultiDex.install(this);
     }
 
