@@ -218,10 +218,12 @@ public class ProfileActivity extends AppCompatActivity {
         alertDialog.setSingleChoiceItems(listItem, -1, (dialog, which) -> {
             if (which == 0){
 //                setLocal("en");
-                LocaleHelper.onAttach(this, "en");
+//                LocaleHelper.onAttach(this, "en");
+                LocaleHelper.setLocale(this, "en");
             }else if(which == 1){
 //                setLocal("fr");
-                LocaleHelper.onAttach(this, "fr");
+//                LocaleHelper.onAttach(this, "fr");
+                LocaleHelper.setLocale(this, "fr");
             }
 
         });
