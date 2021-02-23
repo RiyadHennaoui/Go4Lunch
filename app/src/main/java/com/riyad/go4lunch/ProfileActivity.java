@@ -219,11 +219,13 @@ public class ProfileActivity extends AppCompatActivity {
             if (which == 0){
 //                setLocal("en");
 //                LocaleHelper.onAttach(this, "en");
-                LocaleHelper.setLocale(this, "en");
+                LocaleHelper.onAttach(this, "en");
+                language.setText("English");
             }else if(which == 1){
 //                setLocal("fr");
 //                LocaleHelper.onAttach(this, "fr");
-                LocaleHelper.setLocale(this, "fr");
+                LocaleHelper.onAttach(this, "fr");
+                language.setText("Français");
             }
 
         });
@@ -237,7 +239,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         alertDialog.setPositiveButton(R.string.profileactivity_adiag_btn_yes, (dialog, which) -> {
             input = editText.getText().toString();
-            language.setText(listItem.length);
+//            language.setText(listItem.length);
 
         });
         alertDialog.setNegativeButton(R.string.profileactivity_adiag_btn_cancel, (dialog, which) -> dialog.cancel());
