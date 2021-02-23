@@ -16,6 +16,10 @@ public class UserViewModel extends ViewModel {
         userRepository = UserRepository.getInstance();
     }
 
+    public LiveData<User> getCurrentUserInFirestore(){
+        return  userRepository.getCurrentUserInfirestore();
+    }
+
     public LiveData<User> createUserinFirestoreRepository() {
         return userRepository.creatUserInFirebase();
     }

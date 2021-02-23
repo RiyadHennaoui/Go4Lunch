@@ -32,6 +32,21 @@ public class UserRepository {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
 
+    public MutableLiveData<User> getCurrentUserInfirestore(){
+        MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
+        userDb.collection(COLLECTION_USER_NAME)
+                .document(getCurrentUser().getUid())
+                .get()
+                .addOnCompleteListener(task -> {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                   User currentUserFirestore;
+                   currentUserFirestore = documentSnapshot.toObject(User.class);
+                    userMutableLiveData.postValue(currentUserFirestore);
+                });
+
+        return  userMutableLiveData;
+    }
+
 
     public MutableLiveData<User> creatUserInFirebase() {
 

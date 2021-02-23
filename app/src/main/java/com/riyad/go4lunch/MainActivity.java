@@ -61,6 +61,8 @@ import com.riyad.go4lunch.viewmodels.DetailRestaurantViewModel;
 import com.riyad.go4lunch.viewmodels.RestaurantsViewModel;
 import com.riyad.go4lunch.viewmodels.UserViewModel;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -143,10 +145,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         profileNavDrawer = headerView.findViewById(R.id.nav_header_profile_picture);
         usernameNavDrawer = headerView.findViewById(R.id.nav_header_profile_name);
         userMailNavDrawer = headerView.findViewById(R.id.nav_header_profile_email);
-        //TODO faire un observe plus de getCurrentUser.
-        usernameNavDrawer.setText(getCurrentUser().getDisplayName());
-        userMailNavDrawer.setText(getCurrentUser().getEmail());
-        Glide.with(MainActivity.this.profileNavDrawer).load(getCurrentUser().getPhotoUrl()).circleCrop().into(profileNavDrawer);
+
+        displayUserInfos();
+
 
         //Initilaze Places
         Places.initialize(getApplicationContext(), API_KEY_PLACES);
@@ -168,6 +169,15 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         myDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+    }
+
+    private void displayUserInfos(){
+        UserViewModel userViewModel = initUserViewModel();
+        userViewModel.getCurrentUserInFirestore().observe(MainActivity.this, user -> {
+            usernameNavDrawer.setText(user.getmUsername());
+            userMailNavDrawer.setText(user.getmMail());
+            Glide.with(MainActivity.this.profileNavDrawer).load(user.getmUrlPicture()).circleCrop().into(profileNavDrawer);
+        });
     }
 
     /**
@@ -257,10 +267,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             EasyPermissions.requestPermissions(this, getString(R.string.location_rationale),
                     PERMISSION_REQUEST_ACCESS_FINE_LOCATION, perms);
         }
-    }
-
-    private FirebaseUser getCurrentUser() {
-        return FirebaseAuth.getInstance().getCurrentUser();
     }
 
     private Boolean updateButtons(Integer integer) {
@@ -509,10 +515,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void goToUserRestaurentBook(){
-            UserViewModel userViewModel;
-            userViewModel = ViewModelProviders.of(MainActivity.this).get(UserViewModel.class);
-            userViewModel.init();
-            userViewModel.getUserInFirestore(getCurrentUser().getUid()).observe(MainActivity.this, user -> {
+        UserViewModel userViewModel = initUserViewModel();
+        userViewModel.getCurrentUserInFirestore().observe(MainActivity.this, user -> {
             if (user.getBookingRestaurant().getRestaurantId() != null) {
                 String restaurantId = user.getBookingRestaurant().getRestaurantId();
                 intentToDetailRestaurant(restaurantId);
@@ -520,6 +524,14 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 Toast.makeText(this, R.string.navigation_drawer_toast_your_lunch_no_lunch, Toast.LENGTH_SHORT).show();
             }
             });
+    }
+
+    @NotNull
+    private UserViewModel initUserViewModel() {
+        UserViewModel userViewModel;
+        userViewModel = ViewModelProviders.of(MainActivity.this).get(UserViewModel.class);
+        userViewModel.init();
+        return userViewModel;
     }
 
 
