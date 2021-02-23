@@ -50,5 +50,6 @@
     <string name="notification_title">"Your reservation in  "</string>
     <string name="notification_with_you">"with you : "</string>
     <string name="notification_restaurant_adress">"restaurant adress : "</string>
+    <string name="profile_ui_logout">Logout</string>
 
 </resources>

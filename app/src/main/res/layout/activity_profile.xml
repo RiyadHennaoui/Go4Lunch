@@ -117,6 +117,46 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/profile_icn_your_lunch"
         tools:layout_editor_absoluteY="507dp" />
+    
+    <ImageView
+        android:id="@+id/profile_edit_your_lunch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_edit_24"
+        app:layout_constraintEnd_toEndOf="@+id/profile_notification_switch"
+        app:layout_constraintTop_toTopOf="@id/profile_icn_your_lunch"/>
+
+    <ImageView
+        android:id="@+id/profile_edit_language"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_edit_24"
+        app:layout_constraintEnd_toEndOf="@id/profile_edit_your_lunch"
+        app:layout_constraintTop_toTopOf="@+id/profile_icn_language"/>
+
+    <ImageView
+        android:id="@+id/profile_edit_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_edit_24"
+        app:layout_constraintEnd_toEndOf="@id/profile_edit_your_lunch"
+        app:layout_constraintTop_toTopOf="@id/profile_icn_person"/>
+
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="@string/profile_ui_logout"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:drawableStart="@drawable/ic_logout_24dp"
+        android:backgroundTint="@color/colorPrimaryDark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profile_notification_switch"/>
+
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

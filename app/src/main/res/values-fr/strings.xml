@@ -43,6 +43,7 @@
     <string name="notification_title">"Votre réservation "</string>
     <string name="notification_with_you">Avec vous :</string>
     <string name="notification_restaurant_adress">adresse du restaurant</string>
+    <string name="profile_ui_logout">Quitter</string>
 
 
 </resources>
