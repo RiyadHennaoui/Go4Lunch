@@ -40,6 +40,9 @@
     <string name="workmates_adapter_is_eating_at">mange à %s</string>
     <string name="toolbar_title">J\'ai Faim</string>
     <string name="navigation_drawer_toast_your_lunch_no_lunch">pas de réservation aujourd\\\'hui</string>
+    <string name="notification_title">"Votre réservation "</string>
+    <string name="notification_with_you">Avec vous :</string>
+    <string name="notification_restaurant_adress">adresse du restaurant</string>
 
 
 </resources>

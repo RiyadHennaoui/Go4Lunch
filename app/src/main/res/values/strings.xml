@@ -47,5 +47,8 @@
     <string name="workmates_adapter_hasnt_decided_yet">hasn\'t decided yet</string>
     <string name="toolbar_title">I\'m Hungry</string>
     <string name="navigation_drawer_toast_your_lunch_no_lunch">no reservation today</string>
+    <string name="notification_title">"Your reservation in  "</string>
+    <string name="notification_with_you">"with you : "</string>
+    <string name="notification_restaurant_adress">"restaurant adress : "</string>
 
 </resources>
