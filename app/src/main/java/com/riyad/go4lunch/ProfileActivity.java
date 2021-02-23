@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -29,7 +28,10 @@ import static com.riyad.go4lunch.utils.Constants.SIGN_OUT_TASK;
 
 public class ProfileActivity extends AppCompatActivity {
     private TextView textInputEditTextUsername;
-    private TextView textViewEmail;
+    private TextView YourLunch;
+    private TextView language;
+    private ImageView editLanguage;
+    private ImageView editLunch;
     private ImageView imageViewProfile;
     private ImageView addProfilePicture;
     private ImageView addProfileUsername;
@@ -42,14 +44,17 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_v2);
+        setContentView(R.layout.activity_profile);
 
-        textViewEmail = findViewById(R.id.profile_tv_mail);
+        YourLunch = findViewById(R.id.profile_tv_your_lunch);
+        editLunch = findViewById(R.id.profile_edit_your_lunch);
         textInputEditTextUsername = findViewById(R.id.profile_tv_name);
+        editLanguage = findViewById(R.id.profile_edit_language);
+        language = findViewById(R.id.profile_tv_language);
         imageViewProfile = findViewById(R.id.profile_iv_profile);
         addProfilePicture = findViewById(R.id.profile_iv_add_picture);
         logoutProfile = findViewById(R.id.profile_btn_logout);
-        addProfileUsername = findViewById(R.id.profile_iv_add_name);
+        addProfileUsername = findViewById(R.id.profile_edit_username);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         initUserViewModel();
@@ -70,10 +75,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void updateUIWhenCreating(){
 
-        if(this.getCurrentUser().getDisplayName() != null){
             displayUsernameProfile();
-            addProfileUsername.setVisibility(View.GONE);
-        }else{
+
             addProfileUsername.setOnClickListener(v -> {
                 AlertDialog.Builder alerteDiag = new AlertDialog.Builder(ProfileActivity.this);
                 alerteDiag.setTitle(R.string.profileactivity_adiag_title_enter_your_name);
@@ -93,14 +96,13 @@ public class ProfileActivity extends AppCompatActivity {
                 alerteDiag.show();
 
             });
-        }
+
 
         if (this.getCurrentUser().getPhotoUrl() !=null){
             displayPhotoProfile();
         }else{
 
             addProfilePicture.setOnClickListener((View v)-> {
-               //TODO charger une photo.
 
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(ProfileActivity.this);
                 alertDialog.setTitle(R.string.profileactivity_adiag_title_picture_add);
@@ -123,14 +125,21 @@ public class ProfileActivity extends AppCompatActivity {
 
         }
         displayUsernameProfile();
-        displayEmailUser();
+        displayUserLunch();
 
     }
 
-    private void displayEmailUser() {
+    private void displayUserLunch() {
+        //TODO afficher le lunch si pas vide
         String email = TextUtils.isEmpty(this.getCurrentUser().getEmail()) ?
                getString(R.string.info_no_email_found)  : this.getCurrentUser().getEmail();
-        this.textViewEmail.setText(email);
+
+        userViewModel.getUserInFirestore(getCurrentUser().getUid()).observe(ProfileActivity.this, user -> {
+            String    restaurantName = user.getBookingRestaurant().getRestaurantName();
+            this.YourLunch.setText(restaurantName);
+        });
+
+
     }
 
     private void displayUsernameProfile() {
@@ -140,7 +149,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void displayPhotoProfile() {
-        addProfilePicture.setVisibility(View.GONE);
         if (getCurrentUser().getPhotoUrl() != null){
             Glide.with(this)
                     .load(this.getCurrentUser().getPhotoUrl())
@@ -153,21 +161,14 @@ public class ProfileActivity extends AppCompatActivity {
     private void setUserPhotoProfile(String photoUrl) {
 
         userViewModel.setUserPhotoUrl(firebaseUser.getUid(), photoUrl)
-                .observe(this, user -> {
-                    displayPhotoProfile();
-                    addProfilePicture.setVisibility(View.GONE);
-                });
-
+                .observe(this, user -> displayPhotoProfile());
     }
 
 
     private void setUserNameProfile(String usernameProfile){
 
             userViewModel.setUserName(firebaseUser.getUid(), usernameProfile)
-            .observe(this, user -> {
-                displayUsernameProfile();
-                addProfileUsername.setVisibility(View.GONE);
-            });
+            .observe(this, user -> displayUsernameProfile());
 
     }
 

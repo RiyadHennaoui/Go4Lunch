@@ -69,6 +69,7 @@
         app:layout_constraintTop_toBottomOf="@id/profile_icn_person" />
 
     <TextView
+        android:id="@+id/profile_tv_language"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -87,6 +88,7 @@
         app:layout_constraintTop_toBottomOf="@+id/profile_icn_language" />
 
     <TextView
+        android:id="@+id/profile_tv_your_lunch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -143,6 +145,7 @@
         app:layout_constraintTop_toTopOf="@id/profile_icn_person"/>
 
     <Button
+        android:id="@+id/profile_btn_logout"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="@string/profile_ui_logout"
