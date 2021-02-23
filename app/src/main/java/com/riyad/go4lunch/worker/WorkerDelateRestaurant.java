@@ -1,6 +1,8 @@
 package com.riyad.go4lunch.worker;
 
 import android.content.Context;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
@@ -10,6 +12,8 @@ import androidx.work.WorkerParameters;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.riyad.go4lunch.model.BookingRestaurant;
+import com.riyad.go4lunch.model.User;
 import com.riyad.go4lunch.ui.Restaurant;
 
 import org.jetbrains.annotations.NotNull;
@@ -19,12 +23,17 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import bolts.Task;
+
 import static com.riyad.go4lunch.utils.Constants.COLLECTION_RESTAURANTS_NAME;
+import static com.riyad.go4lunch.utils.Constants.COLLECTION_USER_NAME;
+import static com.riyad.go4lunch.utils.Constants.FIELD_BOOKING_USER_FOR_RESTAURANT_DOCUMENT;
 
 public class WorkerDelateRestaurant extends Worker {
 
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private CollectionReference restaurantDb;
+    private CollectionReference usersDb;
 
 
     public WorkerDelateRestaurant(@NonNull Context context, @NonNull WorkerParameters workerParams) {
@@ -36,10 +45,12 @@ public class WorkerDelateRestaurant extends Worker {
     public Result doWork() {
 
         restaurantDb = firebaseFirestore.collection(COLLECTION_RESTAURANTS_NAME);
+        usersDb = firebaseFirestore.collection(COLLECTION_USER_NAME);
 
         List<Restaurant> restaurantList = setRestaurantsListInFirestore();
 
         suppressAllRestaurant(restaurantList);
+        suppressAllUsersBook();
 
         return Result.success();
     }
@@ -71,6 +82,33 @@ public class WorkerDelateRestaurant extends Worker {
         }
 
         return restaurantsList;
+
+    }
+
+    private void suppressAllUsersBook(){
+
+        ArrayList<User> users = new ArrayList<>();
+        BookingRestaurant emptyBookingrestaurant = new BookingRestaurant();
+
+        usersDb
+                .get()
+                .addOnCompleteListener(task -> {
+                   if(task.isSuccessful()){
+                       if (!task.getResult().isEmpty()){
+
+                           for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()){
+
+                               User user = queryDocumentSnapshot.toObject(User.class);
+                               user.setBookingRestaurant(emptyBookingrestaurant);
+                               users.add(user);
+                               usersDb.document(user.getmUid())
+                                       .set(user)
+                                       .addOnSuccessListener(aVoid -> Log.e("bookingdeleteworker", user.getBookingRestaurant().getRestaurantId()) );
+                           }
+                       }
+                   }
+                });
+
 
     }
 

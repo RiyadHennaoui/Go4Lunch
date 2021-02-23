@@ -59,6 +59,7 @@ import com.riyad.go4lunch.fragments.WorkmateFragment;
 import com.riyad.go4lunch.ui.Restaurant;
 import com.riyad.go4lunch.viewmodels.DetailRestaurantViewModel;
 import com.riyad.go4lunch.viewmodels.RestaurantsViewModel;
+import com.riyad.go4lunch.viewmodels.UserViewModel;
 
 import java.util.Arrays;
 import java.util.List;
@@ -280,6 +281,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
             case R.id.nav_your_lunch:
                 //TODO intent vers le fragment/Activité souhaité.
+                goToUserRestaurentBook();
                 break;
 
             case R.id.nav_settings:
@@ -404,11 +406,15 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.setMyLocationEnabled(true);
         mMap.setOnInfoWindowClickListener(marker -> {
-            Intent intent = new Intent(this, DetailActivity.class);
-            intent.putExtra(PLACE_ID, marker.getSnippet());
-            startActivity(intent);
+            intentToDetailRestaurant(marker.getSnippet());
         });
         getDeviceLocation();
+    }
+
+    private void intentToDetailRestaurant(String restaurantId) {
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra(PLACE_ID, restaurantId);
+        startActivity(intent);
     }
 
 
@@ -499,6 +505,20 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         return new LatLngBounds(new LatLng(minLat, minLong), new LatLng(maxLat, maxLong));
+    }
+
+    private void goToUserRestaurentBook(){
+            UserViewModel userViewModel;
+            userViewModel = ViewModelProviders.of(MainActivity.this).get(UserViewModel.class);
+            userViewModel.init();
+            userViewModel.getUserInFirestore(getCurrentUser().getUid()).observe(MainActivity.this, user -> {
+            if (user.getBookingRestaurant().getRestaurantId() != null) {
+                String restaurantId = user.getBookingRestaurant().getRestaurantId();
+                intentToDetailRestaurant(restaurantId);
+            }else{
+                Toast.makeText(this, R.string.navigation_drawer_toast_your_lunch_no_lunch, Toast.LENGTH_SHORT).show();
+            }
+            });
     }
 
 

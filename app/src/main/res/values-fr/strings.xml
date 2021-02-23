@@ -39,6 +39,7 @@
     <string name="workmates_adapter_hasnt_decided_yet">n\\\'a pas encore décidé</string>
     <string name="workmates_adapter_is_eating_at">mange à %s</string>
     <string name="toolbar_title">J\'ai Faim</string>
+    <string name="navigation_drawer_toast_your_lunch_no_lunch">pas de réservation aujourd\\\'hui</string>
 
 
 </resources>
