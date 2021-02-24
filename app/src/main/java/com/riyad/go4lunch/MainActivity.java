@@ -336,27 +336,27 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         RestaurantsViewModel restaurantsViewModel;
         restaurantsViewModel = ViewModelProviders.of(MainActivity.this).get(RestaurantsViewModel.class);
         restaurantsViewModel.init(nearbySearchLocationFormat);
-        restaurantsViewModel.getRestaurantRepository().observe(MainActivity.this, restaurants -> {
-            int index = 0;
-            for (Restaurant restaurant : restaurants) {
-                if (!restaurants.get(index).getBookingRestaurant().isEmpty()) {
-                    mMap.addMarker(new MarkerOptions()
-                            .title(restaurant.getName())
-                            .snippet(restaurant.getId())
-                            .position(new LatLng(restaurant.getRestaurantLocation().getLat(), restaurant.getRestaurantLocation().getLng())))
-                            .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.icon_restaurant_book));
-                } else {
-                    mMap.addMarker(new MarkerOptions()
-                            .title(restaurant.getName())
-                            .snippet(restaurant.getId())
-                            .position(new LatLng(restaurant.getRestaurantLocation().getLat(), restaurant.getRestaurantLocation().getLng())))
-                            .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.icon_restaurant_not_book));
-                }
-                index++;
-            }
-            //TODO le rendre plus propre.
+        restaurantsViewModel.getRestaurantRepository().observe(MainActivity.this, restaurants -> addMarkers(restaurants));
+    }
 
-        });
+    private void addMarkers(List<Restaurant> restaurants) {
+        int index = 0;
+        for (Restaurant restaurant : restaurants) {
+            if (!restaurants.get(index).getBookingRestaurant().isEmpty()) {
+                mMap.addMarker(new MarkerOptions()
+                        .title(restaurant.getName())
+                        .snippet(restaurant.getId())
+                        .position(new LatLng(restaurant.getRestaurantLocation().getLat(), restaurant.getRestaurantLocation().getLng())))
+                        .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.icon_restaurant_book));
+            } else {
+                mMap.addMarker(new MarkerOptions()
+                        .title(restaurant.getName())
+                        .snippet(restaurant.getId())
+                        .position(new LatLng(restaurant.getRestaurantLocation().getLat(), restaurant.getRestaurantLocation().getLng())))
+                        .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.icon_restaurant_not_book));
+            }
+            index++;
+        }
     }
 
     private void openMap() {
