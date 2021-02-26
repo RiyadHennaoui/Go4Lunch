@@ -44,6 +44,12 @@
     <string name="notification_with_you">Avec vous :</string>
     <string name="notification_restaurant_adress">adresse du restaurant</string>
     <string name="profile_ui_logout">Quitter</string>
+    <string name="detail_activity_call">APPELER</string>
+    <string name="detail_activity_like">AIMER</string>
+    <string name="detail_activity_website">SITE WEB</string>
+    <string name="profile_activity_username">Nom</string>
+    <string name="profile_activity_language">Français</string>
+    <string name="notifications_once_a_day">Notification (une par jour)</string>
 
 
 </resources>

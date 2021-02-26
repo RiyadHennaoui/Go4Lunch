@@ -55,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:hint="Username"
+        android:hint="@string/profile_activity_username"
         app:layout_constraintBottom_toBottomOf="@+id/profile_icn_person"
         app:layout_constraintStart_toEndOf="@+id/profile_icn_person" />
 
@@ -73,7 +73,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:hint="English"
+        android:hint="@string/profile_activity_language"
         app:layout_constraintBottom_toBottomOf="@id/profile_icn_language"
         app:layout_constraintStart_toEndOf="@+id/profile_icn_language"/>
 
@@ -103,7 +103,7 @@
         android:layout_marginStart="5dp"
         android:checked="false"
         android:outlineSpotShadowColor="@color/white"
-        android:text="Notifications ( once a day )  "
+        android:text="@string/notifications_once_a_day"
         android:textColor="@color/colorPrimary"
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@id/profile_iv_notification"
