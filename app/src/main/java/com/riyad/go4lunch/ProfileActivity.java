@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -22,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.riyad.go4lunch.model.User;
 import com.riyad.go4lunch.viewmodels.UserViewModel;
+import com.yariksoffice.lingver.Lingver;
 
 import java.util.Locale;
 
@@ -37,6 +40,7 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView addProfilePicture;
     private ImageView addProfileUsername;
     private Button logoutProfile;
+    private Switch notificationSwitch;
     FirebaseUser firebaseUser;
     String input;
     private UserViewModel userViewModel;
@@ -56,6 +60,7 @@ public class ProfileActivity extends AppCompatActivity {
         addProfilePicture = findViewById(R.id.profile_iv_add_picture);
         logoutProfile = findViewById(R.id.profile_btn_logout);
         addProfileUsername = findViewById(R.id.profile_edit_username);
+        notificationSwitch = findViewById(R.id.profile_notification_switch);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         initUserViewModel();
@@ -64,6 +69,7 @@ public class ProfileActivity extends AppCompatActivity {
         this.updateUIWhenCreating();
         this.logoutProfile();
         this.setEditLanguage();
+        setNotificationSwitch();
     }
 
     private void initUserViewModel() {
@@ -71,6 +77,13 @@ public class ProfileActivity extends AppCompatActivity {
         userViewModel.init();
     }
 
+    private void setNotificationSwitch(){
+        notificationSwitch.setOnClickListener(v -> {
+
+        });
+    }
+
+    //TODO l'activité ne doit pas connaitre la data utiliser le viewModel!!!
     private FirebaseUser getCurrentUser(){ return FirebaseAuth.getInstance().getCurrentUser(); }
 
     private Boolean isCurrentUserLogged(){ return (this.getCurrentUser() !=null); }
@@ -78,7 +91,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void updateUIWhenCreating(){
 
 
-            displayUsernameProfile(getCurrentUser().getDisplayName());
+            displayUsernameProfile();
 
             addProfileUsername.setOnClickListener(v -> {
                 AlertDialog.Builder alerteDiag = new AlertDialog.Builder(ProfileActivity.this);
@@ -127,14 +140,14 @@ public class ProfileActivity extends AppCompatActivity {
             });
 
         }
-        displayUsernameProfile(getCurrentUser().getDisplayName());
+        displayUsernameProfile();
         displayUserLunch();
 
     }
 
     private void displayUserLunch() {
         //TODO afficher le lunch si pas vide
-        userViewModel.getUserInFirestore(getCurrentUser().getUid()).observe(ProfileActivity.this, user -> {
+        userViewModel.getCurrentUserInFirestore().observe(ProfileActivity.this, user -> {
             if (user.getBookingRestaurant().getRestaurantName() != null) {
                 String restaurantName = user.getBookingRestaurant().getRestaurantName();
                 this.YourLunch.setText(restaurantName);
@@ -147,33 +160,44 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    private void displayUsernameProfile(String userName) {
+    private void displayUsernameProfile() {
         //TODO utiliser le repo et non le firebaseUser.
+        userViewModel.getCurrentUserInFirestore().observe(ProfileActivity.this, user ->
+                this.textInputEditTextUsername.setText(user.getmUsername()));
 
-        this.textInputEditTextUsername.setText(userName);
+
     }
 
     private void displayPhotoProfile() {
-        if (getCurrentUser().getPhotoUrl() != null){
-            Glide.with(this)
-                    .load(this.getCurrentUser().getPhotoUrl())
-                    .apply(RequestOptions.circleCropTransform())
-                    .into(imageViewProfile);
-        }
+        userViewModel.getCurrentUserInFirestore().observe(ProfileActivity.this, user ->{
+            if (user.getmUrlPicture() != null){
+                Glide.with(this)
+                        .load(user.getmUrlPicture())
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(imageViewProfile);
+            }
+        });
+
 
     }
 
     private void setUserPhotoProfile(String photoUrl) {
 
-        userViewModel.setUserPhotoUrl(firebaseUser.getUid(), photoUrl)
-                .observe(this, user -> displayPhotoProfile());
+        userViewModel.getCurrentUserInFirestore().observe(ProfileActivity.this, user -> {
+            userViewModel.setUserPhotoUrl(user.getmUid(), photoUrl)
+                    .observe(this, user1 -> displayPhotoProfile());
+        });
+
     }
 
 
     private void setUserNameProfile(String usernameProfile){
 
-            userViewModel.setUserName(firebaseUser.getUid(), usernameProfile)
-            .observe(this, user -> displayUsernameProfile(user.getmUsername()));
+        userViewModel.getCurrentUserInFirestore().observe(this, user -> {
+            userViewModel.setUserName(user.getmUid(), usernameProfile)
+                    .observe(this, user1 -> displayUsernameProfile());
+        });
+
 
     }
 
@@ -218,13 +242,13 @@ public class ProfileActivity extends AppCompatActivity {
         alertDialog.setSingleChoiceItems(listItem, -1, (dialog, which) -> {
             if (which == 0){
 //                setLocal("en");
+                    setNewLocale("en", "US");
 //                LocaleHelper.onAttach(this, "en");
-                LocaleHelper.onAttach(this, "en");
                 language.setText("English");
             }else if(which == 1){
 //                setLocal("fr");
+                    setNewLocale("fr", "FR");
 //                LocaleHelper.onAttach(this, "fr");
-                LocaleHelper.onAttach(this, "fr");
                 language.setText("Français");
             }
 
@@ -246,6 +270,23 @@ public class ProfileActivity extends AppCompatActivity {
         alertDialog.show();
 
 
+    }
+
+    private void followSystemLocale(){
+        Lingver.getInstance().setFollowSystemLocale(this);
+        restart();
+    }
+
+
+
+    private void setNewLocale(String language, String country){
+        Lingver.getInstance().setLocale(this, language, country);
+        restart();
+    }
+
+    private void restart() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
     }
 
 //    private void setLocal(String language) {

@@ -1,5 +1,7 @@
 package com.riyad.go4lunch;
 
+import java.util.Locale;
+
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -11,6 +13,8 @@ import androidx.multidex.MultiDex;
 
 import com.riyad.go4lunch.worker.WorkerDelateRestaurant;
 import com.riyad.go4lunch.worker.WorkerRestaurantNotification;
+import com.yariksoffice.lingver.Lingver;
+import com.yariksoffice.lingver.store.PreferenceLocaleStore;
 
 import static com.riyad.go4lunch.utils.Constants.CHANNEL_DESCRIPTON;
 import static com.riyad.go4lunch.utils.Constants.CHANNEL_ID;
@@ -35,11 +39,13 @@ public class AppControler extends Application {
         createNotificationChannel();
         WorkerRestaurantNotification.periodRequest(getApplicationContext());
         WorkerDelateRestaurant.deleteRestaurantsPeriodRequest(getApplicationContext());
+        PreferenceLocaleStore store = new PreferenceLocaleStore(this, new Locale("en"));
+        Lingver lingver = Lingver.init(this, store);
     }
 
     @Override
     protected void attachBaseContext(Context base) {
-        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
+        super.attachBaseContext(base);
         MultiDex.install(this);
     }
 
@@ -60,6 +66,8 @@ public class AppControler extends Application {
             notificationManager.createNotificationChannel(channel);
         }
     }
+
+
 
 
 }
