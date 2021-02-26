@@ -6,8 +6,11 @@ import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Build;
+import android.preference.PreferenceManager;
+import android.util.Log;
 
 import androidx.multidex.MultiDex;
 
@@ -37,7 +40,14 @@ public class AppControler extends Application {
         super.onCreate();
         instance = this;
         createNotificationChannel();
-        WorkerRestaurantNotification.periodRequest(getApplicationContext());
+        SharedPreferences settingsNotifications = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean userWantNotification = settingsNotifications.getBoolean("isCheck", true);
+        if (userWantNotification){
+            WorkerRestaurantNotification.periodRequest(getApplicationContext());
+        }else{
+            Log.e("notif dans APP", userWantNotification + "");
+        }
+
         WorkerDelateRestaurant.deleteRestaurantsPeriodRequest(getApplicationContext());
         PreferenceLocaleStore store = new PreferenceLocaleStore(this, new Locale("en"));
         Lingver lingver = Lingver.init(this, store);

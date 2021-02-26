@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -43,6 +44,7 @@ public class ProfileActivity extends AppCompatActivity {
     private Switch notificationSwitch;
     FirebaseUser firebaseUser;
     String input;
+    private SharedPreferences sharedPreferences;
     private UserViewModel userViewModel;
 
 
@@ -63,6 +65,7 @@ public class ProfileActivity extends AppCompatActivity {
         notificationSwitch = findViewById(R.id.profile_notification_switch);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        sharedPreferences = getSharedPreferences(getString(R.string.sharedpreference_notification_settings), MODE_PRIVATE);
         initUserViewModel();
 
         this.isCurrentUserLogged();
@@ -79,7 +82,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void setNotificationSwitch(){
         notificationSwitch.setOnClickListener(v -> {
-
+            sharedPreferences.edit().putBoolean("isCheck", v.isActivated()).apply();
         });
     }
 

@@ -101,7 +101,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:checked="false"
+        android:checked="true"
         android:outlineSpotShadowColor="@color/white"
         android:text="@string/notifications_once_a_day"
         android:textColor="@color/colorPrimary"
