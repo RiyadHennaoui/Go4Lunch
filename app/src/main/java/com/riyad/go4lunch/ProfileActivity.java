@@ -72,12 +72,18 @@ public class ProfileActivity extends AppCompatActivity {
         this.updateUIWhenCreating();
         this.logoutProfile();
         this.setEditLanguage();
-        setNotificationSwitch();
+        this.setNotificationSwitch();
+        this.setYourLunch();
     }
 
     private void initUserViewModel() {
         userViewModel = ViewModelProviders.of(ProfileActivity.this).get(UserViewModel.class);
         userViewModel.init();
+    }
+
+    private void setYourLunch(){
+        editLunch.setOnClickListener(v -> displayFragmentRestaurantList());
+
     }
 
     private void setNotificationSwitch(){
@@ -291,6 +297,16 @@ public class ProfileActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
     }
+
+    private void displayFragmentRestaurantList(){
+        //TODO trouvez comment démarrer sur le fragement de la liste des restaurants.
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("fragement value", 1);
+        startActivity(intent);
+
+    }
+
+
 
 //    private void setLocal(String language) {
 //

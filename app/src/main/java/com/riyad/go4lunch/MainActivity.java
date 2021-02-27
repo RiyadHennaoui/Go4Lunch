@@ -97,6 +97,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private Button toolbarSearch;
     private SearchView searchView;
     private List<Place.Field> fields;
+    private int go4restaurantList;
 
     // The entry point to the fused Location Provider
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -126,6 +127,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         myDrawerLayout = findViewById(R.id.main_drawer_layout);
 
 
+        go4restaurantList = getIntent().getIntExtra("fragement value", 0);
+
+        Log.e("intent", go4restaurantList + "");
 
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
@@ -156,6 +160,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         PlacesClient placesClient = Places.createClient(this);
 
 
+        if(go4restaurantList != 0){
+            displayRestaurantFragment();
+        }
 
     }
 
