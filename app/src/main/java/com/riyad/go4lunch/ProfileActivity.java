@@ -74,6 +74,7 @@ public class ProfileActivity extends AppCompatActivity {
         this.setEditLanguage();
         this.setNotificationSwitch();
         this.setYourLunch();
+        this.updatePhotoUrl();
     }
 
     private void initUserViewModel() {
@@ -126,32 +127,34 @@ public class ProfileActivity extends AppCompatActivity {
         if (this.getCurrentUser().getPhotoUrl() !=null){
             displayPhotoProfile();
         }else{
-
-            addProfilePicture.setOnClickListener((View v)-> {
-
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(ProfileActivity.this);
-                alertDialog.setTitle(R.string.profileactivity_adiag_title_picture_add);
-                alertDialog.setMessage(R.string.profileactivity_adiag_message_picture_add);
-                final EditText editText = new EditText(this);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT);
-                editText.setLayoutParams(lp);
-                alertDialog.setView(editText);
-
-
-                alertDialog.setPositiveButton(R.string.profileactivity_adiag_btn_yes, (dialog, which) -> {
-                    input = editText.getText().toString();
-                    setUserPhotoProfile(input);
-                });
-                alertDialog.setNegativeButton(R.string.profileactivity_adiag_btn_cancel, (dialog, which) -> dialog.cancel());
-                alertDialog.show();
-            });
-
+            updatePhotoUrl();
         }
         displayUsernameProfile();
         displayUserLunch();
 
+    }
+
+    private void updatePhotoUrl() {
+        addProfilePicture.setOnClickListener((View v)-> {
+
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(ProfileActivity.this);
+            alertDialog.setTitle(R.string.profileactivity_adiag_title_picture_add);
+            alertDialog.setMessage(R.string.profileactivity_adiag_message_picture_add);
+            final EditText editText = new EditText(this);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT);
+            editText.setLayoutParams(lp);
+            alertDialog.setView(editText);
+
+
+            alertDialog.setPositiveButton(R.string.profileactivity_adiag_btn_yes, (dialog, which) -> {
+                input = editText.getText().toString();
+                setUserPhotoProfile(input);
+            });
+            alertDialog.setNegativeButton(R.string.profileactivity_adiag_btn_cancel, (dialog, which) -> dialog.cancel());
+            alertDialog.show();
+        });
     }
 
     private void displayUserLunch() {
