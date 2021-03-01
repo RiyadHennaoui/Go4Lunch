@@ -22,6 +22,7 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.riyad.go4lunch.model.User;
 import com.riyad.go4lunch.viewmodels.UserViewModel;
 import com.yariksoffice.lingver.Lingver;
 
@@ -72,6 +73,7 @@ public class ProfileActivity extends AppCompatActivity {
         this.setYourLunch();
         this.updatePhotoUrl();
         this.switchListner();
+
 
     }
 
@@ -291,12 +293,6 @@ public class ProfileActivity extends AppCompatActivity {
         editText.setLayoutParams(lp);
         alertDialog.setView(editText);
 
-
-        alertDialog.setPositiveButton(R.string.profileactivity_adiag_btn_yes, (dialog, which) -> {
-            input = editText.getText().toString();
-//            language.setText(listItem.length);
-
-        });
         alertDialog.setNegativeButton(R.string.profileactivity_adiag_btn_cancel, (dialog, which) -> dialog.cancel());
         alertDialog.show();
 

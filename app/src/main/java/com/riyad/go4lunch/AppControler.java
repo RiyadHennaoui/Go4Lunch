@@ -42,7 +42,7 @@ public class AppControler extends Application {
         instance = this;
         myAppContext = this;
         createNotificationChannel();
-        SharedPreferences settingsNotifications = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences settingsNotifications = getSharedPreferences(getString(R.string.sharedpreference_notification_settings), MODE_PRIVATE);
         boolean userWantNotification = settingsNotifications.getBoolean("isCheck", true);
         if (userWantNotification){
             Log.e("App if", userWantNotification + "");

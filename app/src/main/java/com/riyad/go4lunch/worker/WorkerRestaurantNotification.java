@@ -89,8 +89,13 @@ public class WorkerRestaurantNotification extends Worker {
                         DocumentSnapshot documentSnapshot = task.getResult();
                         restaurant = documentSnapshot.toObject(Restaurant.class);
                         String usersNamebook = "";
+                        if(restaurant.getBookingRestaurant().size() > 0){
+                            usersNamebook = "with you : ";
+                        }else{
+                            usersNamebook = "Alone";
+                        }
                         for (int i = 0; i < restaurant.getBookingRestaurant().size(); i++){
-                            usersNamebook = formatingWorkmateBookingListInNotification(usersNamebook, i);
+                            usersNamebook += formatingWorkmateBookingListInNotification(usersNamebook, i);
                         }
 
                         showNotification(restaurant.getRestaurantAdress(), restaurant.getName(), usersNamebook);
@@ -136,6 +141,7 @@ public class WorkerRestaurantNotification extends Worker {
         //TODO trouver comment faire pour avoir la notification tous les jours à 12h.
 
         OneTimeWorkRequest periodicWorkRequest = new OneTimeWorkRequest.Builder(WorkerRestaurantNotification.class)
+                .setInitialDelay(delay, TimeUnit.MILLISECONDS)
                 .build();
 
 
@@ -158,9 +164,9 @@ public class WorkerRestaurantNotification extends Worker {
                 .setShowWhen(true)
                 .setContentTitle(getApplicationContext().getString(R.string.notification_title) + restaurantName)
                 .setStyle(new NotificationCompat.InboxStyle()
-                        .addLine(getApplicationContext().getString(R.string.notification_with_you) + utilisateurs)
                         .addLine(getApplicationContext().getString(R.string.notification_restaurant_adress))
                         .addLine(restaurantAdress)
+                        .addLine(utilisateurs)
                 )
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
