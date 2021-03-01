@@ -43,8 +43,10 @@ public class AppControler extends Application {
         SharedPreferences settingsNotifications = PreferenceManager.getDefaultSharedPreferences(this);
         boolean userWantNotification = settingsNotifications.getBoolean("isCheck", true);
         if (userWantNotification){
+            Log.e("App if", userWantNotification + "");
             WorkerRestaurantNotification.periodRequest(getApplicationContext());
         }else{
+            Log.e("App else", userWantNotification + "");
             Log.e("notif dans APP", userWantNotification + "");
         }
 

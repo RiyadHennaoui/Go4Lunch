@@ -6,9 +6,8 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,11 +22,8 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.riyad.go4lunch.model.User;
 import com.riyad.go4lunch.viewmodels.UserViewModel;
 import com.yariksoffice.lingver.Lingver;
-
-import java.util.Locale;
 
 import static com.riyad.go4lunch.utils.Constants.SIGN_OUT_TASK;
 
@@ -72,9 +68,11 @@ public class ProfileActivity extends AppCompatActivity {
         this.updateUIWhenCreating();
         this.logoutProfile();
         this.setEditLanguage();
-        this.setNotificationSwitch();
+        this.getSwitchState();
         this.setYourLunch();
         this.updatePhotoUrl();
+        this.switchListner();
+
     }
 
     private void initUserViewModel() {
@@ -87,11 +85,31 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    private void setNotificationSwitch(){
-        notificationSwitch.setOnClickListener(v -> {
-            sharedPreferences.edit().putBoolean("isCheck", v.isActivated()).apply();
-        });
+    private void switchListner(){
+        notificationSwitch.setOnClickListener(v -> setNotificationSwitchState());
     }
+
+    private void setNotificationSwitchState(){
+
+        if(notificationSwitch.isChecked()){
+            sharedPreferences.edit().putBoolean("isCheck", true).apply();
+        } else {
+            sharedPreferences.edit().putBoolean("isCheck", false).apply();
+        }
+    }
+
+    private void getSwitchState(){
+        boolean ifCheckedState = sharedPreferences.getBoolean("isCheck", true);
+        if (ifCheckedState){
+            notificationSwitch.setChecked(true);
+        }else{
+            notificationSwitch.setChecked(false);
+        }
+//        getNotificationSwitchState();
+        Log.e("profile switch check", ifCheckedState + "");
+    }
+
+
 
     //TODO l'activité ne doit pas connaitre la data utiliser le viewModel!!!
     private FirebaseUser getCurrentUser(){ return FirebaseAuth.getInstance().getCurrentUser(); }
@@ -100,29 +118,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void updateUIWhenCreating(){
 
-
-            displayUsernameProfile();
-
-            addProfileUsername.setOnClickListener(v -> {
-                AlertDialog.Builder alerteDiag = new AlertDialog.Builder(ProfileActivity.this);
-                alerteDiag.setTitle(R.string.profileactivity_adiag_title_enter_your_name);
-                final EditText editText = new EditText(this);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT);
-                editText.setLayoutParams(lp);
-                alerteDiag.setView(editText);
-
-                alerteDiag.setPositiveButton(R.string.profileactivity_adiag_btn_yes, (dialog, which) -> {
-                   input = editText.getText().toString();
-                    setUserNameProfile(input);
-                });
-
-                alerteDiag.setNegativeButton(R.string.profileactivity_adiag_btn_cancel, (dialog, which) -> dialog.cancel());
-                alerteDiag.show();
-
-            });
-
+        displayUsernameProfile();
+        updateUserName();
 
         if (this.getCurrentUser().getPhotoUrl() !=null){
             displayPhotoProfile();
@@ -132,6 +129,28 @@ public class ProfileActivity extends AppCompatActivity {
         displayUsernameProfile();
         displayUserLunch();
 
+    }
+
+    private void updateUserName() {
+        addProfileUsername.setOnClickListener(v -> {
+            AlertDialog.Builder alerteDiag = new AlertDialog.Builder(ProfileActivity.this);
+            alerteDiag.setTitle(R.string.profileactivity_adiag_title_enter_your_name);
+            final EditText editText = new EditText(this);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT);
+            editText.setLayoutParams(lp);
+            alerteDiag.setView(editText);
+
+            alerteDiag.setPositiveButton(R.string.profileactivity_adiag_btn_yes, (dialog, which) -> {
+               input = editText.getText().toString();
+                setUserNameProfile(input);
+            });
+
+            alerteDiag.setNegativeButton(R.string.profileactivity_adiag_btn_cancel, (dialog, which) -> dialog.cancel());
+            alerteDiag.show();
+
+        });
     }
 
     private void updatePhotoUrl() {
