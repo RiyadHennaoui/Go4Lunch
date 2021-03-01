@@ -63,5 +63,8 @@
     <string name="restaurant_hours_open">Open</string>
     <string name="restaurant_hours_close_today">Closed Today</string>
     <string name="restaurant_hours_unavailable">Unavailable</string>
+    <string name="navdrawer_menu_settings">SETTINGS</string>
+    <string name="navdrawer_menu_logout">LOGOUT</string>
+    <string name="navheader_menu_your_lunch">Your Lunch</string>
 
 </resources>

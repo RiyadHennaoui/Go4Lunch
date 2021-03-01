@@ -45,13 +45,8 @@ public class AppControler extends Application {
         SharedPreferences settingsNotifications = getSharedPreferences(getString(R.string.sharedpreference_notification_settings), MODE_PRIVATE);
         boolean userWantNotification = settingsNotifications.getBoolean("isCheck", true);
         if (userWantNotification){
-            Log.e("App if", userWantNotification + "");
             WorkerRestaurantNotification.periodRequest(getApplicationContext());
-        }else{
-            Log.e("App else", userWantNotification + "");
-            Log.e("notif dans APP", userWantNotification + "");
         }
-
         WorkerDelateRestaurant.deleteRestaurantsPeriodRequest(getApplicationContext());
         PreferenceLocaleStore store = new PreferenceLocaleStore(this, new Locale("en"));
         Lingver lingver = Lingver.init(this, store);

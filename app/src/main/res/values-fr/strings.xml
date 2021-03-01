@@ -55,6 +55,9 @@
     <string name="restaurant_hours_open">Ouvert</string>
     <string name="restaurant_hours_close_today">Fermé aujourd\'hui</string>
     <string name="restaurant_hours_unavailable">Indisponible</string>
+    <string name="navheader_menu_your_lunch">Votre repas</string>
+    <string name="navdrawer_menu_settings">Paramètres</string>
+    <string name="navdrawer_menu_logout">QUITTER</string>
 
 
 </resources>
