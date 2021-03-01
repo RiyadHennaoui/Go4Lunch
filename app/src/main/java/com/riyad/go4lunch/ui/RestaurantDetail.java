@@ -3,6 +3,7 @@ package com.riyad.go4lunch.ui;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.riyad.go4lunch.R;
 import com.riyad.go4lunch.datadetail.OpeningHours;
 import com.riyad.go4lunch.datadetail.Period;
 
@@ -11,6 +12,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import static com.riyad.go4lunch.AppControler.getMyAppContext;
 
 
 public class RestaurantDetail {
@@ -113,22 +116,22 @@ public class RestaurantDetail {
                     if (formatedCurrentHour > Integer.parseInt(openHour)
                             && formatedCurrentHour < Integer.parseInt(closeHour)) {
                         //TODO Trouver comment faire une string ressource
-                        result = "Open until : " + closeHourFormatted;
+                        result = getMyAppContext().getString(R.string.restaurant_hours_open_until) + closeHourFormatted;
                         isOpen = true;
 
                     } else {
                         if (!isOpen) {
-                            result = "Close, Open at : " + openHourFormatted;
+                            result = getMyAppContext().getString(R.string.restaurant_hours_close_open_at) + openHourFormatted;
                         } else {
-                            result = "Open";
+                            result = getMyAppContext().getString(R.string.restaurant_hours_open);
                         }
                     }
                 } else if (result == "") {
-                    result = "Closed Today";
+                    result = getMyAppContext().getString(R.string.restaurant_hours_close_today);
                 }
             }
         } else {
-            result = "Unavailable";
+            result = getMyAppContext().getString(R.string.restaurant_hours_unavailable);
         }
         return result;
     }

@@ -26,8 +26,8 @@
     <string name="location_rationale">Permission pour la position obligatoire</string>
     <string name="pick_place">Choisir la place</string>
     <string name="profileactivity_adiag_title_enter_your_name">Enter votre nom</string>
-    <string name="profileactivity_toast_update_profile_success">\"Votre profile est mis à jour \"</string>
-    <string name="profileactivity_toast_update_error">\"erreur merci de recommencer \"</string>
+    <string name="profileactivity_toast_update_profile_success">Votre profile est mis à jour</string>
+    <string name="profileactivity_toast_update_error">"erreur merci de recommencer "</string>
     <string name="profileactivity_adiag_btn_cancel">Annulé</string>
     <string name="profileactivity_adiag_btn_yes">Oui</string>
     <string name="profileactivity_adiag_title_picture_add">URL de votre photo</string>
@@ -36,10 +36,10 @@
     <string name="detailactivity_toast_permission_denied">impossible d\'appeler sans votre permission</string>
     <string name="rv_adapter_workmat_book">\ a rejoint!\</string>
     <string name="restaurant_fragment_restaurant_is_not_in_bounds">Le restaurant n\'est pas dans le rayon de recherche</string>
-    <string name="workmates_adapter_hasnt_decided_yet">n\\\'a pas encore décidé</string>
+    <string name="workmates_adapter_hasnt_decided_yet">n\'a pas encore décidé</string>
     <string name="workmates_adapter_is_eating_at">mange à %s</string>
     <string name="toolbar_title">J\'ai Faim</string>
-    <string name="navigation_drawer_toast_your_lunch_no_lunch">pas de réservation aujourd\\\'hui</string>
+    <string name="navigation_drawer_toast_your_lunch_no_lunch">pas de réservation aujourd\'hui</string>
     <string name="notification_title">"Votre réservation "</string>
     <string name="notification_with_you">Avec vous :</string>
     <string name="notification_restaurant_adress">adresse du restaurant</string>
@@ -50,6 +50,11 @@
     <string name="profile_activity_username">Nom</string>
     <string name="profile_activity_language">Français</string>
     <string name="notifications_once_a_day">Notification (une par jour)</string>
+    <string name="restaurant_hours_open_until">"Ouvre à : "</string>
+    <string name="restaurant_hours_close_open_at">"Fermé, ouvre à : "</string>
+    <string name="restaurant_hours_open">Ouvert</string>
+    <string name="restaurant_hours_close_today">Fermé aujourd\'hui</string>
+    <string name="restaurant_hours_unavailable">Indisponible</string>
 
 
 </resources>

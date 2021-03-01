@@ -26,6 +26,7 @@ import static com.riyad.go4lunch.utils.Constants.CHANNEL_NAME;
 public class AppControler extends Application {
 
     Location currentLocation;
+    private static Context myAppContext;
 
 
     private static AppControler instance;
@@ -39,6 +40,7 @@ public class AppControler extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        myAppContext = this;
         createNotificationChannel();
         SharedPreferences settingsNotifications = PreferenceManager.getDefaultSharedPreferences(this);
         boolean userWantNotification = settingsNotifications.getBoolean("isCheck", true);
@@ -77,6 +79,10 @@ public class AppControler extends Application {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+
+    public static Context getMyAppContext(){
+        return myAppContext;
     }
 
 

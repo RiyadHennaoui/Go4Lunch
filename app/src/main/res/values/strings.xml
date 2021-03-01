@@ -31,8 +31,8 @@
     <string name="location_rationale">Permission for location needed</string>
     <string name="pick_place">Choose a place</string>
     <string name="profileactivity_adiag_title_enter_your_name">Enter your name</string>
-    <string name="profileactivity_toast_update_profile_success">\"your profile is update \"</string>
-    <string name="profileactivity_toast_update_error">\"error please retry \"</string>
+    <string name="profileactivity_toast_update_profile_success">your profile is update</string>
+    <string name="profileactivity_toast_update_error">error please retry</string>
     <string name="profileactivity_adiag_btn_cancel">Cancel</string>
     <string name="profileactivity_adiag_btn_yes">Yes</string>
     <string name="profileactivity_adiag_title_picture_add">Your Photo URL</string>
@@ -58,5 +58,10 @@
     <string name="profile_activity_username">Username</string>
     <string name="profile_activity_language">English</string>
     <string name="notifications_once_a_day">Notifications ( once a day )</string>
+    <string name="restaurant_hours_open_until">"Open until : "</string>
+    <string name="restaurant_hours_close_open_at">"Close, Open at : "</string>
+    <string name="restaurant_hours_open">Open</string>
+    <string name="restaurant_hours_close_today">Closed Today</string>
+    <string name="restaurant_hours_unavailable">Unavailable</string>
 
 </resources>
