@@ -39,7 +39,6 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView addProfileUsername;
     private Button logoutProfile;
     private Switch notificationSwitch;
-    FirebaseUser firebaseUser;
     String input;
     private SharedPreferences sharedPreferences;
     private UserViewModel userViewModel;
@@ -61,11 +60,10 @@ public class ProfileActivity extends AppCompatActivity {
         addProfileUsername = findViewById(R.id.profile_edit_username);
         notificationSwitch = findViewById(R.id.profile_notification_switch);
 
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
         sharedPreferences = getSharedPreferences(getString(R.string.sharedpreference_notification_settings), MODE_PRIVATE);
         initUserViewModel();
 
-        this.isCurrentUserLogged();
         this.updateUIWhenCreating();
         this.logoutProfile();
         this.setEditLanguage();
@@ -107,27 +105,17 @@ public class ProfileActivity extends AppCompatActivity {
         }else{
             notificationSwitch.setChecked(false);
         }
-//        getNotificationSwitchState();
-        Log.e("profile switch check", ifCheckedState + "");
+
     }
 
-
-
-    //TODO l'activité ne doit pas connaitre la data utiliser le viewModel!!!
-    private FirebaseUser getCurrentUser(){ return FirebaseAuth.getInstance().getCurrentUser(); }
-
-    private Boolean isCurrentUserLogged(){ return (this.getCurrentUser() !=null); }
 
     private void updateUIWhenCreating(){
 
         displayUsernameProfile();
         updateUserName();
 
-        if (this.getCurrentUser().getPhotoUrl() !=null){
-            displayPhotoProfile();
-        }else{
-            updatePhotoUrl();
-        }
+        displayPhotoProfile();
+
         displayUsernameProfile();
         displayUserLunch();
 
@@ -179,7 +167,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void displayUserLunch() {
-        //TODO afficher le lunch si pas vide
         userViewModel.getCurrentUserInFirestore().observe(ProfileActivity.this, user -> {
             if (user.getBookingRestaurant().getRestaurantName() != null) {
                 String restaurantName = user.getBookingRestaurant().getRestaurantName();
@@ -194,10 +181,8 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void displayUsernameProfile() {
-        //TODO utiliser le repo et non le firebaseUser.
         userViewModel.getCurrentUserInFirestore().observe(ProfileActivity.this, user ->
                 this.textInputEditTextUsername.setText(user.getmUsername()));
-
 
     }
 
@@ -274,14 +259,10 @@ public class ProfileActivity extends AppCompatActivity {
         alertDialog.setTitle("Choose language");
         alertDialog.setSingleChoiceItems(listItem, -1, (dialog, which) -> {
             if (which == 0){
-//                setLocal("en");
                     setNewLocale("en", "US");
-//                LocaleHelper.onAttach(this, "en");
                 language.setText("English");
             }else if(which == 1){
-//                setLocal("fr");
                     setNewLocale("fr", "FR");
-//                LocaleHelper.onAttach(this, "fr");
                 language.setText("Français");
             }
 
@@ -299,11 +280,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    private void followSystemLocale(){
-        Lingver.getInstance().setFollowSystemLocale(this);
-        restart();
-    }
-
 
 
     private void setNewLocale(String language, String country){
@@ -317,23 +293,12 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void displayFragmentRestaurantList(){
-        //TODO trouvez comment démarrer sur le fragement de la liste des restaurants.
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("fragement value", 1);
         startActivity(intent);
 
     }
 
-
-
-//    private void setLocal(String language) {
-//
-//        Locale locale = new Locale(language);
-//        Locale.setDefault(locale);
-//        Configuration configuration = new Configuration();
-//        configuration.locale = locale;
-//        getBaseContext().getResources().updateConfiguration(configuration, getBaseContext().getResources().getDisplayMetrics());
-//    }
 
 
 }
