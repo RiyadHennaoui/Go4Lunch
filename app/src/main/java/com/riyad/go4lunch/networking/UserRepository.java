@@ -12,6 +12,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.riyad.go4lunch.model.User;
 
+import org.jetbrains.annotations.NotNull;
+
 import static com.riyad.go4lunch.utils.Constants.COLLECTION_USER_NAME;
 
 public class UserRepository {
@@ -88,9 +90,8 @@ public class UserRepository {
 
         MutableLiveData<User> userPhotoMutableLiveData = new MutableLiveData<>();
 
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setPhotoUri(Uri.parse(userPhotoUrl))
-                .build();
+        Log.e("userreposetPhoto", userPhotoUrl);
+
 
 
         userDb.collection(COLLECTION_USER_NAME)
@@ -101,6 +102,7 @@ public class UserRepository {
                     User getUser;
                     getUser = documentSnapshot.toObject(User.class);
                     getUser.setmUrlPicture(userPhotoUrl);
+                    UserProfileChangeRequest profileUpdates = getUserPhotoUrlProfileChangeRequest(userPhotoUrl);
                     currentUserFirebaseAuth.updateProfile(profileUpdates);
                     userDb.collection(COLLECTION_USER_NAME).document(userId).set(getUser);
 
@@ -110,13 +112,18 @@ public class UserRepository {
         return userPhotoMutableLiveData;
     }
 
+    @NotNull
+    private UserProfileChangeRequest getUserPhotoUrlProfileChangeRequest(String userPhotoUrl) {
+        return new UserProfileChangeRequest.Builder()
+                                .setPhotoUri(Uri.parse(userPhotoUrl))
+                                .build();
+    }
+
     public MutableLiveData<User> setNameProfileUserInFirestore(String userId, String userName) {
 
         MutableLiveData<User> userNameMutableLiveData = new MutableLiveData<>();
 
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName(userName)
-                .build();
+
 
 
         userDb.collection(COLLECTION_USER_NAME)
@@ -127,6 +134,7 @@ public class UserRepository {
                     User getUser;
                     getUser = documentSnapshot.toObject(User.class);
                     getUser.setmUsername(userName);
+                    UserProfileChangeRequest profileUpdates = getUserNameProfileChangeRequest(userName);
                     currentUserFirebaseAuth.updateProfile(profileUpdates);
                     userDb.collection(COLLECTION_USER_NAME).document(userId).set(getUser);
 
@@ -134,5 +142,12 @@ public class UserRepository {
                 });
 
         return userNameMutableLiveData;
+    }
+
+    @NotNull
+    private UserProfileChangeRequest getUserNameProfileChangeRequest(String userName) {
+        return new UserProfileChangeRequest.Builder()
+                                .setDisplayName(userName)
+                                .build();
     }
 }
