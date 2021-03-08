@@ -16,24 +16,24 @@ public class UserViewModel extends ViewModel {
         userRepository = UserRepository.getInstance();
     }
 
-    public LiveData<User> getCurrentUserInFirestore(){
-        return  userRepository.getCurrentUserInfirestore();
+    public LiveData<User> getCurrentUser(){
+        return  userRepository.getCurrentUser();
     }
 
-    public LiveData<User> createUserinFirestoreRepository() {
-        return userRepository.creatUserInFirebase();
+    public LiveData<User> createUser() {
+        return userRepository.creatUser();
     }
 
-    public LiveData<User> getUserInFirestore(String userId) {
-        return userRepository.getUserinfirestore(userId);
+    public LiveData<User> getUser(String userId) {
+        return userRepository.getUser(userId);
     }
 
     public LiveData<User> setUserPhotoUrl(String userId, String photoUrl) {
-        return userRepository.setPhotoProfileUserInFirestore(userId, photoUrl);
+        return userRepository.setPhotoProfileUser(userId, photoUrl);
     }
 
     public LiveData<User> setUserName(String userId, String name) {
-        return userRepository.setNameProfileUserInFirestore(userId, name);
+        return userRepository.setNameProfileUser(userId, name);
     }
 
 }

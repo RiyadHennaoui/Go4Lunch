@@ -43,8 +43,8 @@ public class DetailRestaurantViewModel extends ViewModel {
     }
 
     
-    public MutableLiveData<ArrayList<User>> getBookingRestaurantMutableLiveData (String restaurantId){
-        bookingRestaurantMutableLiveData = detailRestaurantRepository.bookingRestaurantRepo(restaurantId);
+    public MutableLiveData<ArrayList<User>> getBookingRestaurant(String restaurantId){
+        bookingRestaurantMutableLiveData = detailRestaurantRepository.bookingRestaurant(restaurantId);
         return  bookingRestaurantMutableLiveData;
     }
 
@@ -53,8 +53,8 @@ public class DetailRestaurantViewModel extends ViewModel {
         return restaurantLikes;
     }
 
-    public MutableLiveData<ArrayList<User>> getWorkmateBookingRestaurantMutableLiveData (String restaurantId){
-        workmateBookingRestaurantMutableLiveData = detailRestaurantRepository.workmatesBookingRestaurantRepo(restaurantId);
+    public MutableLiveData<ArrayList<User>> getWorkmateBookingRestaurant(String restaurantId){
+        workmateBookingRestaurantMutableLiveData = detailRestaurantRepository.workmatesBookingRestaurant(restaurantId);
         return workmateBookingRestaurantMutableLiveData;
     }
 }

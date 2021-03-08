@@ -21,7 +21,7 @@ public class RestaurantsViewModel extends ViewModel {
 
     }
 
-    public LiveData<List<Restaurant>> getRestaurantRepository(){
+    public LiveData<List<Restaurant>> getRestaurants(){
         return  restaurantRepository.getRestaurants(currentLocation);
     }
 

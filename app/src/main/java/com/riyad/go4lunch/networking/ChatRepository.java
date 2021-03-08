@@ -31,8 +31,8 @@ public class ChatRepository {
     private static ChatRepository chatRepository;
 
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+    //TODO voir pourquoi le timestemps enable n'éxiste plus
     FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-            .setTimestampsInSnapshotsEnabled(true)
             .build();
 
 

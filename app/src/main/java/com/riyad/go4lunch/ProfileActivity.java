@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,9 +19,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.riyad.go4lunch.model.User;
 import com.riyad.go4lunch.viewmodels.UserViewModel;
 import com.yariksoffice.lingver.Lingver;
 
@@ -167,7 +163,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void displayUserLunch() {
-        userViewModel.getCurrentUserInFirestore().observe(ProfileActivity.this, user -> {
+        userViewModel.getCurrentUser().observe(ProfileActivity.this, user -> {
             if (user.getBookingRestaurant().getRestaurantName() != null) {
                 String restaurantName = user.getBookingRestaurant().getRestaurantName();
                 this.YourLunch.setText(restaurantName);
@@ -181,13 +177,13 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void displayUsernameProfile() {
-        userViewModel.getCurrentUserInFirestore().observe(ProfileActivity.this, user ->
+        userViewModel.getCurrentUser().observe(ProfileActivity.this, user ->
                 this.textInputEditTextUsername.setText(user.getmUsername()));
 
     }
 
     private void displayPhotoProfile() {
-        userViewModel.getCurrentUserInFirestore().observe(ProfileActivity.this, user ->{
+        userViewModel.getCurrentUser().observe(ProfileActivity.this, user ->{
             if (user.getmUrlPicture() != null){
                 Glide.with(this)
                         .load(user.getmUrlPicture())
@@ -201,7 +197,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void setUserPhotoProfile(String photoUrl) {
 
-        userViewModel.getCurrentUserInFirestore().observe(ProfileActivity.this, user -> {
+        userViewModel.getCurrentUser().observe(ProfileActivity.this, user -> {
             userViewModel.setUserPhotoUrl(user.getmUid(), photoUrl)
                     .observe(this, user1 -> displayPhotoProfile());
         });
@@ -211,7 +207,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void setUserNameProfile(String usernameProfile){
 
-        userViewModel.getCurrentUserInFirestore().observe(this, user -> {
+        userViewModel.getCurrentUser().observe(this, user -> {
             userViewModel.setUserName(user.getmUid(), usernameProfile)
                     .observe(this, user1 -> displayUsernameProfile());
         });

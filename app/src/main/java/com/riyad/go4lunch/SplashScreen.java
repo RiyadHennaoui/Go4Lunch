@@ -85,7 +85,7 @@ public class SplashScreen extends AppCompatActivity {
 
             userViewModel = ViewModelProviders.of(SplashScreen.this).get(UserViewModel.class);
             userViewModel.init();
-            userViewModel.createUserinFirestoreRepository()
+            userViewModel.createUser()
                     .observe(SplashScreen.this, user -> {
                         intentToMainActivity();
                         finish();

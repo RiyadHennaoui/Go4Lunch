@@ -3,45 +3,30 @@ package com.riyad.go4lunch.fragments;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.riyad.go4lunch.MainActivity;
 import com.riyad.go4lunch.R;
 import com.riyad.go4lunch.adapter.RestaurantAdapter;
-import com.riyad.go4lunch.data.Restaurants;
-import com.riyad.go4lunch.data.Result;
 import com.riyad.go4lunch.ui.Restaurant;
 import com.riyad.go4lunch.viewmodels.DetailRestaurantViewModel;
 import com.riyad.go4lunch.viewmodels.RestaurantsViewModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
-
-import retrofit2.Call;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.riyad.go4lunch.utils.Constants.CURRENT_DEVICE_LOCATION;
-import static com.riyad.go4lunch.utils.Constants.DEFAULT_ZOOM;
 import static com.riyad.go4lunch.utils.Constants.SHARED_NAME;
 
 public class RestaurantsFragment extends Fragment {
@@ -91,7 +76,7 @@ public class RestaurantsFragment extends Fragment {
 
         String currentLocation = sharedPreferences.getString(CURRENT_DEVICE_LOCATION, "");
         restaurantsViewModel.init(currentLocation);
-        restaurantsViewModel.getRestaurantRepository().observe(this, restaurants -> {
+        restaurantsViewModel.getRestaurants().observe(this, restaurants -> {
             restaurantAdapter.setData(restaurants);
 
         });

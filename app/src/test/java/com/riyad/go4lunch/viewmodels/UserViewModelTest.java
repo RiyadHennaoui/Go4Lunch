@@ -52,9 +52,9 @@ public class UserViewModelTest {
         //Given fresh viewModel and fake user id
         String fakeUserId = "fake user id ";
         //When get user in database
-        when(userRepository.getUserinfirestore(fakeUserId)).thenReturn(livedataUser);
+        when(userRepository.getUser(fakeUserId)).thenReturn(livedataUser);
         try {
-            User user = JavaTestUtils.getOrAwaitValue(userViewModel.getUserInFirestore(fakeUserId));
+            User user = JavaTestUtils.getOrAwaitValue(userViewModel.getUser(fakeUserId));
             assertEquals(user, user1);
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -64,10 +64,10 @@ public class UserViewModelTest {
 
     @Test
     public void creatUserInFirestore(){
-       when(userRepository.creatUserInFirebase()).thenReturn(livedataUser);
+       when(userRepository.creatUser()).thenReturn(livedataUser);
 
         try {
-            User fakeUserLive = JavaTestUtils.getOrAwaitValue(userViewModel.createUserinFirestoreRepository());
+            User fakeUserLive = JavaTestUtils.getOrAwaitValue(userViewModel.createUser());
             assertEquals(fakeUserLive, user1);
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -80,7 +80,7 @@ public class UserViewModelTest {
     public void setUserName(){
         String fakeUserId = "fake user id ";
         String fakeUserName = "moi";
-        when(userRepository.setNameProfileUserInFirestore(fakeUserId, fakeUserName)).thenReturn(livedataUser);
+        when(userRepository.setNameProfileUser(fakeUserId, fakeUserName)).thenReturn(livedataUser);
 
         try{
             User user = JavaTestUtils.getOrAwaitValue(userViewModel.setUserName(fakeUserId, fakeUserName));

@@ -22,8 +22,6 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.riyad.go4lunch.utils.Constants.API_KEY_PLACES;
-import static com.riyad.go4lunch.utils.Constants.RESTAURANT_TYPE;
 import static org.mockito.Mockito.when;
 
 import static org.junit.Assert.*;
@@ -70,7 +68,7 @@ public class RestaurantsViewModelTest {
         when(restaurantRepository.getRestaurants(location.toString())).thenReturn(liveDataRestaurantList);
 
         try {
-            List<Restaurant> restaurantList = JavaTestUtils.getOrAwaitValue(restaurantsViewModel.getRestaurantRepository());
+            List<Restaurant> restaurantList = JavaTestUtils.getOrAwaitValue(restaurantsViewModel.getRestaurants());
             assertEquals(restaurantList, restaurantList1);
         } catch (InterruptedException e) {
             e.printStackTrace();

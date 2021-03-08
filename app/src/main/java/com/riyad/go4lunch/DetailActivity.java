@@ -86,7 +86,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private void displayWorkmatesBoonkingThisRestaurant() {
         //TODO n'affiche pas la liste mais seulement le premier user qui book! a voir
-        detailRestaurantViewModel.getWorkmateBookingRestaurantMutableLiveData(restaurantID).observe(DetailActivity.this,
+        detailRestaurantViewModel.getWorkmateBookingRestaurant(restaurantID).observe(DetailActivity.this,
                 workmates -> {
                     workmatesBookingRestaurantAdapter = new WorkmatesBookingRestaurantAdapter(workmates);
                     rvDetailActivity.setAdapter(workmatesBookingRestaurantAdapter);
@@ -113,7 +113,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void bookRestaurant() {
-        detailRestaurantViewModel.getBookingRestaurantMutableLiveData(restaurantID)
+        detailRestaurantViewModel.getBookingRestaurant(restaurantID)
                 .observe(DetailActivity.this, bookingRestaurants -> {
                     setBookingIcon(bookingRestaurants);
                     displayWorkmatesBoonkingThisRestaurant();

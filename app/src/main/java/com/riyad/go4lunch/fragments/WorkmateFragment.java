@@ -38,8 +38,12 @@ public class WorkmateFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.main_rv, container, false);
 
-
-        Query query = usersRef.orderBy(ORDERBY_BOOKING_RESTAURANT, Query.Direction.DESCENDING)
+        String userid = "Bagheera";
+        Query query = usersRef
+//                .whereEqualTo(ORDERBY_USERNAME, userid)
+//                .whereNotEqualTo(ORDERBY_USERNAME, userid)
+                .whereEqualTo("username", false)
+                .orderBy(ORDERBY_BOOKING_RESTAURANT, Query.Direction.DESCENDING)
                 .orderBy(ORDERBY_USERNAME, Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<User> options = new FirestoreRecyclerOptions.Builder<User>()
                 .setQuery(query, User.class)
@@ -69,4 +73,5 @@ public class WorkmateFragment extends Fragment {
         super.onStop();
         adapter.stopListening();
     }
+
 }

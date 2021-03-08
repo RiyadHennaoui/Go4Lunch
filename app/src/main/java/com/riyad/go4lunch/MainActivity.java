@@ -1,5 +1,6 @@
 package com.riyad.go4lunch;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -18,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 
+import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -52,8 +54,6 @@ import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.riyad.go4lunch.fragments.RestaurantsFragment;
 import com.riyad.go4lunch.fragments.WorkmateFragment;
 import com.riyad.go4lunch.ui.Restaurant;
@@ -132,8 +132,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
-
-        getLocationPermission();
         myMainToolbar.inflateMenu(R.menu.action_bar_menu);
         this.configureToolbar();
         this.configureBottomView();
@@ -146,10 +144,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         Places.initialize(getApplicationContext(), API_KEY_PLACES);
 
 
-
-        if(go4restaurantList != 0){
-            displayRestaurantFragment();
+        if (go4restaurantList != 0) {
+            bottomNavigationView.setSelectedItemId(R.id.action_list_view);
+        }else{
+            openMap();
         }
+
     }
 
     private void steupNavigationHeaderView() {
@@ -173,9 +173,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         toggle.syncState();
     }
 
-    private void displayUserInfos(){
+    private void displayUserInfos() {
         UserViewModel userViewModel = initUserViewModel();
-        userViewModel.getCurrentUserInFirestore().observe(MainActivity.this, user -> {
+        userViewModel.getCurrentUser().observe(MainActivity.this, user -> {
             usernameNavDrawer.setText(user.getmUsername());
             userMailNavDrawer.setText(user.getmMail());
             Glide.with(MainActivity.this.profileNavDrawer).load(user.getmUrlPicture()).circleCrop().into(profileNavDrawer);
@@ -201,6 +201,19 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         //TODO gérer les problèmes de permissions
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
         locationResult.addOnCompleteListener(this, task -> {
             if (task.isSuccessful()) {
@@ -250,10 +263,16 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    mLocationPermissionGranted = true;
+                    onLocationPermissionGranted();
                 }
             }
         }
+
+    }
+
+    private void onLocationPermissionGranted() {
+        mLocationPermissionGranted = true;
+        getDeviceLocation();
         updateLocationUI();
     }
 
@@ -262,8 +281,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         String[] perms = {ACCESS_FINE_LOCATION};
         if (EasyPermissions.hasPermissions(this, perms)) {
             // Already have permission, do the thing
-            mLocationPermissionGranted = true;
-            openMap();
+           onLocationPermissionGranted();
         } else {
             // Do not have permissions, request them now
             EasyPermissions.requestPermissions(this, getString(R.string.location_rationale),
@@ -336,7 +354,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         RestaurantsViewModel restaurantsViewModel;
         restaurantsViewModel = ViewModelProviders.of(MainActivity.this).get(RestaurantsViewModel.class);
         restaurantsViewModel.init(nearbySearchLocationFormat);
-        restaurantsViewModel.getRestaurantRepository().observe(MainActivity.this, restaurants -> addMarkers(restaurants));
+        restaurantsViewModel.getRestaurants().observe(MainActivity.this, restaurants -> addMarkers(restaurants));
     }
 
     private void addMarkers(List<Restaurant> restaurants) {
@@ -411,11 +429,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        mMap.setMyLocationEnabled(true);
         mMap.setOnInfoWindowClickListener(marker -> {
             intentToDetailRestaurant(marker.getSnippet());
         });
-        getDeviceLocation();
+        getLocationPermission();
     }
 
     private void intentToDetailRestaurant(String restaurantId) {
@@ -429,19 +446,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
      * Updates the map's UI settings based on whether the user has granted location permission.
      */
     private void updateLocationUI() {
-        if (mMap == null) {
-            return;
-        }
+
         try {
-            if (mLocationPermissionGranted) {
-                mMap.setMyLocationEnabled(true);
-                mMap.getUiSettings().setMyLocationButtonEnabled(true);
-            } else {
-                mMap.setMyLocationEnabled(false);
-                mMap.getUiSettings().setMyLocationButtonEnabled(false);
-                mLastKnownLocation = null;
-                getLocationPermission();
-            }
+            mMap.setMyLocationEnabled(true);
+            mMap.getUiSettings().setMyLocationButtonEnabled(true);
         } catch (SecurityException e) {
             Log.e("Ex UpdateLocation: %s", e.getMessage());
         }
@@ -516,7 +524,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void goToUserRestaurentBook(){
         UserViewModel userViewModel = initUserViewModel();
-        userViewModel.getCurrentUserInFirestore().observe(MainActivity.this, user -> {
+        userViewModel.getCurrentUser().observe(MainActivity.this, user -> {
             if (user.getBookingRestaurant().getRestaurantId() != null) {
                 String restaurantId = user.getBookingRestaurant().getRestaurantId();
                 intentToDetailRestaurant(restaurantId);

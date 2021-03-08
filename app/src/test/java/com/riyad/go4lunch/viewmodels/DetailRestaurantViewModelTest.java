@@ -21,7 +21,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.Mockito.when;
 import static org.junit.Assert.*;
@@ -117,10 +116,10 @@ public class DetailRestaurantViewModelTest {
     public void usersBookingThisRestaurant(){
 
 
-        when(detailRestaurantRepository.bookingRestaurantRepo(fakeRestaurantId)).thenReturn(usersListMutableLiveData);
+        when(detailRestaurantRepository.bookingRestaurant(fakeRestaurantId)).thenReturn(usersListMutableLiveData);
 
         try{
-            ArrayList<User> users = JavaTestUtils.getOrAwaitValue(detailRestaurantViewModel.getBookingRestaurantMutableLiveData(fakeRestaurantId));
+            ArrayList<User> users = JavaTestUtils.getOrAwaitValue(detailRestaurantViewModel.getBookingRestaurant(fakeRestaurantId));
             assertEquals(users, usersList);
         }catch (InterruptedException e){
             e.printStackTrace();
@@ -148,10 +147,10 @@ public class DetailRestaurantViewModelTest {
     @Test
     public void getWorkmateBookingrestaurant(){
 
-        when(detailRestaurantRepository.workmatesBookingRestaurantRepo(fakeRestaurantId)).thenReturn(usersListMutableLiveData);
+        when(detailRestaurantRepository.workmatesBookingRestaurant(fakeRestaurantId)).thenReturn(usersListMutableLiveData);
 
         try{
-            ArrayList<User> users = JavaTestUtils.getOrAwaitValue(detailRestaurantViewModel.getWorkmateBookingRestaurantMutableLiveData(fakeRestaurantId));
+            ArrayList<User> users = JavaTestUtils.getOrAwaitValue(detailRestaurantViewModel.getWorkmateBookingRestaurant(fakeRestaurantId));
             assertEquals(users, usersList);
 
         }catch(InterruptedException e){

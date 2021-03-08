@@ -30,14 +30,14 @@ public class UserRepository {
         return userRepository;
     }
 
-    private FirebaseUser getCurrentUser() {
+    private FirebaseUser getCurrentFirebaseUser() {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
 
-    public MutableLiveData<User> getCurrentUserInfirestore(){
+    public MutableLiveData<User> getCurrentUser(){
         MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
         userDb.collection(COLLECTION_USER_NAME)
-                .document(getCurrentUser().getUid())
+                .document(getCurrentFirebaseUser().getUid())
                 .get()
                 .addOnCompleteListener(task -> {
                     DocumentSnapshot documentSnapshot = task.getResult();
@@ -50,15 +50,15 @@ public class UserRepository {
     }
 
 
-    public MutableLiveData<User> creatUserInFirebase() {
+    public MutableLiveData<User> creatUser() {
 
         MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
         User userToSave = new User();
-        userToSave.setmUid(getCurrentUser().getUid());
-        userToSave.setmUsername(getCurrentUser().getDisplayName());
-        userToSave.setmMail(getCurrentUser().getEmail());
-        if (getCurrentUser().getPhotoUrl() != null) {
-            userToSave.setmUrlPicture(getCurrentUser().getPhotoUrl().toString());
+        userToSave.setmUid(getCurrentFirebaseUser().getUid());
+        userToSave.setmUsername(getCurrentFirebaseUser().getDisplayName());
+        userToSave.setmMail(getCurrentFirebaseUser().getEmail());
+        if (getCurrentFirebaseUser().getPhotoUrl() != null) {
+            userToSave.setmUrlPicture(getCurrentFirebaseUser().getPhotoUrl().toString());
         }
 
         userDb.collection(COLLECTION_USER_NAME)
@@ -69,7 +69,7 @@ public class UserRepository {
         return userMutableLiveData;
     }
 
-    public MutableLiveData<User> getUserinfirestore(String userId) {
+    public MutableLiveData<User> getUser(String userId) {
 
         MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
 
@@ -86,7 +86,7 @@ public class UserRepository {
         return userMutableLiveData;
     }
 
-    public MutableLiveData<User> setPhotoProfileUserInFirestore(String userId, String userPhotoUrl) {
+    public MutableLiveData<User> setPhotoProfileUser(String userId, String userPhotoUrl) {
 
         MutableLiveData<User> userPhotoMutableLiveData = new MutableLiveData<>();
 
@@ -119,7 +119,7 @@ public class UserRepository {
                                 .build();
     }
 
-    public MutableLiveData<User> setNameProfileUserInFirestore(String userId, String userName) {
+    public MutableLiveData<User> setNameProfileUser(String userId, String userName) {
 
         MutableLiveData<User> userNameMutableLiveData = new MutableLiveData<>();
 

@@ -103,7 +103,7 @@ public class DetailRestaurantRepository {
     }
 
     //for book restaurant
-    public MutableLiveData<ArrayList<User>> bookingRestaurantRepo(String restaurantId) {
+    public MutableLiveData<ArrayList<User>> bookingRestaurant(String restaurantId) {
 
         DocumentReference firestoreRestaurants = restaurantDb.collection(COLLECTION_RESTAURANTS_NAME).document(restaurantId);
 
@@ -203,7 +203,7 @@ public class DetailRestaurantRepository {
     }
 
     //get list of workmates book current restaurant.
-    public MutableLiveData<ArrayList<User>> workmatesBookingRestaurantRepo(String restaurantId) {
+    public MutableLiveData<ArrayList<User>> workmatesBookingRestaurant(String restaurantId) {
         DocumentReference firestoreRestaurant = restaurantDb.collection(COLLECTION_RESTAURANTS_NAME).document(restaurantId);
         CollectionReference workamatesCollection = restaurantDb.collection(COLLECTION_USER_NAME);
 
