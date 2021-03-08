@@ -129,8 +129,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         go4restaurantList = getIntent().getIntExtra("fragement value", 0);
 
-        Log.e("intent", go4restaurantList + "");
-
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -140,30 +138,27 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         this.configureToolbar();
         this.configureBottomView();
         this.configureNavView();
-        myNavView.setCheckedItem(R.id.action_map_view);
-//        initPlaces();
-//        openMap();
-
-        configureActionBarDrawer();
-        View headerView = myNavView.getHeaderView(0);
-        profileNavDrawer = headerView.findViewById(R.id.nav_header_profile_picture);
-        usernameNavDrawer = headerView.findViewById(R.id.nav_header_profile_name);
-        userMailNavDrawer = headerView.findViewById(R.id.nav_header_profile_email);
+        steupNavigationHeaderView();
 
         displayUserInfos();
-
 
         //Initilaze Places
         Places.initialize(getApplicationContext(), API_KEY_PLACES);
 
-        //Creat new places client instance
-        PlacesClient placesClient = Places.createClient(this);
 
 
         if(go4restaurantList != 0){
             displayRestaurantFragment();
         }
+    }
 
+    private void steupNavigationHeaderView() {
+        myNavView.setCheckedItem(R.id.action_map_view);
+        configureActionBarDrawer();
+        View headerView = myNavView.getHeaderView(0);
+        profileNavDrawer = headerView.findViewById(R.id.nav_header_profile_picture);
+        usernameNavDrawer = headerView.findViewById(R.id.nav_header_profile_name);
+        userMailNavDrawer = headerView.findViewById(R.id.nav_header_profile_email);
     }
 
     private void configureActionBarDrawer() {
@@ -280,7 +275,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         switch (integer) {
 
-            //TODO ajouter le case de la searchView.
             case R.id.action_map_view:
                 openMap();
                 break;
@@ -294,7 +288,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 break;
 
             case R.id.nav_your_lunch:
-                //TODO intent vers le fragment/Activité souhaité.
                 goToUserRestaurentBook();
                 break;
 

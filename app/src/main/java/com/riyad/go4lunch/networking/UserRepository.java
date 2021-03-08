@@ -102,6 +102,7 @@ public class UserRepository {
                     getUser = documentSnapshot.toObject(User.class);
                     getUser.setmUrlPicture(userPhotoUrl);
                     currentUserFirebaseAuth.updateProfile(profileUpdates);
+                    userDb.collection(COLLECTION_USER_NAME).document(userId).set(getUser);
 
                     userPhotoMutableLiveData.setValue(getUser);
                 });
