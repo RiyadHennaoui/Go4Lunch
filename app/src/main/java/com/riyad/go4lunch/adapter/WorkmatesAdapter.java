@@ -19,9 +19,12 @@ import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.riyad.go4lunch.ChatActivity;
+import com.riyad.go4lunch.DetailActivity;
 import com.riyad.go4lunch.R;
+import com.riyad.go4lunch.datadetail.DetailRestaurant;
 import com.riyad.go4lunch.model.User;
 
+import static com.riyad.go4lunch.utils.Constants.PLACE_ID;
 import static com.riyad.go4lunch.utils.Constants.WORKMATE_ID;
 import static com.riyad.go4lunch.utils.Constants.WORKMATE_PICTURE_URL;
 import static com.riyad.go4lunch.utils.Constants.WORKMATE_USERNAME;
@@ -80,10 +83,15 @@ public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesAd
                mWhereLunch.setText(itemView.getContext().getString(R.string.workmates_adapter_is_eating_at, user.getBookingRestaurant().getRestaurantName()));
                mWhereLunch.setTextColor(itemView.getContext().getResources().getColor(android.R.color.black));
                mWhereLunch.setTypeface(mWhereLunch.getTypeface(), Typeface.BOLD);
+               mMainCardView.setOnClickListener(v -> {
+                   toDetailRestaurant(user.getBookingRestaurant().getRestaurantId(), v.getContext());
+               });
             }else{
               mWhereLunch.setText(R.string.workmates_adapter_hasnt_decided_yet);
                 mWhereLunch.setTypeface(mWhereLunch.getTypeface(), Typeface.ITALIC);
             }
+
+
 
 
             Glide.with(mIvProfileCircle).load(user.getmUrlPicture()).circleCrop().into(mIvProfileCircle);
@@ -102,5 +110,11 @@ public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesAd
         intent.putExtra(WORKMATE_USERNAME, workmateUsername);
         context.startActivity(intent);
 
+    }
+
+    private void toDetailRestaurant(String restaurantId, Context context){
+        Intent intent = new Intent(context, DetailActivity.class);
+        intent.putExtra(PLACE_ID, restaurantId);
+        context.startActivity(intent);
     }
 }
