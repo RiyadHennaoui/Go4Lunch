@@ -38,13 +38,15 @@ public class WorkmateFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.main_rv, container, false);
 
-        String userid = "Bagheera";
+        String userid = "Amélia";
         Query query = usersRef
+
 //                .whereEqualTo(ORDERBY_USERNAME, userid)
 //                .whereNotEqualTo(ORDERBY_USERNAME, userid)
-                .whereEqualTo("username", false)
                 .orderBy(ORDERBY_BOOKING_RESTAURANT, Query.Direction.DESCENDING)
-                .orderBy(ORDERBY_USERNAME, Query.Direction.ASCENDING);
+                .orderBy(ORDERBY_USERNAME, Query.Direction.ASCENDING)
+                ;
+
         FirestoreRecyclerOptions<User> options = new FirestoreRecyclerOptions.Builder<User>()
                 .setQuery(query, User.class)
                 .build();
