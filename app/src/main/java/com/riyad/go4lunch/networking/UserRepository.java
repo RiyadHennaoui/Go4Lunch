@@ -5,14 +5,22 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.common.collect.ComparisonChain;
+import com.google.common.collect.Ordering;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.riyad.go4lunch.model.User;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import static com.riyad.go4lunch.utils.Constants.COLLECTION_USER_NAME;
 
@@ -150,4 +158,42 @@ public class UserRepository {
                                 .setDisplayName(userName)
                                 .build();
     }
+
+    public MutableLiveData<List<User>> getUsersList(){
+        MutableLiveData<List<User>> usersData = new MutableLiveData<>();
+
+        userDb.collection(COLLECTION_USER_NAME)
+                .get()
+                .addOnCompleteListener(task -> {
+                    ArrayList<User> usersList = new ArrayList<>();
+                    if (task.isSuccessful()){
+                        for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                            User user = documentSnapshot.toObject(User.class);
+                            if(!user.getmUid().equals(currentUserFirebaseAuth.getUid())){
+
+                                    usersList.add(user);
+
+
+                            }
+
+                        }
+                        Collections.sort(usersList, new Comparator<User>(){
+
+                            @Override
+                            public int compare(User user1, User user2) {
+                                return ComparisonChain.start()
+                                        .compare(user1.getBookingRestaurant().getRestaurantName(), user2.getBookingRestaurant().getRestaurantName(), Ordering.natural().nullsLast())
+                                        .compare(user1.getmUsername(), user2.getmUsername(), Ordering.natural())
+                                        .result();
+                            }
+                        });
+
+                        usersData.setValue(usersList);
+                    }
+
+                });
+            return usersData;
+    }
+
+
 }

@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel;
 import com.riyad.go4lunch.model.User;
 import com.riyad.go4lunch.networking.UserRepository;
 
+import java.util.List;
+
 
 public class UserViewModel extends ViewModel {
 
@@ -34,6 +36,10 @@ public class UserViewModel extends ViewModel {
 
     public LiveData<User> setUserName(String userId, String name) {
         return userRepository.setNameProfileUser(userId, name);
+    }
+
+    public LiveData<List<User>> getUsers(){
+        return  userRepository.getUsersList();
     }
 
 }
