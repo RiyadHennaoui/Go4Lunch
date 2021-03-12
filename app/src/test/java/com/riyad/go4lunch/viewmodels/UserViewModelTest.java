@@ -15,6 +15,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.notNull;
 import static org.mockito.Mockito.mock;
@@ -31,7 +34,9 @@ public class UserViewModelTest {
     private UserRepository userRepository;
 
     private User user1;
+    private List<User> userList1 = new ArrayList<>();
     private MutableLiveData<User> livedataUser;
+    private MutableLiveData<List<User>> livedataUsersList;
     @InjectMocks
     UserViewModel userViewModel = new UserViewModel();
 
@@ -41,8 +46,11 @@ public class UserViewModelTest {
         user1 = new User();
         user1.setmUid("1");
         user1.setmUsername("moi");
-        livedataUser = new MutableLiveData<User>();
+        userList1.add(user1);
+        livedataUser = new MutableLiveData<>();
         livedataUser.postValue(user1);
+        livedataUsersList = new MutableLiveData<>();
+        livedataUsersList.postValue(userList1);
 
     }
 
@@ -85,6 +93,19 @@ public class UserViewModelTest {
         try{
             User user = JavaTestUtils.getOrAwaitValue(userViewModel.setUserName(fakeUserId, fakeUserName));
             assertEquals(user.getmUsername(), user1.getmUsername());
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    @Test
+    public void getUsersList(){
+
+        when(userRepository.getUsersList()).thenReturn(livedataUsersList);
+        try{
+            List<User> userList = JavaTestUtils.getOrAwaitValue(userViewModel.getUsers());
+            assertEquals(userList, userList1);
         }catch (InterruptedException e){
             e.printStackTrace();
         }

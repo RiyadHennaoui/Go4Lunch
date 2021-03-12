@@ -83,11 +83,6 @@ public class WorkmateFragment extends Fragment {
 
         userViewModel.init();
         userViewModel.getUsers().observe(this, users ->{
-            Log.e("lambdaFragment workmate", users.get(0).getmUsername() + "");
-            Log.e("lambdaFragment workmate", users.get(1).getmUsername() + "");
-            Log.e("lambdaFragment workmate", users.get(2).getmUsername() + "");
-            Log.e("lambdaFragment workmate", users.get(3).getmUsername() + "");
-
             newAdapter.setData(users);
         });
     }
