@@ -238,7 +238,8 @@ public class ProfileActivity extends AppCompatActivity {
         return aVoid -> {
             switch (origin) {
                 case SIGN_OUT_TASK:
-                    finish();
+//                    finish();
+                    restartSplashScreen();
                     break;
                 default:
                     break;
@@ -293,6 +294,11 @@ public class ProfileActivity extends AppCompatActivity {
         intent.putExtra("fragement value", 1);
         startActivity(intent);
 
+    }
+
+    private void restartSplashScreen(){
+        Intent intent = new Intent(this, SplashScreen.class);
+        startActivity(intent);
     }
 
 

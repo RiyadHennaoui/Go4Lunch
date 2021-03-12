@@ -170,23 +170,19 @@ public class UserRepository {
                         for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
                             User user = documentSnapshot.toObject(User.class);
                             if(!user.getmUid().equals(currentUserFirebaseAuth.getUid())){
-
                                     usersList.add(user);
-
-
                             }
 
                         }
-                        Collections.sort(usersList, new Comparator<User>(){
-
-                            @Override
-                            public int compare(User user1, User user2) {
-                                return ComparisonChain.start()
-                                        .compare(user1.getBookingRestaurant().getRestaurantName(), user2.getBookingRestaurant().getRestaurantName(), Ordering.natural().nullsLast())
-                                        .compare(user1.getmUsername(), user2.getmUsername(), Ordering.natural())
-                                        .result();
-                            }
-                        });
+                        Collections.sort(usersList, (user1, user2) ->
+                                ComparisonChain.start()
+                                .compare(user1.getBookingRestaurant().getRestaurantName(),
+                                        user2.getBookingRestaurant().getRestaurantName(),
+                                        Ordering.natural().nullsLast())
+                                .compare(user1.getmUsername(),
+                                        user2.getmUsername(),
+                                        Ordering.natural())
+                                .result());
 
                         usersData.setValue(usersList);
                     }
