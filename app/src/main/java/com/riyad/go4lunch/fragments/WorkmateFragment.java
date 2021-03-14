@@ -35,9 +35,7 @@ import static com.riyad.go4lunch.utils.Constants.ORDERBY_USERNAME;
 
 public class WorkmateFragment extends Fragment {
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference usersRef = db.collection(COLLECTION_USER_NAME);
-    private WorkmatesAdapter adapter;
+
     private UserViewModel userViewModel;
     private WorkmateNewAdapter newAdapter;
     private ArrayList<User> usersList = new ArrayList<>();
@@ -59,9 +57,6 @@ public class WorkmateFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.main_rv, container, false);
 
-//        initUserViewModel();
-//        initRvWorkmates();
-
 
         newAdapter = new WorkmateNewAdapter(usersList, getContext());
         RecyclerView myRecyclerView = myView.findViewById(R.id.main_rv);
@@ -69,7 +64,6 @@ public class WorkmateFragment extends Fragment {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         myRecyclerView.setLayoutManager(layoutManager);
         myRecyclerView.setAdapter(newAdapter);
-//        getUserFirestoreRecyclerOptions();
 
 
 
@@ -85,50 +79,6 @@ public class WorkmateFragment extends Fragment {
         userViewModel.getUsers().observe(this, users ->{
             newAdapter.setData(users);
         });
-    }
-
-    private void initRvWorkmates() {
-        userViewModel.getCurrentUser().observe(requireActivity(), user -> {
-//            userName = user.getmUsername();
-//            Log.e("workmateFragment", userName);
-
-
-        });
-    }
-
-    @NotNull
-    private FirestoreRecyclerOptions<User> getUserFirestoreRecyclerOptions() {
-        Query query = usersRef
-//                .whereNotEqualTo(ORDERBY_USERNAME, userName)
-//                .orderBy(ORDERBY_BOOKING_RESTAURANT, Query.Direction.DESCENDING)
-//                .orderBy(ORDERBY_USERNAME, Query.Direction.ASCENDING)
-                ;
-
-        FirestoreRecyclerOptions<User> options = new FirestoreRecyclerOptions.Builder<User>()
-                .setQuery(query, User.class)
-                .build();
-
-
-        adapter = new WorkmatesAdapter(options);
-        adapter.notifyDataSetChanged();
-        return options;
-    }
-
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        adapter.startListening();
-//    }
-
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//        adapter.stopListening();
-//    }
-
-    private void initUserViewModel() {
-        userViewModel = (UserViewModel) new ViewModelProvider(requireActivity()).get(UserViewModel.class);
-        userViewModel.init();
     }
 
 
