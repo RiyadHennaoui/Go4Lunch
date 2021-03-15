@@ -8,9 +8,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +35,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -48,7 +45,6 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.RectangularBounds;
 import com.google.android.libraries.places.api.model.TypeFilter;
-import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
@@ -86,7 +82,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private static final String TAG = "MainActivity";
     private SupportMapFragment mMapFragment;
     private GoogleMap mMap;
-    private CameraPosition mCameraPosition;
     private BottomNavigationView bottomNavigationView;
     private DrawerLayout myDrawerLayout;
     private NavigationView myNavView;
@@ -94,8 +89,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private ImageView profileNavDrawer;
     private TextView usernameNavDrawer;
     private TextView userMailNavDrawer;
-    private Button toolbarSearch;
-    private SearchView searchView;
     private List<Place.Field> fields;
     private int go4restaurantList;
 
@@ -104,10 +97,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     // The geographical location where the device is currently located. That is, the last-know location retrieved by the Fused Location Provider
     private Location mLastKnownLocation;
-    private boolean mLocationPermissionGranted;
-
-    // The entry point to the Places API.
-    private PlacesClient mPlacesClient;
 
 
     private SharedPreferences sharedPreferences;
@@ -252,7 +241,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        mLocationPermissionGranted = false;
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
         switch (requestCode) {
             case PERMISSION_REQUEST_ACCESS_FINE_LOCATION: {
@@ -267,7 +255,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void onLocationPermissionGranted() {
-        mLocationPermissionGranted = true;
         getDeviceLocation();
         updateLocationUI();
     }
@@ -302,7 +289,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 break;
 
             case R.id.nav_your_lunch:
-                goToUserRestaurentBook();
+                goToUserRestaurantBook();
                 break;
 
             case R.id.nav_settings:
@@ -314,7 +301,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 break;
 
             case R.id.menu_search:
-                autocompleltePlace();
+                autocompletePlace();
                 break;
         }
 
@@ -468,7 +455,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         };
     }
 
-    public void autocompleltePlace() {
+    public void autocompletePlace() {
         fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
         Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
                 .setTypeFilter(TypeFilter.ESTABLISHMENT)
@@ -517,7 +504,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         return new LatLngBounds(new LatLng(minLat, minLong), new LatLng(maxLat, maxLong));
     }
 
-    private void goToUserRestaurentBook(){
+    private void goToUserRestaurantBook(){
         UserViewModel userViewModel = initUserViewModel();
         userViewModel.getCurrentUser().observe(MainActivity.this, user -> {
             if (user.getBookingRestaurant().getRestaurantId() != null) {

@@ -1,17 +1,13 @@
 package com.riyad.go4lunch.worker;
 
-import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
-import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
@@ -22,16 +18,12 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.gson.Gson;
 import com.riyad.go4lunch.MainActivity;
 import com.riyad.go4lunch.R;
 import com.riyad.go4lunch.model.User;
 import com.riyad.go4lunch.ui.Restaurant;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import static com.riyad.go4lunch.utils.Constants.COLLECTION_RESTAURANTS_NAME;
@@ -159,7 +151,7 @@ public class WorkerRestaurantNotification extends Worker {
                 .setShowWhen(true)
                 .setContentTitle(getApplicationContext().getString(R.string.notification_title) + restaurantName)
                 .setStyle(new NotificationCompat.InboxStyle()
-                        .addLine(getApplicationContext().getString(R.string.notification_restaurant_adress))
+                        .addLine(getApplicationContext().getString(R.string.notification_restaurant_address))
                         .addLine(restaurantAdress)
                         .addLine(utilisateurs)
                 )

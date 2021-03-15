@@ -76,7 +76,7 @@ public class RestaurantsFragment extends Fragment {
 
         String currentLocation = sharedPreferences.getString(CURRENT_DEVICE_LOCATION, "");
         restaurantsViewModel.init(currentLocation);
-        restaurantsViewModel.getRestaurants().observe(this, restaurants -> {
+        restaurantsViewModel.getRestaurants().observe(this.getActivity(), restaurants -> {
             restaurantAdapter.setData(restaurants);
 
         });

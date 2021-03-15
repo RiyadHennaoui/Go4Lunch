@@ -42,7 +42,7 @@
     <string name="navigation_drawer_toast_your_lunch_no_lunch">pas de réservation aujourd\'hui</string>
     <string name="notification_title">"Votre réservation "</string>
     <string name="notification_with_you">Avec vous :</string>
-    <string name="notification_restaurant_adress">adresse du restaurant</string>
+    <string name="notification_restaurant_address">adresse du restaurant</string>
     <string name="profile_ui_logout">Quitter</string>
     <string name="detail_activity_call">APPELER</string>
     <string name="detail_activity_like">AIMER</string>
@@ -58,6 +58,13 @@
     <string name="navheader_menu_your_lunch">Votre repas</string>
     <string name="navdrawer_menu_settings">Paramètres</string>
     <string name="navdrawer_menu_logout">QUITTER</string>
+    <string name="settings_activity_choose_language">Choisissez  la langue</string>
+
+
+    <string-array name="listItem_array">
+        <item>Englais</item>
+        <item>Français</item>
+    </string-array>
 
 
 </resources>

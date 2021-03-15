@@ -76,36 +76,36 @@ public class ProfileActivity extends AppCompatActivity {
         userViewModel.init();
     }
 
-    private void setYourLunch(){
+    private void setYourLunch() {
         editLunch.setOnClickListener(v -> displayFragmentRestaurantList());
 
     }
 
-    private void switchListner(){
+    private void switchListner() {
         notificationSwitch.setOnClickListener(v -> setNotificationSwitchState());
     }
 
-    private void setNotificationSwitchState(){
+    private void setNotificationSwitchState() {
 
-        if(notificationSwitch.isChecked()){
+        if (notificationSwitch.isChecked()) {
             sharedPreferences.edit().putBoolean("isCheck", true).apply();
         } else {
             sharedPreferences.edit().putBoolean("isCheck", false).apply();
         }
     }
 
-    private void getSwitchState(){
+    private void getSwitchState() {
         boolean ifCheckedState = sharedPreferences.getBoolean("isCheck", true);
-        if (ifCheckedState){
+        if (ifCheckedState) {
             notificationSwitch.setChecked(true);
-        }else{
+        } else {
             notificationSwitch.setChecked(false);
         }
 
     }
 
 
-    private void updateUIWhenCreating(){
+    private void updateUIWhenCreating() {
 
         displayUsernameProfile();
         updateUserName();
@@ -129,7 +129,7 @@ public class ProfileActivity extends AppCompatActivity {
             alerteDiag.setView(editText);
 
             alerteDiag.setPositiveButton(R.string.profileactivity_adiag_btn_yes, (dialog, which) -> {
-               input = editText.getText().toString();
+                input = editText.getText().toString();
                 setUserNameProfile(input);
             });
 
@@ -140,7 +140,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void updatePhotoUrl() {
-        addProfilePicture.setOnClickListener((View v)-> {
+        addProfilePicture.setOnClickListener((View v) -> {
 
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(ProfileActivity.this);
             alertDialog.setTitle(R.string.profileactivity_adiag_title_picture_add);
@@ -167,7 +167,7 @@ public class ProfileActivity extends AppCompatActivity {
             if (user.getBookingRestaurant().getRestaurantName() != null) {
                 String restaurantName = user.getBookingRestaurant().getRestaurantName();
                 this.YourLunch.setText(restaurantName);
-            }else{
+            } else {
                 this.YourLunch.setText(R.string.navigation_drawer_toast_your_lunch_no_lunch);
             }
 
@@ -183,8 +183,8 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void displayPhotoProfile() {
-        userViewModel.getCurrentUser().observe(ProfileActivity.this, user ->{
-            if (user.getmUrlPicture() != null){
+        userViewModel.getCurrentUser().observe(ProfileActivity.this, user -> {
+            if (user.getmUrlPicture() != null) {
                 Glide.with(this)
                         .load(user.getmUrlPicture())
                         .apply(RequestOptions.circleCropTransform())
@@ -205,7 +205,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
-    private void setUserNameProfile(String usernameProfile){
+    private void setUserNameProfile(String usernameProfile) {
 
         userViewModel.getCurrentUser().observe(this, user -> {
             userViewModel.setUserName(user.getmUid(), usernameProfile)
@@ -215,7 +215,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    private void logoutProfile(){
+    private void logoutProfile() {
 
         logoutProfile.setOnClickListener(v -> {
             signOutUserFromFirebase();
@@ -224,7 +224,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    private void setEditLanguage(){
+    private void setEditLanguage() {
         editLanguage.setOnClickListener(v -> showChangeLanguageDialog());
     }
 
@@ -238,7 +238,6 @@ public class ProfileActivity extends AppCompatActivity {
         return aVoid -> {
             switch (origin) {
                 case SIGN_OUT_TASK:
-//                    finish();
                     restartSplashScreen();
                     break;
                 default:
@@ -247,20 +246,20 @@ public class ProfileActivity extends AppCompatActivity {
         };
     }
 
-    private void showChangeLanguageDialog(){
+    private void showChangeLanguageDialog() {
 
-        final String[] listItem = {"English", "French"};
+        final String[] languageChoise = getResources().getStringArray(R.array.listItem_array);
 
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(ProfileActivity.this);
-        alertDialog.setTitle("Choose language");
-        alertDialog.setSingleChoiceItems(listItem, -1, (dialog, which) -> {
-            if (which == 0){
-                    setNewLocale("en", "US");
-                language.setText("English");
-            }else if(which == 1){
-                    setNewLocale("fr", "FR");
-                language.setText("Français");
+        alertDialog.setTitle(R.string.settings_activity_choose_language);
+        alertDialog.setSingleChoiceItems(languageChoise, -1, (dialog, which) -> {
+            if (which == 0) {
+                setNewLocale("en", "US");
+                language.setText(languageChoise[which]);
+            } else if (which == 1) {
+                setNewLocale("fr", "FR");
+                language.setText(languageChoise[which]);
             }
 
         });
@@ -278,8 +277,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
-
-    private void setNewLocale(String language, String country){
+    private void setNewLocale(String language, String country) {
         Lingver.getInstance().setLocale(this, language, country);
         restart();
     }
@@ -289,18 +287,17 @@ public class ProfileActivity extends AppCompatActivity {
         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
     }
 
-    private void displayFragmentRestaurantList(){
+    private void displayFragmentRestaurantList() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("fragement value", 1);
         startActivity(intent);
 
     }
 
-    private void restartSplashScreen(){
+    private void restartSplashScreen() {
         Intent intent = new Intent(this, SplashScreen.class);
         startActivity(intent);
     }
-
 
 
 }

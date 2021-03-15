@@ -76,7 +76,7 @@ public class WorkmateFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         userViewModel.init();
-        userViewModel.getUsers().observe(this, users ->{
+        userViewModel.getUsers().observe(this.getActivity(), users ->{
             newAdapter.setData(users);
         });
     }
