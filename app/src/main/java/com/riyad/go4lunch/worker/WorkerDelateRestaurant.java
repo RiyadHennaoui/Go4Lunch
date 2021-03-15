@@ -103,7 +103,7 @@ public class WorkerDelateRestaurant extends Worker {
                                users.add(user);
                                usersDb.document(user.getmUid())
                                        .set(user)
-                                       .addOnSuccessListener(aVoid -> Log.e("bookingdeleteworker", user.getBookingRestaurant().getRestaurantId()) );
+                                       .addOnSuccessListener(aVoid -> {} );
                            }
                        }
                    }

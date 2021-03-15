@@ -55,17 +55,14 @@ public class SplashScreen extends AppCompatActivity {
     }
 
     public void createSignInIntent() {
-        // [START auth_fui_create_intent]
-        // Choose authentication providers
+
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.GoogleBuilder().build(),
-
-//TODO Revoir l'autenthification de FB !
                 new AuthUI.IdpConfig.FacebookBuilder().build(),
                 new AuthUI.IdpConfig.TwitterBuilder().build());
 
-// TODO finir l'activité SplashScreen après le lancement de l'autentification Firebase.
+
         startActivityForResult(
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
@@ -80,8 +77,6 @@ public class SplashScreen extends AppCompatActivity {
     }
 
     private void creatUserInFirestore() {
-        //TODO Crée un Repo Pour les Users, supprimer la class UserHelper, sans oublier de faire le TODO de vérification si le compte existe dèja!!!
-
 
             userViewModel = ViewModelProviders.of(SplashScreen.this).get(UserViewModel.class);
             userViewModel.init();
@@ -98,17 +93,10 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e("result", "dans le result");
         if (requestCode == RC_SIGN_IN) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
             if (resultCode == RESULT_OK) {
                 this.creatUserInFirestore();
-
-            } else {
-
-                Log.e("Dans le requestSplash", resultCode + "");
-                //TODO something
-
             }
 
         }
