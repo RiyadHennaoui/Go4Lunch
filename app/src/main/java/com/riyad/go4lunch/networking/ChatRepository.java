@@ -31,7 +31,7 @@ public class ChatRepository {
     private static ChatRepository chatRepository;
 
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    //TODO voir pourquoi le timestemps enable n'éxiste plus
+
     FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
             .build();
 
@@ -63,7 +63,7 @@ public class ChatRepository {
                         return;
                     }
                     mchat.clear();
-                    //TODO demander à Thie si j'en ai encore besoin.
+
                     String source = value != null && value.getMetadata().hasPendingWrites()
                             ? "Local" : "Server";
 

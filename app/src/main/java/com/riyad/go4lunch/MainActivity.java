@@ -199,14 +199,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
      */
     private void getDeviceLocation() {
 
-        //TODO gérer les problèmes de permissions
-
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
             //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
             //                                          int[] grantResults)
@@ -320,7 +316,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             case R.id.menu_search:
                 autocompleltePlace();
                 break;
-            //TODO ce deconnecter.
         }
 
         return true;

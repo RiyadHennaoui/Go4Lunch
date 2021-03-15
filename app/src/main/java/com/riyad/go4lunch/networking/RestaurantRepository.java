@@ -54,7 +54,6 @@ public class RestaurantRepository {
         googlePlacesAPI = RetrofitService.createService(GooglePlacesAPI.class);
     }
 
-    //TODO éliminer les 4 derniers paramètres ne pas oublié le viewmodel.
     public MutableLiveData<List<Restaurant>> getRestaurants(String location) {
         MutableLiveData<List<Restaurant>> restaurantData = new MutableLiveData<>();
 

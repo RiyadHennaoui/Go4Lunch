@@ -115,7 +115,6 @@ public class RestaurantDetail {
 
                     if (formatedCurrentHour > Integer.parseInt(openHour)
                             && formatedCurrentHour < Integer.parseInt(closeHour)) {
-                        //TODO Trouver comment faire une string ressource
                         result = getMyAppContext().getString(R.string.restaurant_hours_open_until) + closeHourFormatted;
                         isOpen = true;
 

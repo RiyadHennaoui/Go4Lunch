@@ -119,7 +119,6 @@ public class WorkerRestaurantNotification extends Worker {
     }
 
 
-    //TODO récuperer la liste des users qui ont reservé sans oublier d'enlever le current user.
     public static void periodRequest(Context context) {
 
 
@@ -131,14 +130,11 @@ public class WorkerRestaurantNotification extends Worker {
 
 
         Long delay = noonDate.getTimeInMillis() - actualDate.getTimeInMillis();
-        Log.e("delay", (delay / 60000) + "");
         if (delay < 0){
             Calendar tomorrowDate = Calendar.getInstance();
             tomorrowDate.add(Calendar.HOUR_OF_DAY, 24);
             delay = tomorrowDate.getTimeInMillis() - actualDate.getTimeInMillis() - Math.abs(delay);
-            Log.e("delayIf", (delay / 60000) + "");
         }
-        //TODO trouver comment faire pour avoir la notification tous les jours à 12h.
 
         OneTimeWorkRequest periodicWorkRequest = new OneTimeWorkRequest.Builder(WorkerRestaurantNotification.class)
                 .setInitialDelay(delay, TimeUnit.MILLISECONDS)
@@ -157,7 +153,6 @@ public class WorkerRestaurantNotification extends Worker {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
-        //TODO trouver comment faire pour les extractions de ressources. 
 
         NotificationCompat.Builder notificationCompat = new NotificationCompat.Builder(getApplicationContext(), "4")
                 .setSmallIcon(R.mipmap.ic_launcher)

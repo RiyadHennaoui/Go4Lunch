@@ -85,7 +85,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void displayWorkmatesBoonkingThisRestaurant() {
-        //TODO n'affiche pas la liste mais seulement le premier user qui book! a voir
+
         detailRestaurantViewModel.getWorkmateBookingRestaurant(restaurantID).observe(DetailActivity.this,
                 workmates -> {
                     workmatesBookingRestaurantAdapter = new WorkmatesBookingRestaurantAdapter(workmates);
@@ -135,7 +135,7 @@ public class DetailActivity extends AppCompatActivity {
                     } );
         } else {
             fbBookingRestaurant.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_check_24));
-            //TODO demander a Thie comment faire plus propore.
+
             detailRestaurantViewModel.clearUserBook()
                     .observe(DetailActivity.this, bookingRestaurant -> {});
         }

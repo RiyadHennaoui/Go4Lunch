@@ -17,12 +17,12 @@ public interface GooglePlacesAPI {
                                     @Query("type") String type,
                                     @Query("key") String key);
 
-    // TODO ajouter le pagetoken "getNextPageRestaurant".
+
     @GET("maps/api/place/nearbysearch/json")
     Call<Restaurants> getNextPageRestaurant(@Query("key") String key,
                                             @Query("pagetoken") String pagetoken);
 
-    //TODO ajouter les fields comme dans postman pour intégrer "name,formatted_phone_number,opening_hours,photos,website,vicinity,formatted_address"
+
     @GET("maps/api/place/details/json")
     Call<DetailRestaurant> getRestaurantDetail(@Query("place_id") String place_id,
                                                 @Query("fields") String fields,
