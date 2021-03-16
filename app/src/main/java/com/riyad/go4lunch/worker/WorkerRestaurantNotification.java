@@ -82,9 +82,9 @@ public class WorkerRestaurantNotification extends Worker {
                         restaurant = documentSnapshot.toObject(Restaurant.class);
                         String usersNamebook = "";
                         if(restaurant.getBookingRestaurant().size() > 0){
-                            usersNamebook = "with you : ";
+                            usersNamebook = getApplicationContext().getString(R.string.notification_with_you);
                         }else{
-                            usersNamebook = "Alone";
+                            usersNamebook = getApplicationContext().getString(R.string.notification_alone);
                         }
                         for (int i = 0; i < restaurant.getBookingRestaurant().size(); i++){
                             usersNamebook += formatingWorkmateBookingListInNotification(usersNamebook, i);
@@ -100,7 +100,7 @@ public class WorkerRestaurantNotification extends Worker {
     private String formatingWorkmateBookingListInNotification(String usersNamebook, int i) {
         if(!restaurant.getBookingRestaurant().get(i).getmUid().equals(getCurrentUser().getUid())){
             if (i == restaurant.getBookingRestaurant().size()- 1) {
-                usersNamebook += " and " + restaurant.getBookingRestaurant().get(i).getmUsername() + ".";
+                usersNamebook += getApplicationContext().getString(R.string.notification_and) + restaurant.getBookingRestaurant().get(i).getmUsername() + ".";
             }else if (i == 0){
                 usersNamebook += restaurant.getBookingRestaurant().get(i).getmUsername();
             }else{

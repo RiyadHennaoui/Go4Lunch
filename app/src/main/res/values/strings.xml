@@ -66,6 +66,8 @@
     <string name="navdrawer_menu_logout">LOGOUT</string>
     <string name="navheader_menu_your_lunch">Your Lunch</string>
     <string name="settings_activity_choose_language">Choose language</string>
+    <string name="notification_alone">Alone</string>
+    <string name="notification_and">"and "</string>
 
     <string-array name="listItem_array">
         <item>English</item>

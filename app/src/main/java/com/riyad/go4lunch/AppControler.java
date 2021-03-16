@@ -9,8 +9,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Build;
-import android.preference.PreferenceManager;
-import android.util.Log;
 
 import androidx.multidex.MultiDex;
 
@@ -30,8 +28,8 @@ public class AppControler extends Application {
 
 
     private static AppControler instance;
-    public static synchronized AppControler getInstance()
-    {
+
+    public static synchronized AppControler getInstance() {
         // Return the instance
         return instance;
     }
@@ -44,7 +42,7 @@ public class AppControler extends Application {
         createNotificationChannel();
         SharedPreferences settingsNotifications = getSharedPreferences(getString(R.string.sharedpreference_notification_settings), MODE_PRIVATE);
         boolean userWantNotification = settingsNotifications.getBoolean("isCheck", true);
-        if (userWantNotification){
+        if (userWantNotification) {
             WorkerRestaurantNotification.periodRequest(getApplicationContext());
         }
         WorkerDelateRestaurant.deleteRestaurantsPeriodRequest(getApplicationContext());
@@ -58,9 +56,13 @@ public class AppControler extends Application {
         MultiDex.install(this);
     }
 
-    public Location getCurrentLocation() { return currentLocation; }
+    public Location getCurrentLocation() {
+        return currentLocation;
+    }
 
-    public void setCurrentLocation(Location currentLocation) { this.currentLocation = currentLocation; }
+    public void setCurrentLocation(Location currentLocation) {
+        this.currentLocation = currentLocation;
+    }
 
     public void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
@@ -76,11 +78,9 @@ public class AppControler extends Application {
         }
     }
 
-    public static Context getMyAppContext(){
+    public static Context getMyAppContext() {
         return myAppContext;
     }
-
-
 
 
 }

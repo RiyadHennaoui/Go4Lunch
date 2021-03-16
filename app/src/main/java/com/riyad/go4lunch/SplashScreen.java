@@ -2,7 +2,6 @@ package com.riyad.go4lunch;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -78,14 +77,13 @@ public class SplashScreen extends AppCompatActivity {
 
     private void creatUserInFirestore() {
 
-            userViewModel = ViewModelProviders.of(SplashScreen.this).get(UserViewModel.class);
-            userViewModel.init();
-            userViewModel.createUser()
-                    .observe(SplashScreen.this, user -> {
-                        intentToMainActivity();
-                        finish();
-                    });
-
+        userViewModel = ViewModelProviders.of(SplashScreen.this).get(UserViewModel.class);
+        userViewModel.init();
+        userViewModel.createUser()
+                .observe(SplashScreen.this, user -> {
+                    intentToMainActivity();
+                    finish();
+                });
 
 
     }

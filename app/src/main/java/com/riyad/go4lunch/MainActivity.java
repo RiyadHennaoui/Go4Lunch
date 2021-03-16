@@ -135,7 +135,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         if (go4restaurantList != 0) {
             bottomNavigationView.setSelectedItemId(R.id.action_list_view);
-        }else{
+        } else {
             openMap();
         }
 
@@ -264,7 +264,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         String[] perms = {ACCESS_FINE_LOCATION};
         if (EasyPermissions.hasPermissions(this, perms)) {
             // Already have permission, do the thing
-           onLocationPermissionGranted();
+            onLocationPermissionGranted();
         } else {
             // Do not have permissions, request them now
             EasyPermissions.requestPermissions(this, getString(R.string.location_rationale),
@@ -401,7 +401,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public View getInfoContents(Marker marker) {
                 View infoWindow = getLayoutInflater().inflate(R.layout.custom_info_contents,
-                       findViewById(R.id.map), false);
+                        findViewById(R.id.map), false);
 
                 TextView title = infoWindow.findViewById(R.id.custom_info_title);
                 title.setText(marker.getTitle());
@@ -500,20 +500,19 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         double maxLong = location.getLongitude() + deltaLong;
 
 
-
         return new LatLngBounds(new LatLng(minLat, minLong), new LatLng(maxLat, maxLong));
     }
 
-    private void goToUserRestaurantBook(){
+    private void goToUserRestaurantBook() {
         UserViewModel userViewModel = initUserViewModel();
         userViewModel.getCurrentUser().observe(MainActivity.this, user -> {
             if (user.getBookingRestaurant().getRestaurantId() != null) {
                 String restaurantId = user.getBookingRestaurant().getRestaurantId();
                 intentToDetailRestaurant(restaurantId);
-            }else{
+            } else {
                 Toast.makeText(this, R.string.navigation_drawer_toast_your_lunch_no_lunch, Toast.LENGTH_SHORT).show();
             }
-            });
+        });
     }
 
     @NotNull

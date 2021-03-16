@@ -65,6 +65,8 @@
         <item>Englais</item>
         <item>Français</item>
     </string-array>
+    <string name="notification_alone">Vous mangez seul</string>
+    <string name="notification_and">et</string>
 
 
 </resources>

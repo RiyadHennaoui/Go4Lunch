@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -130,14 +129,13 @@ public class DetailActivity extends AppCompatActivity {
         if (isBook) {
             fbBookingRestaurant.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_clear_24));
             detailRestaurantViewModel.getUserBookingRestaurant(restaurantID)
-                    .observe(DetailActivity.this, bookingRestaurantForUser ->{
-                        Log.e("userBook", "c'est Fait ");
-                    } );
+                    .observe(DetailActivity.this, bookingRestaurantForUser -> { });
         } else {
             fbBookingRestaurant.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_check_24));
 
             detailRestaurantViewModel.clearUserBook()
-                    .observe(DetailActivity.this, bookingRestaurant -> {});
+                    .observe(DetailActivity.this, bookingRestaurant -> {
+                    });
         }
     }
 
@@ -151,7 +149,7 @@ public class DetailActivity extends AppCompatActivity {
 
         for (int i = 0; i < like.size(); i++) {
             if (like.get(i).getmUid().equals(getCurrentUser().getUid())) {
-                    isLike = true;
+                isLike = true;
             }
         }
         if (isLike) {
