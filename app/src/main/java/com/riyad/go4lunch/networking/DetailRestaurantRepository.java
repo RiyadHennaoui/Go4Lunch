@@ -126,7 +126,7 @@ public class DetailRestaurantRepository {
                     if (bookinfRef.isEmpty()) {
                         newBookingRestaurant.setmUid(getCurrentUser().getUid());
                         newBookingRestaurant.setmUsername(getCurrentUser().getDisplayName());
-                        newBookingRestaurant.setmUrlPicture(getCurrentUser().getPhotoUrl().toString());
+                        newBookingRestaurant.setUrlPicture(getCurrentUser().getPhotoUrl().toString());
                         bookinfRef.add(newBookingRestaurant);
                     } else {
                         int currentCount = -1;
@@ -141,7 +141,7 @@ public class DetailRestaurantRepository {
                             newBookingRestaurant.setmUid(getCurrentUser().getUid());
                             newBookingRestaurant.setmUsername(getCurrentUser().getDisplayName());
                             if (getCurrentUser().getPhotoUrl() != null) {
-                                newBookingRestaurant.setmUrlPicture(getCurrentUser().getPhotoUrl().toString());
+                                newBookingRestaurant.setUrlPicture(getCurrentUser().getPhotoUrl().toString());
                             }
                             bookinfRef.add(newBookingRestaurant);
                         } else {

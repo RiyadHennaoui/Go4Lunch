@@ -23,7 +23,7 @@ public class UserViewModel extends ViewModel {
     }
 
     public LiveData<User> createUser() {
-        return userRepository.creatUser();
+        return userRepository.createUser();
     }
 
     public LiveData<User> getUser(String userId) {

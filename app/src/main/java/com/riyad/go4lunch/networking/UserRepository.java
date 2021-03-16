@@ -24,7 +24,7 @@ import static com.riyad.go4lunch.utils.Constants.COLLECTION_USER_NAME;
 
 public class UserRepository {
 
-    private FirebaseUser currentUserFirebaseAuth = FirebaseAuth.getInstance().getCurrentUser();
+
     private FirebaseFirestore userDb = FirebaseFirestore.getInstance();
 
     private static UserRepository userRepository;
@@ -56,7 +56,7 @@ public class UserRepository {
     }
 
 
-    public MutableLiveData<User> creatUser() {
+    public MutableLiveData<User> createUser() {
 
         MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
         User userToSave = new User();
@@ -64,7 +64,7 @@ public class UserRepository {
         userToSave.setmUsername(getCurrentFirebaseUser().getDisplayName());
         userToSave.setmMail(getCurrentFirebaseUser().getEmail());
         if (getCurrentFirebaseUser().getPhotoUrl() != null) {
-            userToSave.setmUrlPicture(getCurrentFirebaseUser().getPhotoUrl().toString());
+            userToSave.setUrlPicture(getCurrentFirebaseUser().getPhotoUrl().toString());
         }
 
         userDb.collection(COLLECTION_USER_NAME)
@@ -104,9 +104,9 @@ public class UserRepository {
                     DocumentSnapshot documentSnapshot = task.getResult();
                     User getUser;
                     getUser = documentSnapshot.toObject(User.class);
-                    getUser.setmUrlPicture(userPhotoUrl);
+                    getUser.setUrlPicture(userPhotoUrl);
                     UserProfileChangeRequest profileUpdates = getUserPhotoUrlProfileChangeRequest(userPhotoUrl);
-                    currentUserFirebaseAuth.updateProfile(profileUpdates);
+                    getCurrentFirebaseUser().updateProfile(profileUpdates);
                     userDb.collection(COLLECTION_USER_NAME).document(userId).set(getUser);
 
                     userPhotoMutableLiveData.setValue(getUser);
@@ -136,7 +136,7 @@ public class UserRepository {
                     getUser = documentSnapshot.toObject(User.class);
                     getUser.setmUsername(userName);
                     UserProfileChangeRequest profileUpdates = getUserNameProfileChangeRequest(userName);
-                    currentUserFirebaseAuth.updateProfile(profileUpdates);
+                    getCurrentFirebaseUser().updateProfile(profileUpdates);
                     userDb.collection(COLLECTION_USER_NAME).document(userId).set(getUser);
 
                     userNameMutableLiveData.setValue(getUser);
@@ -162,7 +162,7 @@ public class UserRepository {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                             User user = documentSnapshot.toObject(User.class);
-                            if (!user.getmUid().equals(currentUserFirebaseAuth.getUid())) {
+                            if (!user.getmUid().equals(getCurrentFirebaseUser().getUid())) {
                                 usersList.add(user);
                             }
 

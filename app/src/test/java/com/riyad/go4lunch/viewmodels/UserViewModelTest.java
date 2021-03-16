@@ -72,7 +72,7 @@ public class UserViewModelTest {
 
     @Test
     public void creatUserInFirestore(){
-       when(userRepository.creatUser()).thenReturn(livedataUser);
+       when(userRepository.createUser()).thenReturn(livedataUser);
 
         try {
             User fakeUserLive = JavaTestUtils.getOrAwaitValue(userViewModel.createUser());

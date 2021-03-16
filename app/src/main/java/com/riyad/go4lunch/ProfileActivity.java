@@ -239,6 +239,7 @@ public class ProfileActivity extends AppCompatActivity {
             switch (origin) {
                 case SIGN_OUT_TASK:
                     restartSplashScreen();
+                    finishAffinity();
                     break;
                 default:
                     break;

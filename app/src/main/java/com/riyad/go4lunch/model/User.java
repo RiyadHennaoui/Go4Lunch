@@ -16,7 +16,7 @@ public class User {
 
     public User() { } // Needed for Firebase
 
-    public User (String mUid, String mUsername, String mMail, String mUrlPicture){
+    public User (String mUid, String mUsername, String mMail,@Nullable String mUrlPicture){
 
         this.mUid = mUid;
         this.mUsername = mUsername;
@@ -26,6 +26,7 @@ public class User {
 
     }
 
+    //TODO changer le nom des methodes
     // --- GETTERS --
     @Nullable
     public String getmUrlPicture() { return mUrlPicture; }
@@ -39,7 +40,7 @@ public class User {
 
     public void setmUid(String mUid) { this.mUid = mUid; }
     public void setmUsername(String mUsername) { this.mUsername = mUsername; }
-    public void setmUrlPicture(@Nullable String mUrlPicture) { this.mUrlPicture = mUrlPicture; }
+    public void setUrlPicture(@Nullable String mUrlPicture) { this.mUrlPicture = mUrlPicture; }
     public void setmMail(String mMail) { this.mMail = mMail; }
     public void setBookingRestaurant(BookingRestaurant bookingRestaurant) { this.bookingRestaurant = bookingRestaurant; }
 }

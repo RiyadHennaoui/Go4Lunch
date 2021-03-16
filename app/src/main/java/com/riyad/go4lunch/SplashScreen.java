@@ -45,14 +45,6 @@ public class SplashScreen extends AppCompatActivity {
         finish();
     }
 
-    private Boolean userCurrentLogged() {
-        return (this.getCurrentUser() != null);
-    }
-
-    private FirebaseUser getCurrentUser() {
-        return FirebaseAuth.getInstance().getCurrentUser();
-    }
-
     public void createSignInIntent() {
 
         List<AuthUI.IdpConfig> providers = Arrays.asList(
@@ -82,7 +74,6 @@ public class SplashScreen extends AppCompatActivity {
         userViewModel.createUser()
                 .observe(SplashScreen.this, user -> {
                     intentToMainActivity();
-                    finish();
                 });
     }
 
@@ -93,8 +84,18 @@ public class SplashScreen extends AppCompatActivity {
             IdpResponse response = IdpResponse.fromResultIntent(data);
             if (resultCode == RESULT_OK) {
                 this.creatUserInFirestore();
+            }else{
+                finish();
             }
 
         }
+    }
+
+    private FirebaseUser getCurrentUser() {
+        return FirebaseAuth.getInstance().getCurrentUser();
+    }
+
+    private Boolean userCurrentLogged() {
+        return (this.getCurrentUser() != null);
     }
 }

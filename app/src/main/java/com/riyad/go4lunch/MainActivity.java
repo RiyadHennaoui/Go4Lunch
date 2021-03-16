@@ -455,6 +455,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         return aVoid -> {
             switch (origin) {
                 case SIGN_OUT_TASK:
+                    restartSplashScreen();
                     finish();
                     break;
                 default:
@@ -521,6 +522,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 Toast.makeText(this, R.string.navigation_drawer_toast_your_lunch_no_lunch, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void restartSplashScreen() {
+        Intent intent = new Intent(this, SplashScreen.class);
+        startActivity(intent);
     }
 
 
