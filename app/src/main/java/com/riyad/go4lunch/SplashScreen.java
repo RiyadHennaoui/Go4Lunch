@@ -84,8 +84,6 @@ public class SplashScreen extends AppCompatActivity {
                     intentToMainActivity();
                     finish();
                 });
-
-
     }
 
     @Override

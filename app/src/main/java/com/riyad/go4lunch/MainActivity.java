@@ -162,6 +162,14 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         toggle.syncState();
     }
 
+    @NotNull
+    private UserViewModel initUserViewModel() {
+        UserViewModel userViewModel;
+        userViewModel = ViewModelProviders.of(MainActivity.this).get(UserViewModel.class);
+        userViewModel.init();
+        return userViewModel;
+    }
+
     private void displayUserInfos() {
         UserViewModel userViewModel = initUserViewModel();
         userViewModel.getCurrentUser().observe(MainActivity.this, user -> {
@@ -181,6 +189,54 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             outState.putParcelable(KEY_Location, mLastKnownLocation);
             super.onSaveInstanceState(outState);
         }
+    }
+
+    private void configureNavView() {
+        myNavView.setNavigationItemSelectedListener(item -> updateButtons(item.getItemId()));
+    }
+
+    private void configureBottomView() {
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> updateButtons(item.getItemId()));
+    }
+
+    private void configureToolbar() {
+        myMainToolbar.setOnMenuItemClickListener(item -> updateButtons(item.getItemId()));
+    }
+
+    private Boolean updateButtons(Integer integer) {
+
+        switch (integer) {
+
+            case R.id.action_map_view:
+                openMap();
+                break;
+
+            case R.id.action_list_view:
+                displayRestaurantFragment();
+                break;
+
+            case R.id.action_workmates:
+                displayWorkematesFragment();
+                break;
+
+            case R.id.nav_your_lunch:
+                goToUserRestaurantBook();
+                break;
+
+            case R.id.nav_settings:
+                intentToProfileActivity();
+                break;
+
+            case R.id.nav_logout:
+                signOutUserFromFirebase();
+                break;
+
+            case R.id.menu_search:
+                autocompletePlace();
+                break;
+        }
+
+        return true;
     }
 
     /**
@@ -224,18 +280,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    private void configureNavView() {
-        myNavView.setNavigationItemSelectedListener(item -> updateButtons(item.getItemId()));
-    }
-
-    private void configureBottomView() {
-        bottomNavigationView.setOnNavigationItemSelectedListener(item -> updateButtons(item.getItemId()));
-    }
-
-    private void configureToolbar() {
-        myMainToolbar.setOnMenuItemClickListener(item -> updateButtons(item.getItemId()));
-    }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -272,64 +316,17 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private Boolean updateButtons(Integer integer) {
+    /**
+     * Updates the map's UI settings based on whether the user has granted location permission.
+     */
+    private void updateLocationUI() {
 
-        switch (integer) {
-
-            case R.id.action_map_view:
-                openMap();
-                break;
-
-            case R.id.action_list_view:
-                displayRestaurantFragment();
-                break;
-
-            case R.id.action_workmates:
-                displayWorkematesFragment();
-                break;
-
-            case R.id.nav_your_lunch:
-                goToUserRestaurantBook();
-                break;
-
-            case R.id.nav_settings:
-                intentToProfileActivity();
-                break;
-
-            case R.id.nav_logout:
-                signOutUserFromFirebase();
-                break;
-
-            case R.id.menu_search:
-                autocompletePlace();
-                break;
+        try {
+            mMap.setMyLocationEnabled(true);
+            mMap.getUiSettings().setMyLocationButtonEnabled(true);
+        } catch (SecurityException e) {
+            Log.e("Ex UpdateLocation: %s", e.getMessage());
         }
-
-        return true;
-    }
-
-    private void displayAutocompleteRestaurant(String restaurantId) {
-
-        DetailRestaurantViewModel detailRestaurantViewModel;
-        detailRestaurantViewModel = ViewModelProviders.of(MainActivity.this).get(DetailRestaurantViewModel.class);
-        detailRestaurantViewModel.init();
-        detailRestaurantViewModel.getDetailRestaurant(restaurantId).observe(MainActivity.this, restaurant -> {
-
-            if (restaurant == null) {
-                Toast.makeText(this, R.string.mainactivty_toast_restaurant_not_in_range, Toast.LENGTH_SHORT).show();
-            } else {
-                mMap.addMarker(new MarkerOptions()
-                        .title(restaurant.getName())
-                        .snippet(restaurant.getId())
-                        .position(new LatLng(restaurant.getRestaurantLocation().getLat(),
-                                restaurant.getRestaurantLocation().getLng())));
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                        new LatLng(restaurant.getRestaurantLocation().getLat(),
-                                restaurant.getRestaurantLocation().getLng()), DEFAULT_ZOOM));
-            }
-        });
-
-
     }
 
     private void displayRestaurants(String nearbySearchLocationFormat) {
@@ -359,6 +356,30 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    private void displayAutocompleteRestaurant(String restaurantId) {
+
+        DetailRestaurantViewModel detailRestaurantViewModel;
+        detailRestaurantViewModel = ViewModelProviders.of(MainActivity.this).get(DetailRestaurantViewModel.class);
+        detailRestaurantViewModel.init();
+        detailRestaurantViewModel.getDetailRestaurant(restaurantId).observe(MainActivity.this, restaurant -> {
+
+            if (restaurant == null) {
+                Toast.makeText(this, R.string.mainactivty_toast_restaurant_not_in_range, Toast.LENGTH_SHORT).show();
+            } else {
+                mMap.addMarker(new MarkerOptions()
+                        .title(restaurant.getName())
+                        .snippet(restaurant.getId())
+                        .position(new LatLng(restaurant.getRestaurantLocation().getLat(),
+                                restaurant.getRestaurantLocation().getLng())));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                        new LatLng(restaurant.getRestaurantLocation().getLat(),
+                                restaurant.getRestaurantLocation().getLng()), DEFAULT_ZOOM));
+            }
+        });
+
+
+    }
+
     private void openMap() {
 
         mMapFragment = SupportMapFragment.newInstance();
@@ -368,25 +389,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mMapFragment.getMapAsync(this);
 
 
-    }
-
-    private void displayWorkematesFragment() {
-        WorkmateFragment workmateFragment = WorkmateFragment.newInstance();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.activity_main_frame_layout, workmateFragment).commit();
-    }
-
-    private void displayRestaurantFragment() {
-
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.activity_main_frame_layout, restaurantsFragment).commit();
-    }
-
-    private void intentToProfileActivity() {
-        Intent intent = new Intent(this, ProfileActivity.class);
-        startActivity(intent);
     }
 
     @Override
@@ -417,25 +419,31 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         getLocationPermission();
     }
 
+    private void displayRestaurantFragment() {
+
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.activity_main_frame_layout, restaurantsFragment).commit();
+    }
+
+    private void displayWorkematesFragment() {
+        WorkmateFragment workmateFragment = WorkmateFragment.newInstance();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.activity_main_frame_layout, workmateFragment).commit();
+    }
+
+    private void intentToProfileActivity() {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
     private void intentToDetailRestaurant(String restaurantId) {
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra(PLACE_ID, restaurantId);
         startActivity(intent);
     }
 
-
-    /**
-     * Updates the map's UI settings based on whether the user has granted location permission.
-     */
-    private void updateLocationUI() {
-
-        try {
-            mMap.setMyLocationEnabled(true);
-            mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        } catch (SecurityException e) {
-            Log.e("Ex UpdateLocation: %s", e.getMessage());
-        }
-    }
 
     private void signOutUserFromFirebase() {
         AuthUI.getInstance()
@@ -513,14 +521,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 Toast.makeText(this, R.string.navigation_drawer_toast_your_lunch_no_lunch, Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    @NotNull
-    private UserViewModel initUserViewModel() {
-        UserViewModel userViewModel;
-        userViewModel = ViewModelProviders.of(MainActivity.this).get(UserViewModel.class);
-        userViewModel.init();
-        return userViewModel;
     }
 
 
