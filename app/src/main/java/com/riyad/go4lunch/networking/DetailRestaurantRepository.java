@@ -1,6 +1,5 @@
 package com.riyad.go4lunch.networking;
 
-import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 

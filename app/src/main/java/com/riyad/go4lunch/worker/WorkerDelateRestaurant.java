@@ -1,7 +1,6 @@
 package com.riyad.go4lunch.worker;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.work.OneTimeWorkRequest;
@@ -23,11 +22,10 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import bolts.Task;
 
 import static com.riyad.go4lunch.utils.Constants.COLLECTION_RESTAURANTS_NAME;
 import static com.riyad.go4lunch.utils.Constants.COLLECTION_USER_NAME;
-import static com.riyad.go4lunch.utils.Constants.FIELD_BOOKING_USER_FOR_RESTAURANT_DOCUMENT;
+
 
 public class WorkerDelateRestaurant extends Worker {
 

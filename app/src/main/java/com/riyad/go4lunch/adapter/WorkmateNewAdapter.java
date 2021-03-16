@@ -32,7 +32,7 @@ public class WorkmateNewAdapter extends RecyclerView.Adapter<WorkmateNewAdapter.
     private List<User> usersData;
     Context context;
 
-    public WorkmateNewAdapter(List<User> usersData, Context context){
+    public WorkmateNewAdapter(List<User> usersData, Context context) {
         this.usersData = usersData;
         this.context = context;
     }
@@ -55,7 +55,7 @@ public class WorkmateNewAdapter extends RecyclerView.Adapter<WorkmateNewAdapter.
         return usersData != null ? usersData.size() : 0;
     }
 
-    public void setData(@NonNull List<User> users){
+    public void setData(@NonNull List<User> users) {
         usersData = users;
         notifyDataSetChanged();
     }
@@ -84,19 +84,17 @@ public class WorkmateNewAdapter extends RecyclerView.Adapter<WorkmateNewAdapter.
 
 
             mFirstName.setText(user.getmUsername());
-            if(user.getBookingRestaurant().getRestaurantName() != null){
+            if (user.getBookingRestaurant().getRestaurantName() != null) {
                 mWhereLunch.setText(itemView.getContext().getString(R.string.workmates_adapter_is_eating_at, user.getBookingRestaurant().getRestaurantName()));
                 mWhereLunch.setTextColor(itemView.getContext().getResources().getColor(android.R.color.black));
                 mWhereLunch.setTypeface(mWhereLunch.getTypeface(), Typeface.BOLD);
                 mMainCardView.setOnClickListener(v -> {
                     toDetailRestaurant(user.getBookingRestaurant().getRestaurantId(), v.getContext());
                 });
-            }else{
+            } else {
                 mWhereLunch.setText(R.string.workmates_adapter_hasnt_decided_yet);
                 mWhereLunch.setTypeface(mWhereLunch.getTypeface(), Typeface.ITALIC);
             }
-
-
 
 
             Glide.with(mIvProfileCircle).load(user.getmUrlPicture()).circleCrop().into(mIvProfileCircle);
@@ -108,7 +106,7 @@ public class WorkmateNewAdapter extends RecyclerView.Adapter<WorkmateNewAdapter.
         }
     }
 
-    private void toChat(String workmateId, String workmatePhotoUrl, String workmateUsername, Context context){
+    private void toChat(String workmateId, String workmatePhotoUrl, String workmateUsername, Context context) {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra(WORKMATE_ID, workmateId);
         intent.putExtra(WORKMATE_PICTURE_URL, workmatePhotoUrl);
@@ -117,7 +115,7 @@ public class WorkmateNewAdapter extends RecyclerView.Adapter<WorkmateNewAdapter.
 
     }
 
-    private void toDetailRestaurant(String restaurantId, Context context){
+    private void toDetailRestaurant(String restaurantId, Context context) {
         Intent intent = new Intent(context, DetailActivity.class);
         intent.putExtra(PLACE_ID, restaurantId);
         context.startActivity(intent);

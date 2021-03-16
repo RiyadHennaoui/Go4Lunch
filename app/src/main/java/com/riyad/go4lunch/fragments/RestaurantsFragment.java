@@ -35,7 +35,6 @@ public class RestaurantsFragment extends Fragment {
     private ArrayList<Restaurant> restaurantArrayList = new ArrayList<>();
     private RestaurantsViewModel restaurantsViewModel;
     private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
 
 
     public RestaurantsFragment() {

@@ -1,9 +1,8 @@
 package com.riyad.go4lunch.networking;
 
 import com.riyad.go4lunch.data.Restaurants;
-import com.riyad.go4lunch.data.Result;
 import com.riyad.go4lunch.datadetail.DetailRestaurant;
-import com.riyad.go4lunch.ui.Restaurant;
+
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -25,6 +24,6 @@ public interface GooglePlacesAPI {
 
     @GET("maps/api/place/details/json")
     Call<DetailRestaurant> getRestaurantDetail(@Query("place_id") String place_id,
-                                                @Query("fields") String fields,
-                                                @Query("key") String key);
+                                               @Query("fields") String fields,
+                                               @Query("key") String key);
 }

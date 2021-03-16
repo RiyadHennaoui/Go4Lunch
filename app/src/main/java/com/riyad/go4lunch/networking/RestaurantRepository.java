@@ -8,7 +8,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import com.google.gson.Gson;
 import com.riyad.go4lunch.data.Restaurants;
 import com.riyad.go4lunch.data.Result;
 import com.riyad.go4lunch.datadetail.DetailRestaurant;
@@ -111,15 +110,11 @@ public class RestaurantRepository {
 
                         if (response.isSuccessful()) {
                             ArrayList<Restaurant> restaurantsList = new ArrayList<>(mapResult(response.body()));
-                            Gson gson = new Gson();
-                            Log.e("onResponse", gson.toJson(response.body()));
                             restaurants.addAll(restaurantsList);
 
                             if (response.body().getNextPageToken() == null) {
-                                Log.e("Resto repo", "1");
                                 getDetailRestaurant(restaurantData, restaurants);
                             } else {
-                                Log.e("Resto repo", "2");
                                 getNextPageRestaurants(restaurantData, restaurants, response.body().getNextPageToken());
                             }
                         }

@@ -1,19 +1,14 @@
 package com.riyad.go4lunch.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.gson.Gson;
 import com.riyad.go4lunch.R;
 import com.riyad.go4lunch.model.Chat;
 

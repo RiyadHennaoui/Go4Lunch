@@ -1,12 +1,7 @@
 package com.riyad.go4lunch.model;
 
-import android.util.Pair;
 
 import androidx.annotation.Nullable;
-
-import com.riyad.go4lunch.ui.Restaurant;
-
-import java.util.ArrayList;
 
 public class User {
 

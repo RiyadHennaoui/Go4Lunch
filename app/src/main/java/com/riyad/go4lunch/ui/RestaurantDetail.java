@@ -1,17 +1,10 @@
 package com.riyad.go4lunch.ui;
 
-import android.util.Log;
-
-import com.google.gson.Gson;
 import com.riyad.go4lunch.R;
 import com.riyad.go4lunch.datadetail.OpeningHours;
-import com.riyad.go4lunch.datadetail.Period;
 
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
+
 
 import static com.riyad.go4lunch.AppControler.getMyAppContext;
 

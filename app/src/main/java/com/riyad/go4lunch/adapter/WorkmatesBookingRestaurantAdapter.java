@@ -10,14 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.riyad.go4lunch.R;
 import com.riyad.go4lunch.model.User;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 public class WorkmatesBookingRestaurantAdapter extends RecyclerView.Adapter<WorkmatesBookingRestaurantAdapter.WorkmatesBookingHolder> {
 

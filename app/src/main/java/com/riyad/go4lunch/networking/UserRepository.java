@@ -1,7 +1,6 @@
 package com.riyad.go4lunch.networking;
 
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -19,7 +18,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import static com.riyad.go4lunch.utils.Constants.COLLECTION_USER_NAME;
@@ -42,19 +40,19 @@ public class UserRepository {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
 
-    public MutableLiveData<User> getCurrentUser(){
+    public MutableLiveData<User> getCurrentUser() {
         MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
         userDb.collection(COLLECTION_USER_NAME)
                 .document(getCurrentFirebaseUser().getUid())
                 .get()
                 .addOnCompleteListener(task -> {
                     DocumentSnapshot documentSnapshot = task.getResult();
-                   User currentUserFirestore;
-                   currentUserFirestore = documentSnapshot.toObject(User.class);
+                    User currentUserFirestore;
+                    currentUserFirestore = documentSnapshot.toObject(User.class);
                     userMutableLiveData.postValue(currentUserFirestore);
                 });
 
-        return  userMutableLiveData;
+        return userMutableLiveData;
     }
 
 
@@ -98,9 +96,6 @@ public class UserRepository {
 
         MutableLiveData<User> userPhotoMutableLiveData = new MutableLiveData<>();
 
-        Log.e("userreposetPhoto", userPhotoUrl);
-
-
 
         userDb.collection(COLLECTION_USER_NAME)
                 .document(userId)
@@ -123,15 +118,13 @@ public class UserRepository {
     @NotNull
     private UserProfileChangeRequest getUserPhotoUrlProfileChangeRequest(String userPhotoUrl) {
         return new UserProfileChangeRequest.Builder()
-                                .setPhotoUri(Uri.parse(userPhotoUrl))
-                                .build();
+                .setPhotoUri(Uri.parse(userPhotoUrl))
+                .build();
     }
 
     public MutableLiveData<User> setNameProfileUser(String userId, String userName) {
 
         MutableLiveData<User> userNameMutableLiveData = new MutableLiveData<>();
-
-
 
 
         userDb.collection(COLLECTION_USER_NAME)
@@ -155,40 +148,40 @@ public class UserRepository {
     @NotNull
     private UserProfileChangeRequest getUserNameProfileChangeRequest(String userName) {
         return new UserProfileChangeRequest.Builder()
-                                .setDisplayName(userName)
-                                .build();
+                .setDisplayName(userName)
+                .build();
     }
 
-    public MutableLiveData<List<User>> getUsersList(){
+    public MutableLiveData<List<User>> getUsersList() {
         MutableLiveData<List<User>> usersData = new MutableLiveData<>();
 
         userDb.collection(COLLECTION_USER_NAME)
                 .get()
                 .addOnCompleteListener(task -> {
                     ArrayList<User> usersList = new ArrayList<>();
-                    if (task.isSuccessful()){
-                        for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                             User user = documentSnapshot.toObject(User.class);
-                            if(!user.getmUid().equals(currentUserFirebaseAuth.getUid())){
-                                    usersList.add(user);
+                            if (!user.getmUid().equals(currentUserFirebaseAuth.getUid())) {
+                                usersList.add(user);
                             }
 
                         }
                         Collections.sort(usersList, (user1, user2) ->
                                 ComparisonChain.start()
-                                .compare(user1.getBookingRestaurant().getRestaurantName(),
-                                        user2.getBookingRestaurant().getRestaurantName(),
-                                        Ordering.natural().nullsLast())
-                                .compare(user1.getmUsername(),
-                                        user2.getmUsername(),
-                                        Ordering.natural())
-                                .result());
+                                        .compare(user1.getBookingRestaurant().getRestaurantName(),
+                                                user2.getBookingRestaurant().getRestaurantName(),
+                                                Ordering.natural().nullsLast())
+                                        .compare(user1.getmUsername(),
+                                                user2.getmUsername(),
+                                                Ordering.natural())
+                                        .result());
 
                         usersData.setValue(usersList);
                     }
 
                 });
-            return usersData;
+        return usersData;
     }
 
 
