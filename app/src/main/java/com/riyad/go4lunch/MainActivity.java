@@ -7,7 +7,10 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -120,6 +123,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         myDrawerLayout = findViewById(R.id.main_drawer_layout);
 
 
+
         go4restaurantList = getIntent().getIntExtra("fragement value", 0);
 
         // Construct a FusedLocationProviderClient.
@@ -206,6 +210,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private void configureToolbar() {
         myMainToolbar.setOnMenuItemClickListener(item -> updateButtons(item.getItemId()));
     }
+
 
     private Boolean updateButtons(Integer integer) {
 
@@ -542,6 +547,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         startActivity(intent);
     }
 
+    public void setVisibiltysearch(boolean visibility){
+        myMainToolbar.getMenu().findItem(R.id.menu_search).setVisible(visibility);
+
+    }
 
 }
 

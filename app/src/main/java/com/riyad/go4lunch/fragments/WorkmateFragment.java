@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.riyad.go4lunch.MainActivity;
 import com.riyad.go4lunch.R;
 import com.riyad.go4lunch.adapter.WorkmateNewAdapter;
 import com.riyad.go4lunch.model.User;
@@ -27,6 +29,7 @@ public class WorkmateFragment extends Fragment {
     private UserViewModel userViewModel;
     private WorkmateNewAdapter newAdapter;
     private ArrayList<User> usersList = new ArrayList<>();
+    private Button search;
 
 
     public static WorkmateFragment newInstance() {
@@ -45,13 +48,13 @@ public class WorkmateFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.main_rv, container, false);
 
-
         newAdapter = new WorkmateNewAdapter(usersList, getContext());
         RecyclerView myRecyclerView = myView.findViewById(R.id.main_rv);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         myRecyclerView.setLayoutManager(layoutManager);
         myRecyclerView.setAdapter(newAdapter);
+
 
 
         return myView;
@@ -70,12 +73,12 @@ public class WorkmateFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        //TODO appeler une methode de l'activité pour enlever le search
+        ((MainActivity)getActivity()).setVisibiltysearch(false);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        //TODO appeler une methode de l'activité pour afficher le search
+        ((MainActivity)getActivity()).setVisibiltysearch(true);
     }
 }
