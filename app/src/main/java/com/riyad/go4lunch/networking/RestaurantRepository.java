@@ -26,7 +26,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.riyad.go4lunch.utils.Constants.API_KEY_PLACES;
+import static com.riyad.go4lunch.BuildConfig.API_KEY_PLACES;
 import static com.riyad.go4lunch.utils.Constants.BASE_PHOTO_URL;
 import static com.riyad.go4lunch.utils.Constants.COLLECTION_RESTAURANTS_NAME;
 import static com.riyad.go4lunch.utils.Constants.DETAIL_RESTAURANT_FIELD;

@@ -83,6 +83,15 @@ public class RestaurantsFragment extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        restaurantsViewModel.getRestaurants().observe(this.getActivity(), restaurants -> {
+            restaurantAdapter.setData(restaurants);
+
+        });
+    }
+
     public void displayAutocompleteRestaurant(String restaurantId) {
 
         DetailRestaurantViewModel detailRestaurantViewModel;

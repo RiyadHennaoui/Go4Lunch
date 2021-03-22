@@ -136,14 +136,14 @@ public class DetailActivity extends AppCompatActivity {
         }
         if (isBook) {
             fbBookingRestaurant.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_clear_24));
-            detailRestaurantViewModel.getUserBookingRestaurant(restaurantID)
-                    .observe(DetailActivity.this, bookingRestaurantForUser -> { });
+//            detailRestaurantViewModel.getUserBookingRestaurant(restaurantID)
+//                    .observe(DetailActivity.this, bookingRestaurantForUser -> { });
         } else {
             fbBookingRestaurant.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_check_24));
 
-            detailRestaurantViewModel.clearUserBook()
-                    .observe(DetailActivity.this, bookingRestaurant -> {
-                    });
+//            detailRestaurantViewModel.clearUserBook()
+//                    .observe(DetailActivity.this, bookingRestaurant -> {
+//                    });
         }
     }
 

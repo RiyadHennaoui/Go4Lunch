@@ -67,5 +67,15 @@ public class WorkmateFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        //TODO appeler une methode de l'activité pour enlever le search
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        //TODO appeler une methode de l'activité pour afficher le search
+    }
 }

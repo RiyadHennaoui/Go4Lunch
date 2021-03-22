@@ -87,7 +87,7 @@ public class WorkerRestaurantNotification extends Worker {
                             usersNamebook = getApplicationContext().getString(R.string.notification_alone);
                         }
                         for (int i = 0; i < restaurant.getBookingRestaurant().size(); i++){
-                            usersNamebook += formatingWorkmateBookingListInNotification(usersNamebook, i);
+                            usersNamebook = formatingWorkmateBookingListInNotification(usersNamebook, i);
                         }
 
                         showNotification(restaurant.getRestaurantAdress(), restaurant.getName(), usersNamebook);

@@ -22,6 +22,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
@@ -66,7 +69,7 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static com.riyad.go4lunch.utils.Constants.API_KEY_PLACES;
+import static com.riyad.go4lunch.BuildConfig.API_KEY_PLACES;
 import static com.riyad.go4lunch.utils.Constants.AUTOCOMPLETE_REQUEST_CODE;
 import static com.riyad.go4lunch.utils.Constants.CURRENT_DEVICE_LOCATION;
 import static com.riyad.go4lunch.utils.Constants.DEFAULT_ZOOM;
@@ -91,6 +94,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private TextView userMailNavDrawer;
     private List<Place.Field> fields;
     private int go4restaurantList;
+    private String displayNearbySearchFormat;
 
     // The entry point to the fused Location Provider
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -266,10 +270,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                             new LatLng(mLastKnownLocation.getLatitude(),
                                     mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-                    String nearbySearchLocationFormat = mLastKnownLocation.getLatitude() + "," + mLastKnownLocation.getLongitude();
+                    displayNearbySearchFormat = mLastKnownLocation.getLatitude() + "," + mLastKnownLocation.getLongitude();
 
-                    sharedPreferences.edit().putString(CURRENT_DEVICE_LOCATION, nearbySearchLocationFormat).apply();
-                    displayRestaurants(nearbySearchLocationFormat);
+                    sharedPreferences.edit().putString(CURRENT_DEVICE_LOCATION, displayNearbySearchFormat).apply();
+                    displayRestaurants(displayNearbySearchFormat);
                 }
             } else {
                 Log.d(TAG, "Current location is null. Using defaults.");
@@ -338,6 +342,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void addMarkers(List<Restaurant> restaurants) {
         int index = 0;
+        mMap.clear();
         for (Restaurant restaurant : restaurants) {
             if (!restaurants.get(index).getBookingRestaurant().isEmpty()) {
                 mMap.addMarker(new MarkerOptions()
@@ -387,7 +392,14 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.activity_main_frame_layout, mMapFragment).commit();
         mMapFragment.getMapAsync(this);
-
+        mMapFragment.getLifecycle().addObserver(new LifecycleObserver() {
+            @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+            public void connectListener() {
+                if(displayNearbySearchFormat != null){
+                    displayRestaurants(displayNearbySearchFormat);
+                }
+            }
+        });
 
     }
 
@@ -431,6 +443,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.activity_main_frame_layout, workmateFragment).commit();
+
     }
 
     private void intentToProfileActivity() {

@@ -1,6 +1,8 @@
 package com.riyad.go4lunch.networking;
 
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.firebase.Timestamp;
@@ -11,6 +13,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 import com.riyad.go4lunch.model.BookingRestaurant;
 import com.riyad.go4lunch.model.User;
 import com.riyad.go4lunch.ui.Restaurant;
@@ -105,30 +108,60 @@ public class DetailRestaurantRepository {
     public MutableLiveData<ArrayList<User>> bookingRestaurant(String restaurantId) {
 
         DocumentReference firestoreRestaurants = restaurantDb.collection(COLLECTION_RESTAURANTS_NAME).document(restaurantId);
-
         MutableLiveData<ArrayList<User>> bookingRestaurantMutableLiveData = new MutableLiveData<>();
+        bookinfRef = new ArrayList<>();
+        restaurantDb.collection(COLLECTION_USER_NAME)
+                .document(getCurrentUser().getUid())
+                .get()
+                .addOnCompleteListener(taskUser -> {
+                    User user;
+                    DocumentSnapshot documentSnapshot = taskUser.getResult();
+                    user = documentSnapshot.toObject(User.class);
+                    Gson gson = new Gson();
+                    Log.e("bookingRestaurant", gson.toJson(documentSnapshot.getData()));
+                    removeBookedRestaurant(user, firestoreRestaurants, bookingRestaurantMutableLiveData);
+
+                });
+        return bookingRestaurantMutableLiveData;
+    }
+
+    private void bookRestaurant(Restaurant restaurant, DocumentReference firestoreRestaurants) {
 
         User newBookingRestaurant = new User();
+        if (restaurant.getBookingRestaurant() != null) {
+            bookinfRef = restaurant.getBookingRestaurant();
+        }
 
+        newBookingRestaurant.setmUid(getCurrentUser().getUid());
+        newBookingRestaurant.setmUsername(getCurrentUser().getDisplayName());
+        newBookingRestaurant.setUrlPicture(getCurrentUser().getPhotoUrl().toString());
+        bookinfRef.add(newBookingRestaurant);
 
-        bookinfRef = new ArrayList<>();
+        firestoreRestaurants.update(FIELD_BOOKING_USER_FOR_RESTAURANT_DOCUMENT, bookinfRef);
 
-        firestoreRestaurants
-                .get()
-                .addOnCompleteListener(task -> {
-                    Restaurant restaurant;
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    restaurant = documentSnapshot.toObject(Restaurant.class);
-                    if (restaurant.getBookingRestaurant() != null) {
+        DocumentReference currentUserDocument = restaurantDb.collection(COLLECTION_USER_NAME).document(getCurrentUser().getUid());
+        BookingRestaurant userBookingRestaurant = new BookingRestaurant();
+        Timestamp currentTime = new Timestamp(new Date());
+        userBookingRestaurant.setRestaurantName(restaurant.getName());
+        userBookingRestaurant.setTimestamp(currentTime);
+        userBookingRestaurant.setRestaurantId(restaurant.getId());
+
+        currentUserDocument.update(FIELD_BOOKING_USER_FOR_RESTAURANT_DOCUMENT, userBookingRestaurant);
+    }
+
+    private void removeBookedRestaurant(User user, DocumentReference firestoreRestaurants, MutableLiveData<ArrayList<User>> bookingRestaurantMutableLiveData) {
+
+        Gson gson = new Gson();
+        Log.e("repoResto", gson.toJson(user));
+        if (user.getBookingRestaurant() != null && user.getBookingRestaurant().getRestaurantId() != null) {
+            restaurantDb.collection(COLLECTION_RESTAURANTS_NAME)
+                    .document(user.getBookingRestaurant().getRestaurantId())
+                    .get()
+                    .addOnCompleteListener(taskBookRestaurant -> {
+                        Restaurant restaurant;
+                        DocumentSnapshot documentSnapshot1 = taskBookRestaurant.getResult();
+                        restaurant = documentSnapshot1.toObject(Restaurant.class);
                         bookinfRef = restaurant.getBookingRestaurant();
-                    }
-
-                    if (bookinfRef.isEmpty()) {
-                        newBookingRestaurant.setmUid(getCurrentUser().getUid());
-                        newBookingRestaurant.setmUsername(getCurrentUser().getDisplayName());
-                        newBookingRestaurant.setUrlPicture(getCurrentUser().getPhotoUrl().toString());
-                        bookinfRef.add(newBookingRestaurant);
-                    } else {
                         int currentCount = -1;
                         for (int i = 0; i < restaurant.getBookingRestaurant().size(); i++) {
 
@@ -137,24 +170,38 @@ public class DetailRestaurantRepository {
                                 break;
                             }
                         }
-                        if (currentCount == -1) {
-                            newBookingRestaurant.setmUid(getCurrentUser().getUid());
-                            newBookingRestaurant.setmUsername(getCurrentUser().getDisplayName());
-                            if (getCurrentUser().getPhotoUrl() != null) {
-                                newBookingRestaurant.setUrlPicture(getCurrentUser().getPhotoUrl().toString());
-                            }
-                            bookinfRef.add(newBookingRestaurant);
-                        } else {
-                            bookinfRef.remove(currentCount);
+                        bookinfRef.remove(currentCount);
+                        restaurantDb.collection(COLLECTION_RESTAURANTS_NAME)
+                                .document(user.getBookingRestaurant().getRestaurantId())
+                                .update(FIELD_BOOKING_USER_FOR_RESTAURANT_DOCUMENT, bookinfRef);
+                        firestoreRestaurants
+                                .get()
+                                .addOnCompleteListener(task -> {
+                                    Restaurant restaurant1;
+                                    DocumentSnapshot documentSnapshot2 = task.getResult();
+                                    restaurant1 = documentSnapshot2.toObject(Restaurant.class);
+                                    if (!restaurant.getId().equals(restaurant1.getId())) {
+                                        bookRestaurant(restaurant1, firestoreRestaurants);
+                                    }else {
+                                        DocumentReference currentUserDocument = restaurantDb.collection(COLLECTION_USER_NAME).document(getCurrentUser().getUid());
+                                        BookingRestaurant userBookingRestaurant = new BookingRestaurant();
+                                        currentUserDocument.update(FIELD_BOOKING_USER_FOR_RESTAURANT_DOCUMENT, userBookingRestaurant);
+                                    }
+                                    bookingRestaurantMutableLiveData.setValue(bookinfRef);
+                                });
+                    });
+        } else {
+            firestoreRestaurants
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        Restaurant restaurant;
+                        DocumentSnapshot documentSnapshot1 = task.getResult();
+                        restaurant = documentSnapshot1.toObject(Restaurant.class);
+                        bookRestaurant(restaurant, firestoreRestaurants);
+                        bookingRestaurantMutableLiveData.setValue(bookinfRef);
+                    });
+        }
 
-                        }
-                    }
-                    firestoreRestaurants.update(FIELD_BOOKING_USER_FOR_RESTAURANT_DOCUMENT, bookinfRef);
-                    bookingRestaurantMutableLiveData.setValue(bookinfRef);
-                });
-
-
-        return bookingRestaurantMutableLiveData;
     }
 
     public MutableLiveData<BookingRestaurant> userBookingRestaurant(String restaurantId) {
