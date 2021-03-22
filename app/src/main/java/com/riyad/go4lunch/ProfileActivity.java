@@ -28,6 +28,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView textInputEditTextUsername;
     private TextView YourLunch;
     private TextView language;
+    private ImageView back;
     private ImageView editLanguage;
     private ImageView editLunch;
     private ImageView imageViewProfile;
@@ -55,6 +56,7 @@ public class ProfileActivity extends AppCompatActivity {
         logoutProfile = findViewById(R.id.profile_btn_logout);
         addProfileUsername = findViewById(R.id.profile_edit_username);
         notificationSwitch = findViewById(R.id.profile_notification_switch);
+        back = findViewById(R.id.profile_activity_btn_back);
 
 
         sharedPreferences = getSharedPreferences(getString(R.string.sharedpreference_notification_settings), MODE_PRIVATE);
@@ -67,8 +69,14 @@ public class ProfileActivity extends AppCompatActivity {
         this.setYourLunch();
         this.updatePhotoUrl();
         this.switchListner();
+        this.backToMotherActivity();
 
+    }
 
+    private void backToMotherActivity() {
+        back.setOnClickListener(v -> {
+            onBackPressed();
+        });
     }
 
     private void initUserViewModel() {
@@ -299,6 +307,7 @@ public class ProfileActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SplashScreen.class);
         startActivity(intent);
     }
+
 
 
 }
