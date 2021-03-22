@@ -33,6 +33,7 @@ public class DetailActivity extends AppCompatActivity {
     private TextView restaurantName;
     private ImageView restaurantPicture;
     private TextView restaurantAdress;
+    private Button back;
     private Button restaurantCall;
     private Button restaurantLike;
     private Button restaurantWebsite;
@@ -57,6 +58,7 @@ public class DetailActivity extends AppCompatActivity {
         restaurantWebsite = findViewById(R.id.detail_activity_btn_website);
         fbBookingRestaurant = findViewById(R.id.detail_activity_fbtn_booking_restaurant);
         rvDetailActivity = findViewById(R.id.main_rv);
+        back = findViewById(R.id.detail_activity_btn_back);
 
         restaurantID = getIntent().getStringExtra(PLACE_ID);
 
@@ -65,6 +67,12 @@ public class DetailActivity extends AppCompatActivity {
         displayDetailRestaurant();
         initRv();
         displayWorkmatesBoonkingThisRestaurant();
+
+        backToMotherActivity();
+    }
+
+    private void backToMotherActivity() {
+        back.setOnClickListener(v -> onBackPressed());
     }
 
 
