@@ -7,10 +7,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -181,9 +178,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private void displayUserInfos() {
         UserViewModel userViewModel = initUserViewModel();
         userViewModel.getCurrentUser().observe(MainActivity.this, user -> {
-            usernameNavDrawer.setText(user.getmUsername());
-            userMailNavDrawer.setText(user.getmMail());
-            Glide.with(MainActivity.this.profileNavDrawer).load(user.getmUrlPicture()).circleCrop().into(profileNavDrawer);
+            usernameNavDrawer.setText(user.getUsername());
+            userMailNavDrawer.setText(user.getMail());
+            Glide.with(MainActivity.this.profileNavDrawer).load(user.getUrlPicture()).circleCrop().into(profileNavDrawer);
         });
     }
 

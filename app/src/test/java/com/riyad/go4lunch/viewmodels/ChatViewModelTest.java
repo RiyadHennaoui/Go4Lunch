@@ -45,8 +45,8 @@ public class ChatViewModelTest {
         MockitoAnnotations.initMocks(this);
 
         author = new User();
-        author.setmUid("1");
-        author.setmUsername("author");
+        author.setUid("1");
+        author.setUsername("author");
 
         chat = new Chat();
         chat.setMessage("new Message");
@@ -58,14 +58,14 @@ public class ChatViewModelTest {
 
         liveDataListOfChats = new MutableLiveData<>();
         liveDataListOfChats.postValue(chatList);
-        chatViewModel.receiverId = author.getmUid();
+        chatViewModel.receiverId = author.getUid();
     }
 
 
     @Test
     public void getChat(){
 
-        when(chatRepository.getChat(author.getmUid())).thenReturn(liveDataListOfChats);
+        when(chatRepository.getChat(author.getUid())).thenReturn(liveDataListOfChats);
         try {
             List<Chat> fakeChatList = JavaTestUtils.getOrAwaitValue(chatViewModel.getChat());
             assertEquals(fakeChatList, chatList);

@@ -97,13 +97,13 @@ public class ChatRepository {
                         chat.setCreatedDate(new Date());
                         //For save in Current User Collection.
                         chat.setIsSender(true);
-                        chatDb.document(currentUser.getmUid()).collection(chatPartenerId)
+                        chatDb.document(currentUser.getUid()).collection(chatPartenerId)
                                 .add(chat);
 
 
                         //For save in chatPartener Collection.
                         chat.setIsSender(false);
-                        chatDb.document(chatPartenerId).collection(currentUser.getmUid())
+                        chatDb.document(chatPartenerId).collection(currentUser.getUid())
                                 .add(chat);
                     }
                 });

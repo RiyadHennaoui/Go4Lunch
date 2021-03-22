@@ -78,16 +78,16 @@ public class DetailRestaurantRepository {
                         ratingRestaurants = restaurant.getRatingUser();
                     }
 
-                    newRatingRestaurant.setmUid(getCurrentUser().getUid());
-                    newRatingRestaurant.setmUsername(getCurrentUser().getDisplayName());
-                    newRatingRestaurant.setmMail(getCurrentUser().getEmail());
+                    newRatingRestaurant.setUid(getCurrentUser().getUid());
+                    newRatingRestaurant.setUsername(getCurrentUser().getDisplayName());
+                    newRatingRestaurant.setMail(getCurrentUser().getEmail());
 
                     if (ratingRestaurants.isEmpty()) {
                         ratingRestaurants.add(newRatingRestaurant);
                     } else {
                         int currentCount = -1;
                         for (int i = 0; i < restaurant.getRatingUser().size(); i++) {
-                            if (restaurant.getRatingUser().get(i).getmUid().equals(getCurrentUser().getUid())) {
+                            if (restaurant.getRatingUser().get(i).getUid().equals(getCurrentUser().getUid())) {
                                 currentCount = i;
                                 break;
                             }
@@ -132,8 +132,8 @@ public class DetailRestaurantRepository {
             bookinfRef = restaurant.getBookingRestaurant();
         }
 
-        newBookingRestaurant.setmUid(getCurrentUser().getUid());
-        newBookingRestaurant.setmUsername(getCurrentUser().getDisplayName());
+        newBookingRestaurant.setUid(getCurrentUser().getUid());
+        newBookingRestaurant.setUsername(getCurrentUser().getDisplayName());
         newBookingRestaurant.setUrlPicture(getCurrentUser().getPhotoUrl().toString());
         bookinfRef.add(newBookingRestaurant);
 
@@ -165,7 +165,7 @@ public class DetailRestaurantRepository {
                         int currentCount = -1;
                         for (int i = 0; i < restaurant.getBookingRestaurant().size(); i++) {
 
-                            if (restaurant.getBookingRestaurant().get(i).getmUid().equals(getCurrentUser().getUid())) {
+                            if (restaurant.getBookingRestaurant().get(i).getUid().equals(getCurrentUser().getUid())) {
                                 currentCount = i;
                                 break;
                             }
@@ -266,7 +266,7 @@ public class DetailRestaurantRepository {
                     currentRestaurant = currentDocument.toObject(Restaurant.class);
                     if (currentRestaurant.getBookingRestaurant() != null) {
                         for (int i = 0; i < currentRestaurant.getBookingRestaurant().size(); i++) {
-                            workmatesBookId.add(currentRestaurant.getBookingRestaurant().get(i).getmUid());
+                            workmatesBookId.add(currentRestaurant.getBookingRestaurant().get(i).getUid());
                         }
 
                         workamatesCollection
@@ -278,8 +278,8 @@ public class DetailRestaurantRepository {
                                     if (!workmateRestaurantBook.isEmpty()) {
                                         for (int i = 0; i < workmatesBookId.size(); i++) {
                                             for (int j = 0; j < workmateRestaurantBook.size(); j++) {
-                                                if (workmateRestaurantBook.get(j).getmUid().equals(workmatesBookId.get(i))) {
-                                                    if (!workmateRestaurantBook.get(j).getmUid().equals(getCurrentUser().getUid())) {
+                                                if (workmateRestaurantBook.get(j).getUid().equals(workmatesBookId.get(i))) {
+                                                    if (!workmateRestaurantBook.get(j).getUid().equals(getCurrentUser().getUid())) {
                                                         userBooks.add(workmateRestaurantBook.get(j));
                                                     }
                                                 }

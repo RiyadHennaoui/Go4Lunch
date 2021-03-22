@@ -98,13 +98,13 @@ public class WorkerRestaurantNotification extends Worker {
     }
 
     private String formatingWorkmateBookingListInNotification(String usersNamebook, int i) {
-        if(!restaurant.getBookingRestaurant().get(i).getmUid().equals(getCurrentUser().getUid())){
+        if(!restaurant.getBookingRestaurant().get(i).getUid().equals(getCurrentUser().getUid())){
             if (i == restaurant.getBookingRestaurant().size()- 1) {
-                usersNamebook += getApplicationContext().getString(R.string.notification_and) + restaurant.getBookingRestaurant().get(i).getmUsername() + ".";
+                usersNamebook += getApplicationContext().getString(R.string.notification_and) + restaurant.getBookingRestaurant().get(i).getUsername() + ".";
             }else if (i == 0){
-                usersNamebook += restaurant.getBookingRestaurant().get(i).getmUsername();
+                usersNamebook += restaurant.getBookingRestaurant().get(i).getUsername();
             }else{
-                usersNamebook += " ," + restaurant.getBookingRestaurant().get(i).getmUsername();
+                usersNamebook += " ," + restaurant.getBookingRestaurant().get(i).getUsername();
             }
         }
         return usersNamebook;
