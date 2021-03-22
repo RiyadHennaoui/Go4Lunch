@@ -83,7 +83,7 @@ public class WorkmateNewAdapter extends RecyclerView.Adapter<WorkmateNewAdapter.
         public void bind(final User user) {
 
 
-            mFirstName.setText(user.getUsername());
+            mFirstName.setText(user.getmUsername());
             if (user.getBookingRestaurant().getRestaurantName() != null) {
                 mWhereLunch.setText(itemView.getContext().getString(R.string.workmates_adapter_is_eating_at, user.getBookingRestaurant().getRestaurantName()));
                 mWhereLunch.setTextColor(itemView.getContext().getResources().getColor(android.R.color.black));
@@ -97,11 +97,11 @@ public class WorkmateNewAdapter extends RecyclerView.Adapter<WorkmateNewAdapter.
             }
 
 
-            Glide.with(mIvProfileCircle).load(user.getUrlPicture()).circleCrop().into(mIvProfileCircle);
+            Glide.with(mIvProfileCircle).load(user.getmUrlPicture()).circleCrop().into(mIvProfileCircle);
 
-            mChat.setOnClickListener(view -> toChat(user.getUid(),
-                    user.getUrlPicture(),
-                    user.getUsername(),
+            mChat.setOnClickListener(view -> toChat(user.getmUid(),
+                    user.getmUrlPicture(),
+                    user.getmUsername(),
                     view.getContext()));
         }
     }

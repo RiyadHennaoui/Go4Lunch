@@ -60,8 +60,8 @@ public class WorkmatesBookingRestaurantAdapter extends RecyclerView.Adapter<Work
         public void bind(final User user){
 
 
-            workmateName.setText(user.getUsername() + name);
-            Glide.with(photoProfile).load(user.getUrlPicture()).circleCrop().into(photoProfile);
+            workmateName.setText(user.getmUsername() + name);
+            Glide.with(photoProfile).load(user.getmUrlPicture()).circleCrop().into(photoProfile);
         }
 
 

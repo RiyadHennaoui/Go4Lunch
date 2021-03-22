@@ -178,9 +178,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private void displayUserInfos() {
         UserViewModel userViewModel = initUserViewModel();
         userViewModel.getCurrentUser().observe(MainActivity.this, user -> {
-            usernameNavDrawer.setText(user.getUsername());
-            userMailNavDrawer.setText(user.getMail());
-            Glide.with(MainActivity.this.profileNavDrawer).load(user.getUrlPicture()).circleCrop().into(profileNavDrawer);
+            usernameNavDrawer.setText(user.getmUsername());
+            userMailNavDrawer.setText(user.getmMail());
+            Glide.with(MainActivity.this.profileNavDrawer).load(user.getmUrlPicture()).circleCrop().into(profileNavDrawer);
         });
     }
 

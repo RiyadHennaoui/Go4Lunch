@@ -44,8 +44,8 @@ public class UserViewModelTest {
     public void config(){
         MockitoAnnotations.initMocks(this);
         user1 = new User();
-        user1.setUid("1");
-        user1.setUsername("moi");
+        user1.setmUid("1");
+        user1.setmUsername("moi");
         userList1.add(user1);
         livedataUser = new MutableLiveData<>();
         livedataUser.postValue(user1);
@@ -92,7 +92,7 @@ public class UserViewModelTest {
 
         try{
             User user = JavaTestUtils.getOrAwaitValue(userViewModel.setUserName(fakeUserId, fakeUserName));
-            assertEquals(user.getUsername(), user1.getUsername());
+            assertEquals(user.getmUsername(), user1.getmUsername());
         }catch (InterruptedException e){
             e.printStackTrace();
         }

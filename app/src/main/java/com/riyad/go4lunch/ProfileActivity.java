@@ -186,15 +186,15 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void displayUsernameProfile() {
         userViewModel.getCurrentUser().observe(ProfileActivity.this, user ->
-                this.textInputEditTextUsername.setText(user.getUsername()));
+                this.textInputEditTextUsername.setText(user.getmUsername()));
 
     }
 
     private void displayPhotoProfile() {
         userViewModel.getCurrentUser().observe(ProfileActivity.this, user -> {
-            if (user.getUrlPicture() != null) {
+            if (user.getmUrlPicture() != null) {
                 Glide.with(this)
-                        .load(user.getUrlPicture())
+                        .load(user.getmUrlPicture())
                         .apply(RequestOptions.circleCropTransform())
                         .into(imageViewProfile);
             }
@@ -206,7 +206,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void setUserPhotoProfile(String photoUrl) {
 
         userViewModel.getCurrentUser().observe(ProfileActivity.this, user -> {
-            userViewModel.setUserPhotoUrl(user.getUid(), photoUrl)
+            userViewModel.setUserPhotoUrl(user.getmUid(), photoUrl)
                     .observe(this, user1 -> displayPhotoProfile());
         });
 
@@ -216,7 +216,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void setUserNameProfile(String usernameProfile) {
 
         userViewModel.getCurrentUser().observe(this, user -> {
-            userViewModel.setUserName(user.getUid(), usernameProfile)
+            userViewModel.setUserName(user.getmUid(), usernameProfile)
                     .observe(this, user1 -> displayUsernameProfile());
         });
 

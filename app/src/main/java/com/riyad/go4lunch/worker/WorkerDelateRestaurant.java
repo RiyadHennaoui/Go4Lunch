@@ -99,7 +99,7 @@ public class WorkerDelateRestaurant extends Worker {
                                User user = queryDocumentSnapshot.toObject(User.class);
                                user.setBookingRestaurant(emptyBookingrestaurant);
                                users.add(user);
-                               usersDb.document(user.getUid())
+                               usersDb.document(user.getmUid())
                                        .set(user)
                                        .addOnSuccessListener(aVoid -> {} );
                            }

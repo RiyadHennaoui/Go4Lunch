@@ -29,18 +29,18 @@ public class User {
 
     // --- GETTERS --
     @Nullable
-    public String getUrlPicture() { return mUrlPicture; }
-    public String getUid() { return mUid; }
-    public String getUsername() { return mUsername; }
-    public String getMail() { return mMail; }
+    public String getmUrlPicture() { return mUrlPicture; }
+    public String getmUid() { return mUid; }
+    public String getmUsername() { return mUsername; }
+    public String getmMail() { return mMail; }
     public BookingRestaurant getBookingRestaurant() { return bookingRestaurant; }
 
 
     // --- SETTERS ---
 
-    public void setUid(String mUid) { this.mUid = mUid; }
-    public void setUsername(String mUsername) { this.mUsername = mUsername; }
-    public void setUrlPicture(@Nullable String mUrlPicture) { this.mUrlPicture = mUrlPicture; }
-    public void setMail(String mMail) { this.mMail = mMail; }
+    public void setmUid(String mUid) { this.mUid = mUid; }
+    public void setmUsername(String mUsername) { this.mUsername = mUsername; }
+    public void setmUrlPicture(@Nullable String mUrlPicture) { this.mUrlPicture = mUrlPicture; }
+    public void setmMail(String mMail) { this.mMail = mMail; }
     public void setBookingRestaurant(BookingRestaurant bookingRestaurant) { this.bookingRestaurant = bookingRestaurant; }
 }

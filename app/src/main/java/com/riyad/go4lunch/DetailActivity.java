@@ -130,7 +130,7 @@ public class DetailActivity extends AppCompatActivity {
     private void setBookingIcon(ArrayList<User> bookingRestaurants) {
         boolean isBook = false;
         for (int i = 0; i < bookingRestaurants.size(); i++) {
-            if (bookingRestaurants.get(i).getUid().equals(getCurrentUser().getUid())) {
+            if (bookingRestaurants.get(i).getmUid().equals(getCurrentUser().getUid())) {
                 isBook = true;
             }
         }
@@ -156,7 +156,7 @@ public class DetailActivity extends AppCompatActivity {
         boolean isLike = false;
 
         for (int i = 0; i < like.size(); i++) {
-            if (like.get(i).getUid().equals(getCurrentUser().getUid())) {
+            if (like.get(i).getmUid().equals(getCurrentUser().getUid())) {
                 isLike = true;
             }
         }
