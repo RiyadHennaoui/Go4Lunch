@@ -48,7 +48,7 @@
     <string name="toolbar_title">I\'m Hungry</string>
     <string name="navigation_drawer_toast_your_lunch_no_lunch">no reservation today</string>
     <string name="notification_title">"Your reservation in  "</string>
-    <string name="notification_with_you">"with you : "</string>
+    <string name="notification_with_you">"You "</string>
     <string name="notification_restaurant_address">"restaurant address : "</string>
     <string name="profile_ui_logout">Logout</string>
     <string name="detail_activity_call">CALL</string>

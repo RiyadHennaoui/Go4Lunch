@@ -81,7 +81,7 @@ public class WorkerRestaurantNotification extends Worker {
                         DocumentSnapshot documentSnapshot = task.getResult();
                         restaurant = documentSnapshot.toObject(Restaurant.class);
                         String usersNamebook = "";
-                        if(restaurant.getBookingRestaurant().size() > 0){
+                        if(restaurant.getBookingRestaurant().size() > 1){
                             usersNamebook = getApplicationContext().getString(R.string.notification_with_you);
                         }else{
                             usersNamebook = getApplicationContext().getString(R.string.notification_alone);

@@ -41,7 +41,7 @@
     <string name="toolbar_title">J\'ai Faim</string>
     <string name="navigation_drawer_toast_your_lunch_no_lunch">pas de réservation aujourd\'hui</string>
     <string name="notification_title">"Votre réservation "</string>
-    <string name="notification_with_you">Avec vous :</string>
+    <string name="notification_with_you">Vous </string>
     <string name="notification_restaurant_address">adresse du restaurant</string>
     <string name="profile_ui_logout">Quitter</string>
     <string name="detail_activity_call">APPELER</string>
